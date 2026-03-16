@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>패턴 22–24 | English Study Game</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #21262d;
+      --gold:      #c9a227;
+      --gold-dim:  #8a6e1a;
+      --text:      #e6edf3;
+      --muted:     #7d8590;
+      --green:     #3fb950;
+      --radius:    14px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+
+    /* ── Header ── */
+    .header {
+      padding: 20px 20px 0;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 8px 0;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--gold); }
+    .back-link svg { width: 16px; height: 16px; }
+
+    /* ── Pattern Banner ── */
+    .banner {
+      max-width: 540px;
+      margin: 16px auto 0;
+      padding: 28px 24px;
+      background: linear-gradient(135deg, #1a1400 0%, #0d1117 60%);
+      border: 1px solid var(--gold-dim);
+      border-radius: var(--radius);
+      position: relative;
+      overflow: hidden;
+    }
+    .banner::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(201,162,39,.18) 0%, transparent 70%);
+    }
+    .banner-label {
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .banner-title {
+      font-size: 30px;
+      font-weight: 800;
+      font-family: Georgia, serif;
+      letter-spacing: -.5px;
+      line-height: 1.1;
+    }
+    .banner-title span { color: var(--gold); }
+    .banner-desc {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ── Pattern Chips ── */
+    .chips {
+      max-width: 540px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+    .chip-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      background: rgba(201,162,39,.12);
+      border-radius: 6px;
+      padding: 3px 8px;
+      white-space: nowrap;
+    }
+    .chip-expr {
+      font-size: 15px;
+      font-weight: 600;
+      font-family: Georgia, serif;
+      flex: 1;
+    }
+    .chip-role {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Section Title ── */
+    .section-title {
+      max-width: 540px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Cards ── */
+    .cards {
+      max-width: 540px;
+      margin: 12px auto 0;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-decoration: none;
+      color: var(--text);
+      display: block;
+      transition: transform .18s, border-color .18s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card.active {
+      border-color: var(--gold-dim);
+      cursor: pointer;
+    }
+    .card.active:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+    .card.active::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,162,39,.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .card.pending {
+      opacity: .5;
+      cursor: default;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .card-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+    .card-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .badge-ready {
+      background: rgba(63,185,80,.15);
+      color: var(--green);
+    }
+    .badge-pending {
+      background: rgba(125,133,144,.12);
+      color: var(--muted);
+    }
+
+    .card-title {
+      margin-top: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      font-family: Georgia, serif;
+    }
+    .card-subtitle {
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .card-meta {
+      margin-top: 14px;
+      display: flex;
+      gap: 16px;
+    }
+    .card-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .card-meta-item svg { width: 13px; height: 13px; }
+
+    .card-arrow {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      color: var(--gold);
+      font-size: 18px;
+      opacity: .7;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a class="back-link" href="../index.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10 3L5 8l5 5"/>
+      </svg>
+      패턴 선택으로
+    </a>
+  </div>
+
+  <div class="banner" style="margin:0 20px; max-width:unset;">
+    <div style="max-width:540px;margin:0 auto;">
+      <p class="banner-label">English Study Game</p>
+      <h1 class="banner-title">패턴 <span>22–24</span></h1>
+      <p class="banner-desc">세 가지 핵심 표현으로 실전 대화 연습하기</p>
+    </div>
+  </div>
+
+  <div class="chips">
+    <div class="chip">
+      <span class="chip-num">패턴 22</span>
+      <span class="chip-expr">I think you should</span>
+      <span class="chip-role">조언 · 제안</span>
+    </div>
+    <div class="chip">
+      <span class="chip-num">패턴 23</span>
+      <span class="chip-expr">Do you want to</span>
+      <span class="chip-role">의향 묻기</span>
+    </div>
+    <div class="chip">
+      <span class="chip-num">패턴 24</span>
+      <span class="chip-expr">I'm trying to</span>
+      <span class="chip-role">시도 · 진행 중</span>
+    </div>
+  </div>
+
+  <p class="section-title">복습 게임 목록</p>
+
+  <div class="cards">
+
+    <!-- Active: hotel-260315 -->
+    <a class="card active" href="hotel-260315/index.html">
+      <div class="card-top">
+        <span class="card-icon">🏨</span>
+        <span class="card-badge badge-ready">▶ 플레이 가능</span>
+      </div>
+      <div class="card-title">Hotel Adventures</div>
+      <div class="card-subtitle">호텔에서 벌어지는 다양한 상황 — 체크인부터 레이트 체크아웃까지</div>
+      <div class="card-meta">
+        <span class="card-meta-item">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/>
+          </svg>
+          6 씬 · 약 5분
+        </span>
+        <span class="card-meta-item">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M5 7h6M5 10h4"/>
+          </svg>
+          2025.03.15
+        </span>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <!-- Pending -->
+    <div class="card pending">
+      <div class="card-top">
+        <span class="card-icon">✈️</span>
+        <span class="card-badge badge-pending">준비 중</span>
+      </div>
+      <div class="card-title">Airport Adventures</div>
+      <div class="card-subtitle">공항에서의 대화 — 탑승수속부터 면세점까지</div>
+    </div>
+
+    <div class="card pending">
+      <div class="card-top">
+        <span class="card-icon">🍽️</span>
+        <span class="card-badge badge-pending">준비 중</span>
+      </div>
+      <div class="card-title">Restaurant Adventures</div>
+      <div class="card-subtitle">레스토랑 대화 — 예약부터 주문 변경까지</div>
+    </div>
+
+  </div>
+
+</body>
+</html>
