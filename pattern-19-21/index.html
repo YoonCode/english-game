@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>패턴 19–21 | English Study Game</title>
+  <style>
+    :root {
+      --bg: #080d18;
+      --surface: #0e1525;
+      --card: #131d32;
+      --card2: #192540;
+      --border: #243050;
+      --blue: #4fc3f7;
+      --teal: #26c6da;
+      --gold: #ffd54f;
+      --green: #69f0ae;
+      --muted: #6b7fa3;
+      --text: #e2e8f8;
+      --radius: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Trebuchet MS', 'Segoe UI', 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── top bar ── */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    .back-btn:hover { color: var(--blue); }
+
+    .topbar-divider {
+      color: var(--border);
+      font-size: 16px;
+    }
+
+    .topbar-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── hero ── */
+    .hero {
+      background: linear-gradient(160deg, #0d1e3a 0%, #080d18 60%);
+      border-bottom: 1px solid var(--border);
+      padding: 36px 20px 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(79,195,247,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .pattern-label {
+      display: inline-block;
+      background: rgba(79,195,247,0.12);
+      border: 1px solid rgba(79,195,247,0.25);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+
+    .hero-title {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .hero-title span { color: var(--blue); }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* ── pattern pills ── */
+    .pattern-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .pattern-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .pnum {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      white-space: nowrap;
+      margin-top: 1px;
+    }
+
+    .pinfo-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.3px;
+    }
+
+    .pinfo-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── section ── */
+    .section {
+      padding: 28px 20px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+
+    .section-count {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── content cards ── */
+    .content-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 14px;
+      text-decoration: none;
+      display: block;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .content-card.active:hover {
+      transform: translateY(-2px);
+      border-color: var(--blue);
+    }
+
+    .content-card.inactive {
+      opacity: 0.5;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      padding: 18px 18px 16px;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .card-icon {
+      font-size: 28px;
+    }
+
+    .card-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .badge-live {
+      background: rgba(105, 240, 174, 0.12);
+      border: 1px solid rgba(105, 240, 174, 0.3);
+      color: var(--green);
+    }
+
+    .badge-soon {
+      background: rgba(107, 127, 163, 0.12);
+      border: 1px solid rgba(107, 127, 163, 0.2);
+      color: var(--muted);
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-meta {
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      gap: 12px;
+    }
+
+    .card-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-arrow {
+      font-size: 16px;
+      color: var(--blue);
+    }
+
+    /* ── bottom nav ── */
+    .bottom-nav {
+      padding: 0 20px 48px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .hub-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .hub-link:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <a href="../" class="back-btn">← 홈</a>
+    <div class="topbar-divider">/</div>
+    <div class="topbar-title">패턴 19–21</div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div style="max-width:520px;margin:0 auto;">
+      <div class="pattern-label">Patterns 19 · 20 · 21</div>
+      <div class="hero-title">오늘 배운 패턴으로<br><span>영어를 연결하세요</span> 🔗</div>
+      <div class="hero-subtitle">
+        상황을 읽고 가장 자연스러운 표현을 선택해 보세요.<br>
+        스터디에서 배운 3가지 패턴을 실전에서 확인해요!
+      </div>
+
+      <div class="pattern-cards">
+        <div class="pattern-card">
+          <div class="pnum">19</div>
+          <div>
+            <div class="pinfo-title">I feel like + 동사ing</div>
+            <div class="pinfo-desc">지금 이 순간 ~하고 싶은 기분을 표현해요</div>
+          </div>
+        </div>
+        <div class="pattern-card">
+          <div class="pnum">20</div>
+          <div>
+            <div class="pinfo-title">문장(주어+동사) + to + 동사</div>
+            <div class="pinfo-desc">목적이나 이유를 간결하게 덧붙일 때 써요</div>
+          </div>
+        </div>
+        <div class="pattern-card">
+          <div class="pnum">21</div>
+          <div>
+            <div class="pinfo-title">and, or, so, but, because</div>
+            <div class="pinfo-desc">상황에 맞는 접속사로 문장을 자연스럽게 연결해요</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content list -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">학습 콘텐츠</div>
+      <div class="section-count">1 / 4</div>
+    </div>
+
+    <!-- Active card: Airport -->
+    <a href="airport/" class="content-card active">
+      <div class="card-inner">
+        <div class="card-top">
+          <div class="card-icon">✈️</div>
+          <div class="card-badge badge-live">플레이 가능</div>
+        </div>
+        <div class="card-title">공항에서 영어로!</div>
+        <div class="card-desc">체크인부터 기내식까지 — 공항 상황에서 패턴 19·20·21을 자연스럽게 써봐요</div>
+        <div class="card-footer">
+          <div class="card-meta">
+            <span>🎬 6 씬</span>
+            <span>⏱ 약 5분</span>
+          </div>
+          <div class="card-arrow">→</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Coming soon cards -->
+    <div class="content-card inactive">
+      <div class="card-inner">
+        <div class="card-top">
+          <div class="card-icon">☕</div>
+          <div class="card-badge badge-soon">준비 중</div>
+        </div>
+        <div class="card-title">카페에서 영어로!</div>
+        <div class="card-desc">카페 주문부터 대화까지 — 준비 중이에요</div>
+        <div class="card-footer">
+          <div class="card-meta">
+            <span>🎬 6 씬</span>
+            <span>⏱ 약 5분</span>
+          </div>
+          <div class="card-arrow" style="color:var(--muted)">→</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-card inactive">
+      <div class="card-inner">
+        <div class="card-top">
+          <div class="card-icon">🛒</div>
+          <div class="card-badge badge-soon">준비 중</div>
+        </div>
+        <div class="card-title">쇼핑에서 영어로!</div>
+        <div class="card-desc">쇼핑몰·마트 상황 — 준비 중이에요</div>
+        <div class="card-footer">
+          <div class="card-meta">
+            <span>🎬 6 씬</span>
+            <span>⏱ 약 5분</span>
+          </div>
+          <div class="card-arrow" style="color:var(--muted)">→</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-card inactive">
+      <div class="card-inner">
+        <div class="card-top">
+          <div class="card-icon">🍽️</div>
+          <div class="card-badge badge-soon">준비 중</div>
+        </div>
+        <div class="card-title">레스토랑에서 영어로!</div>
+        <div class="card-desc">식당 예약부터 주문까지 — 준비 중이에요</div>
+        <div class="card-footer">
+          <div class="card-meta">
+            <span>🎬 6 씬</span>
+            <span>⏱ 약 5분</span>
+          </div>
+          <div class="card-arrow" style="color:var(--muted)">→</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="../" class="hub-link">🏠 전체 패턴 목록으로</a>
+  </div>
+
+</body>
+</html>
