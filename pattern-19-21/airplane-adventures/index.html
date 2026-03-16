@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공항에서 영어로! | 패턴 19-21</title>
+  <style>
+    :root {
+      --bg: #080d18;
+      --surface: #0e1525;
+      --card: #111827;
+      --card2: #162035;
+      --card3: #1c2a45;
+      --border: #243050;
+      --blue: #4fc3f7;
+      --teal: #26c6da;
+      --gold: #ffd54f;
+      --green: #69f0ae;
+      --red: #ff6b6b;
+      --muted: #6b7fa3;
+      --muted2: #8b9fbe;
+      --text: #e2e8f8;
+      --radius: 16px;
+      --font-sans: 'Trebuchet MS', 'Segoe UI', 'Helvetica Neue', sans-serif;
+      --font-mono: 'Courier New', 'Consolas', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 480px;
+      padding: 0 16px 60px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ────────── header ────────── */
+    .header {
+      padding: 18px 0 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-left { display: flex; flex-direction: column; gap: 3px; }
+
+    .header-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .header-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .score-chip {
+      background: var(--card2);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+      white-space: nowrap;
+      transition: color 0.3s;
+    }
+
+    /* ────────── progress ────────── */
+    .progress-wrap { margin-bottom: 18px; }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .bar-bg {
+      height: 5px;
+      background: var(--card2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue) 0%, #7c5cbf 100%);
+      border-radius: 3px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0%;
+    }
+
+    /* ────────── scene card ────────── */
+    .scene-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    /* scene card animation */
+    .scene-card, .choices-wrap, .feedback-card {
+      animation: appear 0.28s ease both;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .scene-top {
+      background: linear-gradient(135deg, #0f2040 0%, #0a1628 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .scene-emoji { font-size: 24px; flex-shrink: 0; }
+
+    .scene-num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 3px;
+    }
+
+    .scene-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .scene-context {
+      padding: 13px 18px;
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.6;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    /* dialogue */
+    .dialogue {
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .dl-line {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .dl-who {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      min-width: 18px;
+      padding-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .dl-who.a { color: var(--blue); }
+    .dl-who.b { color: var(--gold); }
+
+    .dl-text {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    .dl-blank {
+      font-size: 13px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* question */
+    .question-area {
+      background: var(--card2);
+      border-top: 1px solid var(--border);
+      padding: 14px 18px;
+    }
+
+    .question-kicker {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 7px;
+    }
+
+    .question-text {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--text);
+    }
+
+    .blank-hi {
+      display: inline;
+      background: rgba(79,195,247,0.14);
+      border-bottom: 2px solid var(--blue);
+      color: var(--blue);
+      font-weight: 700;
+      padding: 0 4px;
+      border-radius: 3px 3px 0 0;
+    }
+
+    /* ────────── choices ────────── */
+    .choices-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .choice-btn {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 13px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.18s, background 0.18s, transform 0.12s;
+      width: 100%;
+    }
+
+    .choice-btn:nth-child(1) { animation: appear 0.28s 0.05s both; }
+    .choice-btn:nth-child(2) { animation: appear 0.28s 0.10s both; }
+    .choice-btn:nth-child(3) { animation: appear 0.28s 0.15s both; }
+
+    .choice-btn:hover:not(:disabled) {
+      border-color: var(--blue);
+      background: rgba(79,195,247,0.05);
+      transform: translateX(3px);
+    }
+
+    .choice-btn:disabled { cursor: default; }
+
+    .choice-lbl {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      min-width: 20px;
+      padding-top: 1px;
+      flex-shrink: 0;
+      transition: color 0.2s;
+    }
+
+    .choice-text {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text);
+      font-family: var(--font-sans);
+    }
+
+    /* states */
+    .choice-btn.correct {
+      border-color: var(--green);
+      background: rgba(105,240,174,0.07);
+    }
+
+    .choice-btn.correct .choice-lbl { color: var(--green); }
+
+    .choice-btn.wrong {
+      border-color: var(--red);
+      background: rgba(255,107,107,0.07);
+      opacity: 0.75;
+    }
+
+    .choice-btn.wrong .choice-lbl { color: var(--red); }
+
+    /* ────────── feedback ────────── */
+    .feedback-card {
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      border: 1px solid transparent;
+    }
+
+    .feedback-card.ok {
+      background: rgba(105,240,174,0.06);
+      border-color: rgba(105,240,174,0.3);
+    }
+
+    .feedback-card.no {
+      background: rgba(255,107,107,0.06);
+      border-color: rgba(255,107,107,0.3);
+    }
+
+    .fb-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 9px;
+    }
+
+    .fb-icon { font-size: 18px; }
+
+    .fb-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .feedback-card.ok  .fb-label { color: var(--green); }
+    .feedback-card.no  .fb-label { color: var(--red); }
+
+    .fb-body {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--text);
+    }
+
+    .fb-pattern {
+      display: inline-block;
+      margin-top: 10px;
+      background: rgba(79,195,247,0.1);
+      border: 1px solid rgba(79,195,247,0.25);
+      color: var(--blue);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* ────────── next button ────────── */
+    .next-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--blue) 0%, #7c5cbf 100%);
+      border: none;
+      border-radius: 13px;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #05080f;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: opacity 0.2s, transform 0.1s;
+      display: none;
+    }
+
+    .next-btn.show {
+      display: block;
+      animation: appear 0.25s ease;
+    }
+
+    .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .next-btn:active { transform: translateY(0); }
+
+    /* ────────── results ────────── */
+    .results {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 10px;
+      animation: appear 0.4s ease;
+    }
+
+    .results.show { display: flex; }
+
+    .res-trophy { font-size: 64px; margin-bottom: 14px; }
+    .res-hl { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+
+    .res-score {
+      font-size: 52px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .res-sub { font-size: 13px; color: var(--muted2); margin-bottom: 26px; }
+
+    .res-card {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 18px;
+      margin-bottom: 14px;
+    }
+
+    .res-summary {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .res-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 16px;
+    }
+
+    .res-patterns { display: flex; flex-direction: column; gap: 11px; }
+
+    .rp-row { display: flex; gap: 12px; align-items: flex-start; }
+
+    .rp-num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--blue);
+      background: var(--card2);
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .rp-desc { font-size: 12.5px; color: var(--muted2); line-height: 1.5; }
+    .rp-desc strong { color: var(--text); font-family: var(--font-mono); font-size: 12px; }
+
+    .retry-btn {
+      width: 100%;
+      background: transparent;
+      border: 1.5px solid var(--blue);
+      border-radius: 13px;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 10px;
+    }
+
+    .retry-btn:hover { background: rgba(79,195,247,0.08); }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 8px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--blue); }
+
+    /* correct pop animation */
+    @keyframes pulse-green {
+      0%   { box-shadow: 0 0 0 0 rgba(105,240,174,0.4); }
+      70%  { box-shadow: 0 0 0 8px rgba(105,240,174,0); }
+      100% { box-shadow: 0 0 0 0 rgba(105,240,174,0); }
+    }
+
+    .choice-btn.correct { animation: pulse-green 0.5s ease; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ── GAME UI ── -->
+  <div id="gameUI">
+
+    <div class="header">
+      <div class="header-left">
+        <div class="header-eyebrow">✈ Pattern 19 · 20 · 21</div>
+        <div class="header-title">공항에서 영어로!</div>
+      </div>
+      <div class="score-chip" id="scoreChip">0점</div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="progLabel">Scene 1 / 6</span>
+        <span id="progPct">0%</span>
+      </div>
+      <div class="bar-bg">
+        <div class="bar-fill" id="barFill"></div>
+      </div>
+    </div>
+
+    <!-- scene card -->
+    <div class="scene-card" id="sceneCard">
+      <div class="scene-top">
+        <div class="scene-emoji" id="sceneEmoji">✈️</div>
+        <div>
+          <div class="scene-num" id="sceneNum">Scene 1</div>
+          <div class="scene-name" id="sceneName"></div>
+        </div>
+      </div>
+      <div class="scene-context" id="sceneContext"></div>
+      <div class="dialogue" id="dialogueArea"></div>
+      <div class="question-area">
+        <div class="question-kicker">Q. 빈칸에 들어갈 말은?</div>
+        <div class="question-text" id="questionText"></div>
+      </div>
+    </div>
+
+    <!-- choices -->
+    <div class="choices-wrap" id="choicesWrap"></div>
+
+    <!-- feedback -->
+    <div class="feedback-card" id="feedbackCard" style="display:none"></div>
+
+    <!-- next -->
+    <button class="next-btn" id="nextBtn" onclick="advance()">다음 장면 →</button>
+
+  </div><!-- /gameUI -->
+
+
+  <!-- ── RESULTS ── -->
+  <div class="results" id="results">
+    <div class="res-trophy" id="resTrophy">🏆</div>
+    <div class="res-hl">게임 완료!</div>
+    <div class="res-score" id="resScore">60점</div>
+    <div class="res-sub" id="resSub">6문제 중 6개 정답</div>
+
+    <div class="res-card">
+      <div class="res-summary" id="resSummary"></div>
+      <div class="res-divider"></div>
+      <div class="res-patterns">
+        <div class="rp-row">
+          <div class="rp-num">19</div>
+          <div class="rp-desc"><strong>I feel like + 동사ing</strong> — 지금 이 순간 ~하고 싶은 즉흥적인 감정 표현</div>
+        </div>
+        <div class="rp-row">
+          <div class="rp-num">20</div>
+          <div class="rp-desc"><strong>문장 + to + 동사</strong> — 목적이나 이유를 간결하게 덧붙이기</div>
+        </div>
+        <div class="rp-row">
+          <div class="rp-num">21</div>
+          <div class="rp-desc"><strong>and, or, so, but, because</strong> — 맥락에 맞는 접속사로 문장 연결</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="retry-btn" onclick="restartGame()">🔄 다시 도전하기</button>
+    <a href="../" class="back-link">← 패턴 19–21 목록으로</a>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+/* ─────────────────────────────────────────
+   SCENE DATA
+───────────────────────────────────────── */
+const SCENES = [
+  {
+    emoji: '🔍',
+    name: '체크인 카운터 찾기',
+    context: '공항에 도착했지만 체크인 카운터를 어디서 찾아야 할지 모르겠어요. A가 직원에게 물어보고 싶다고 말합니다.',
+    dialogue: [
+      { who: 'A', text: null },
+      { who: 'B', text: "Yeah, we should ask someone so we don't waste time walking around." }
+    ],
+    qHtml: 'A가 체크인 카운터를 찾을 수 없어서 직원에게 <span class="blank-hi">물어보고 싶다</span>고 말하려 해요.',
+    pattern: '패턴 19',
+    choices: [
+      {
+        text: "I feel like asking that staff member because I can't find the check-in counter.",
+        ok: true,
+        fb: "정답! 패턴 19 'I feel like + 동사ing'를 완벽하게 사용했어요. 지금 이 순간 ~하고 싶은 기분이 든다는 뜻으로, 즉흥적인 감정이나 욕구를 자연스럽게 전달해요."
+      },
+      {
+        text: "I feel like to ask that staff member because I can't find the check-in counter.",
+        ok: false,
+        fb: "아쉬워요! 'I feel like' 다음에는 반드시 동사-ing 형태가 와야 해요. 'to ask'가 아니라 'asking'이 맞아요. 패턴 19의 핵심 규칙: feel like + 동사ing!"
+      },
+      {
+        text: "I think I should ask that staff member because I can't find the check-in counter.",
+        ok: false,
+        fb: "아쉬워요! 'I think I should'는 조언이나 판단을 나타내는 다른 패턴이에요. 지금 이 순간 하고 싶은 기분을 표현할 때는 'I feel like + 동사ing'가 훨씬 자연스러워요."
+      }
+    ]
+  },
+  {
+    emoji: '💺',
+    name: '좌석 선택',
+    context: '창가 자리와 통로 자리 중 어디에 앉을지 이야기하고 있어요. B는 A의 말에 공감하면서도 반대 선택을 하려 해요.',
+    dialogue: [
+      { who: 'A', text: 'I feel like choosing a window seat because I want to see the view.' },
+      { who: 'B', text: null }
+    ],
+    qHtml: 'B가 창가 자리도 좋지만, 다리를 뻗기 위해 통로 자리를 선택하겠다고 말하려 해요. A의 말과 <span class="blank-hi">대조</span>되는 내용이에요.',
+    pattern: '패턴 21 (but)',
+    choices: [
+      {
+        text: 'That sounds nice, but I might take the aisle seat to stretch my legs.',
+        ok: true,
+        fb: "정답! 패턴 21의 'but'을 완벽하게 사용했어요. 'but'은 앞 내용과 반대되거나 대조되는 내용을 연결할 때 써요. 창가 자리도 좋지만(but) → 통로 자리 선택, 딱 맞는 대조예요!"
+      },
+      {
+        text: 'That sounds nice, so I might take the aisle seat to stretch my legs.',
+        ok: false,
+        fb: "아쉬워요! 'so'는 앞 내용의 결과나 목적을 나타낼 때 써요. 여기서는 A의 말에 동의하면서도 반대 선택을 하는 거라서, 대조를 나타내는 'but'이 자연스러워요."
+      },
+      {
+        text: 'That sounds nice, because I might take the aisle seat to stretch my legs.',
+        ok: false,
+        fb: "아쉬워요! 'because'는 이유를 설명할 때 써요. 여기서는 이유가 아니라 앞 내용과 반대되는 선택을 말하는 거예요. 대조에는 'but'을 사용해야 해요."
+      }
+    ]
+  },
+  {
+    emoji: '⚖️',
+    name: '짐 무게 확인',
+    context: '짐이 너무 무거운 것 같아서 추가 요금이 나올까봐 걱정이에요. A가 걱정하자 B가 현명한 제안을 합니다.',
+    dialogue: [
+      { who: 'A', text: "I hope not because I don't want to pay extra." },
+      { who: 'B', text: null }
+    ],
+    qHtml: 'B가 무게를 먼저 확인하자고 제안해요. 확인하는 <span class="blank-hi">목적(결과)</span>도 함께 말합니다.',
+    pattern: '패턴 21 (so)',
+    choices: [
+      {
+        text: "Let's check the weight first so we don't get surprised.",
+        ok: true,
+        fb: "정답! 패턴 21의 'so'를 완벽하게 사용했어요. 'so'는 앞 행동의 결과나 목적을 연결할 때 써요. 무게를 먼저 확인하자 → 그래서 놀라지 않도록, 목적이 자연스럽게 이어지죠!"
+      },
+      {
+        text: "Let's check the weight first and we don't get surprised.",
+        ok: false,
+        fb: "아쉬워요! 'and'는 비슷하거나 나란한 내용을 연결할 때 써요. 여기서는 '확인하자'는 행동의 목적을 말하는 거라서, 목적·결과를 나타내는 'so'가 맞아요."
+      },
+      {
+        text: "Let's check the weight first because we might be surprised.",
+        ok: false,
+        fb: "아쉬워요! 'because'는 이유를 설명할 때 써요. 여기서는 이유가 아니라 확인함으로써 얻는 결과·목적을 말하는 거예요. 목적·결과를 나타낼 때는 'so'를 써요."
+      }
+    ]
+  },
+  {
+    emoji: '🛬',
+    name: '경유 시간 활용',
+    context: '경유지 공항에서 3시간을 기다려야 해요. A가 공항을 돌아보고 싶다고 먼저 말합니다.',
+    dialogue: [
+      { who: 'A', text: null },
+      { who: 'B', text: 'That sounds fun, because we have three hours to wait.' }
+    ],
+    qHtml: 'A가 경유 시간 동안 공항을 <span class="blank-hi">둘러보고 싶은 기분</span>이라고 말하려 해요.',
+    pattern: '패턴 19',
+    choices: [
+      {
+        text: 'I feel like exploring the airport during our stopover.',
+        ok: true,
+        fb: "정답! 패턴 19 'I feel like + 동사ing'를 완벽하게 썼어요. 경유 시간에 공항을 돌아다니고 싶은 즉흥적인 기분을 자연스럽게 표현했어요!"
+      },
+      {
+        text: 'I feel like to explore the airport during our stopover.',
+        ok: false,
+        fb: "아쉬워요! 'I feel like' 뒤에는 to+동사가 아니라 동사-ing가 와야 해요. 'to explore' → 'exploring'으로 바꿔야 패턴 19가 완성돼요!"
+      },
+      {
+        text: 'I want to explore the airport during our stopover.',
+        ok: false,
+        fb: "아쉬워요! 'I want to'도 자연스럽지만, 'I feel like + 동사ing'는 더 즉흥적이고 감정적인 뉘앙스가 있어요. 지금 이 순간 그런 기분이 든다는 생생함이 담겨 있어요!"
+      }
+    ]
+  },
+  {
+    emoji: '🍗',
+    name: '기내식 주문',
+    context: '기내식을 주문할 시간이에요. A는 보통 가볍게 먹으려고 치킨을 선택한다고 말해요.',
+    dialogue: [
+      { who: 'A', text: 'That sounds good, but I might get pasta.' },
+      { who: 'B', text: 'Really? ___' },
+      { who: 'A', text: "Yeah, but I feel like trying something different today." }
+    ],
+    qHtml: 'B가 보통 치킨을 선택하는 <span class="blank-hi">이유(목적)</span>를 말하려 해요. "가볍게 유지하려고"라는 뜻이에요.',
+    pattern: '패턴 20',
+    choices: [
+      {
+        text: 'I usually choose chicken to keep it light.',
+        ok: true,
+        fb: "정답! 패턴 20 '문장 + to + 동사'를 완벽하게 사용했어요. 'to keep it light'는 '가볍게 유지하기 위해서'라는 목적을 나타내요. 앞 문장에 목적을 덧붙일 때 to를 사용하면 돼요!"
+      },
+      {
+        text: 'I usually choose chicken for keeping it light.',
+        ok: false,
+        fb: "아쉬워요! 목적을 표현할 때는 'for + 동사ing'보다 'to + 동사'가 훨씬 자연스럽고 일반적이에요. 패턴 20처럼 'to keep'이 올바른 형태예요."
+      },
+      {
+        text: 'I usually choose chicken because it keeps it light.',
+        ok: false,
+        fb: "아쉬워요! 'because'는 이유를 설명할 때 쓰고, 패턴 20의 'to + 동사'는 목적을 더 간결하게 표현해요. 이유보다 목적을 말할 때 'to + 동사'를 활용해 보세요!"
+      }
+    ]
+  },
+  {
+    emoji: '📸',
+    name: '여행의 설레임',
+    context: '드디어 기다리던 여행이 시작됐어요! 두 사람이 들뜬 마음으로 이야기하고 있어요.',
+    dialogue: [
+      { who: 'A', text: 'I feel like this trip is going to be amazing.' },
+      { who: 'B', text: 'Me too, because we planned it for months.' },
+      { who: 'A', text: null },
+      { who: 'B', text: 'Definitely, so we can remember everything later.' }
+    ],
+    qHtml: 'A가 사진을 많이 <span class="blank-hi">찍고 싶은 기분</span>이라고 말하려 해요.',
+    pattern: '패턴 19',
+    choices: [
+      {
+        text: 'I feel like taking lots of photos.',
+        ok: true,
+        fb: "정답! 패턴 19 'I feel like + 동사ing'로 여행의 설레임을 완벽하게 표현했어요. 지금 이 순간 사진을 많이 찍고 싶은 생생한 감정, 딱 맞는 표현이에요!"
+      },
+      {
+        text: 'I feel like to take lots of photos.',
+        ok: false,
+        fb: "아쉬워요! 'I feel like' 뒤에는 동사-ing가 와야 해요. 'to take'가 아니라 'taking'이 맞아요. 이 규칙만 기억하면 패턴 19 완성이에요!"
+      },
+      {
+        text: 'I hope to take lots of photos.',
+        ok: false,
+        fb: "아쉬워요! 'I hope to'는 미래에 대한 희망을 나타내요. 반면 'I feel like + 동사ing'는 지금 이 순간 즉각적으로 ~하고 싶다는 생생한 감정 표현이에요. 뉘앙스가 달라요!"
+      }
+    ]
+  }
+];
+
+/* ─────────────────────────────────────────
+   STATE
+───────────────────────────────────────── */
+let cur = 0;
+let score = 0;
+let answered = false;
+let shuffled = [];
+
+/* ─────────────────────────────────────────
+   HELPERS
+───────────────────────────────────────── */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setProgress(idx) {
+  const pct = Math.round((idx / SCENES.length) * 100);
+  document.getElementById('progLabel').textContent = `Scene ${idx + 1} / ${SCENES.length}`;
+  document.getElementById('progPct').textContent  = pct + '%';
+  document.getElementById('barFill').style.width  = pct + '%';
+}
+
+/* ─────────────────────────────────────────
+   LOAD SCENE
+───────────────────────────────────────── */
+function loadScene(idx) {
+  answered = false;
+  const s = SCENES[idx];
+  const LABELS = ['A', 'B', 'C'];
+
+  /* header */
+  document.getElementById('sceneEmoji').textContent = s.emoji;
+  document.getElementById('sceneNum').textContent   = `Scene ${idx + 1}`;
+  document.getElementById('sceneName').textContent  = s.name;
+  document.getElementById('sceneContext').textContent = s.context;
+  document.getElementById('questionText').innerHTML = s.qHtml;
+
+  /* dialogue */
+  document.getElementById('dialogueArea').innerHTML = s.dialogue.map(line => `
+    <div class="dl-line">
+      <div class="dl-who ${line.who.toLowerCase()}">${line.who}</div>
+      <div class="${line.text ? 'dl-text' : 'dl-blank'}">${line.text || '( ? )'}</div>
+    </div>
+  `).join('');
+
+  /* choices */
+  shuffled = shuffle(s.choices);
+  document.getElementById('choicesWrap').innerHTML = shuffled.map((c, i) => `
+    <button class="choice-btn" id="cb${i}" onclick="pick(${i})">
+      <div class="choice-lbl" id="cl${i}">${LABELS[i]}</div>
+      <div class="choice-text">${c.text}</div>
+    </button>
+  `).join('');
+
+  /* reset */
+  document.getElementById('feedbackCard').style.display = 'none';
+  const nb = document.getElementById('nextBtn');
+  nb.classList.remove('show');
+  nb.textContent = idx === SCENES.length - 1 ? '결과 보기 →' : '다음 장면 →';
+
+  setProgress(idx);
+
+  /* re-trigger animation */
+  const card = document.getElementById('sceneCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = '';
+}
+
+/* ─────────────────────────────────────────
+   PICK ANSWER
+───────────────────────────────────────── */
+function pick(i) {
+  if (answered) return;
+  answered = true;
+
+  const choice = shuffled[i];
+  const LABELS = ['A', 'B', 'C'];
+
+  /* disable all */
+  for (let j = 0; j < 3; j++) {
+    document.getElementById('cb' + j).disabled = true;
+  }
+
+  if (choice.ok) {
+    document.getElementById('cb' + i).classList.add('correct');
+    document.getElementById('cl' + i).textContent = '✓';
+    score += 10;
+    document.getElementById('scoreChip').textContent = score + '점';
+    showFeedback(true, choice.fb, SCENES[cur].pattern);
+  } else {
+    document.getElementById('cb' + i).classList.add('wrong');
+    document.getElementById('cl' + i).textContent = '✗';
+    /* reveal correct */
+    shuffled.forEach((c, j) => {
+      if (c.ok) {
+        document.getElementById('cb' + j).classList.add('correct');
+        document.getElementById('cl' + j).textContent = '✓';
+      }
+    });
+    showFeedback(false, choice.fb, SCENES[cur].pattern);
+  }
+
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+/* ─────────────────────────────────────────
+   FEEDBACK
+───────────────────────────────────────── */
+function showFeedback(ok, text, pattern) {
+  const box = document.getElementById('feedbackCard');
+  box.className = 'feedback-card ' + (ok ? 'ok' : 'no');
+  box.style.display = 'block';
+  box.innerHTML = `
+    <div class="fb-head">
+      <div class="fb-icon">${ok ? '🎯' : '💡'}</div>
+      <div class="fb-label">${ok ? '정답!' : '틀렸어요'}</div>
+    </div>
+    <div class="fb-body">${text}</div>
+    <div class="fb-pattern">${pattern}</div>
+  `;
+}
+
+/* ─────────────────────────────────────────
+   ADVANCE
+───────────────────────────────────────── */
+function advance() {
+  cur++;
+  if (cur >= SCENES.length) {
+    showResults();
+  } else {
+    loadScene(cur);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+/* ─────────────────────────────────────────
+   RESULTS
+───────────────────────────────────────── */
+function showResults() {
+  document.getElementById('gameUI').style.display = 'none';
+  document.getElementById('results').classList.add('show');
+
+  document.getElementById('barFill').style.width = '100%';
+  document.getElementById('progPct').textContent = '100%';
+
+  const correct = score / 10;
+  const total   = SCENES.length;
+
+  document.getElementById('resScore').textContent = score + '점';
+  document.getElementById('resSub').textContent   = `${total}문제 중 ${correct}개 정답`;
+
+  let trophy, msg;
+  if (correct === total) {
+    trophy = '🏆';
+    msg = '완벽해요! 패턴 19, 20, 21을 모두 마스터했어요. 이제 공항에서도 자신 있게 영어로 말해 보세요! ✈️';
+  } else if (correct >= 5) {
+    trophy = '🥇';
+    msg = '훌륭해요! 핵심 패턴을 잘 이해하고 있어요. 틀린 문제를 한 번 더 확인해 보세요!';
+  } else if (correct >= 3) {
+    trophy = '🥈';
+    msg = '잘 했어요! 패턴이 조금씩 익숙해지고 있어요. 다시 도전해서 완벽하게 만들어 보세요!';
+  } else {
+    trophy = '🌱';
+    msg = '걱정 마세요! 오늘 배운 패턴을 다시 한번 복습하고 재도전해 보세요. 반복이 실력을 만들어요 💪';
+  }
+
+  document.getElementById('resTrophy').textContent = trophy;
+  document.getElementById('resSummary').textContent = msg;
+}
+
+/* ─────────────────────────────────────────
+   RESTART
+───────────────────────────────────────── */
+function restartGame() {
+  cur = 0;
+  score = 0;
+  answered = false;
+  document.getElementById('scoreChip').textContent = '0점';
+  document.getElementById('gameUI').style.display = 'block';
+  document.getElementById('results').classList.remove('show');
+  loadScene(0);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ─────────────────────────────────────────
+   INIT
+───────────────────────────────────────── */
+loadScene(0);
+</script>
+</body>
+</html>
