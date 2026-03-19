@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Dialogue · 패턴 28–30</title>
+<style>
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #1c2230;
+  --border:    #21262d;
+  --gold:      #c9a227;
+  --gold-dim:  #8a6e1a;
+  --gold-glow: rgba(201,162,39,.15);
+  --text:      #e6edf3;
+  --muted:     #7d8590;
+  --blue:      #58a6ff;
+  --purple:    #bc8cff;
+  --green:     #3fb950;
+  --green-bg:  rgba(63,185,80,.12);
+  --radius:    14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh; padding-bottom: 48px;
+}
+
+/* ── HEADER ── */
+.header {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+}
+.header-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px;
+}
+.btn-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--muted); background: none; border: none;
+  cursor: pointer; font-size: 13px; padding: 4px 0;
+  transition: color .2s; text-decoration: none; width: 60px;
+}
+.btn-back:hover { color: var(--gold); }
+.btn-back svg { width: 16px; height: 16px; }
+.header-title {
+  font-size: 14px; font-weight: 700; color: var(--muted);
+  letter-spacing: .3px;
+}
+
+/* ── PATTERN REFERENCE BAR ── */
+.pattern-bar {
+  margin: 16px 20px 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.pattern-bar-row {
+  display: flex; gap: 8px; align-items: center;
+}
+.pbar-num {
+  font-size: 11px; font-weight: 700; color: var(--gold);
+  background: var(--gold-glow); padding: 2px 7px;
+  border-radius: 5px; white-space: nowrap;
+}
+.pbar-expr { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.pbar-expr b { color: var(--text); }
+
+/* ── GUIDE TEXT ── */
+.guide {
+  margin: 14px 20px 0;
+  font-size: 13px; color: var(--muted); line-height: 1.7;
+  background: var(--surface2); border-radius: 10px; padding: 12px 14px;
+}
+
+/* ── SET CARDS ── */
+.sets { display: flex; flex-direction: column; gap: 14px; padding: 16px 20px 0; }
+
+.set-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.set-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+.set-emoji { font-size: 22px; flex-shrink: 0; }
+.set-num {
+  font-size: 11px; font-weight: 700; letter-spacing: .8px;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 2px;
+}
+.set-title { font-size: 14px; font-weight: 800; color: var(--text); line-height: 1.2; }
+.set-title-ko { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+.dialogue { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+
+.line { display: flex; gap: 10px; align-items: flex-start; }
+.speaker {
+  font-size: 11px; font-weight: 700;
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.speaker.a {
+  background: rgba(88,166,255,.15); color: var(--blue);
+  border: 1px solid rgba(88,166,255,.3);
+}
+.speaker.b {
+  background: rgba(188,140,255,.15); color: var(--purple);
+  border: 1px solid rgba(188,140,255,.3);
+}
+.speech { font-size: 14px; line-height: 1.7; color: var(--text); }
+
+.speak-it {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 10px 16px 14px;
+  border-top: 1px solid var(--border);
+  font-size: 12px; color: var(--muted); line-height: 1.6;
+}
+.speak-it .icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a class="btn-back" href="./index.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10 3L5 8l5 5"/>
+      </svg>
+      목록으로
+    </a>
+    <span class="header-title">패턴 28–30 · 대화 연습</span>
+    <span style="width:60px"></span>
+  </div>
+</div>
+
+<div class="pattern-bar">
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 28</span>
+    <span class="pbar-expr"><b>What / When / Where did you ~?</b> — 뭘 / 언제 / 어디서 ~했어?</span>
+  </div>
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 29</span>
+    <span class="pbar-expr"><b>That's what / why 주어 + 동사</b> — 그게 바로 ~야 / 그래서 ~한 거야</span>
+  </div>
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 30</span>
+    <span class="pbar-expr"><b>Have you (ever) + 과거분사</b> — ~해본 적 있어?</span>
+  </div>
+</div>
+
+<div class="guide">
+  A와 B 역할을 나눠서 소리 내어 읽어보세요. 자연스러워질 때까지 반복하고, 역할을 바꿔서 한 번 더!
+</div>
+
+<div class="sets">
+
+  <!-- SET 1 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">✈️</span>
+      <div>
+        <p class="set-num">SET 1</p>
+        <p class="set-title">Just Got Back</p>
+        <p class="set-title-ko">방금 돌아왔어</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Hey, you look so tan! Where did you go last week?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Danang! Four days. It was amazing.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Oh wow. Have you ever been there before?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">No, first time. That's why I was so excited before I left.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I could tell! What did you do most of the time?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Honestly, just ate and sat on the beach. Perfect trip.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- SET 2 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🗺️</span>
+      <div>
+        <p class="set-num">SET 2</p>
+        <p class="set-title">The Hidden Spot</p>
+        <p class="set-title-ko">아무도 모르는 그 장소</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Have you ever heard of a village called Shirakawa-go?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">No, what is it?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">It's this tiny village in Japan. Thatched roof houses, super quiet.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Sounds unreal. When did you go there?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Last winter. That's what made it so magical — snow everywhere.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Okay I need to go. How did you even find out about it?</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- SET 3 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🍜</span>
+      <div>
+        <p class="set-num">SET 3</p>
+        <p class="set-title">The Food Was The Trip</p>
+        <p class="set-title-ko">음식이 곧 여행이었어</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">What did you eat in Vietnam? I heard the food is unreal.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Pho, banh mi, bun cha... everything. I ate like five times a day.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">That's what I want to do on my next trip. Just eat.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Honestly, that's the best way. Have you ever tried bun cha?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">No, not yet. Is it like pho?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">No, it's grilled pork with noodles. Totally different. You'd love it.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- SET 4 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">😬</span>
+      <div>
+        <p class="set-num">SET 4</p>
+        <p class="set-title">The Flight From Hell</p>
+        <p class="set-title-ko">최악의 비행</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">You look exhausted. When did you get back from Europe?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Like two hours ago. The flight was brutal. 13 hours with a baby crying the whole time.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Oh no. That's why you look like that.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I barely slept. Have you ever taken a flight that long?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Once, to New York. I felt like a zombie for two days.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Exactly. I need a week just to recover.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- SET 5 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🏯</span>
+      <div>
+        <p class="set-num">SET 5</p>
+        <p class="set-title">Solo Travel Convert</p>
+        <p class="set-title-ko">혼자 여행 입문</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Have you ever traveled alone?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Yeah, I went to Kyoto solo last spring. Best decision ever.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Really? What did you do without anyone to plan with?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">That's what was so great — I just did whatever I wanted, whenever.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm kind of scared to try it honestly.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I was too. But once you do it, you get it.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- SET 6 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🏝️</span>
+      <div>
+        <p class="set-num">SET 6</p>
+        <p class="set-title">Worth Every Penny</p>
+        <p class="set-title-ko">돈이 아깝지 않았어</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Where did you stay in Bali? A hotel?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">No, a villa with a private pool. It was a splurge but so worth it.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Have you ever done anything like that before?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Never. That's why it felt so special. Like a different world.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'd feel guilty spending that much on a room.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I thought so too. But honestly? Zero regrets.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- SET 7 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">😅</span>
+      <div>
+        <p class="set-num">SET 7</p>
+        <p class="set-title">Lost in Translation</p>
+        <p class="set-title-ko">길을 잃다</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">What did you do when you got lost in Morocco?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I just kept walking and asked a shop owner for help. Somehow made it back.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">That's what I admire about you. You don't panic.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Well I was panicking inside! Have you ever gotten totally lost abroad?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Once in Istanbul. I sat at a café for an hour waiting for Google Maps to load.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Ha! That's the move honestly.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- SET 8 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🎒</span>
+      <div>
+        <p class="set-num">SET 8</p>
+        <p class="set-title">The Budget Trip</p>
+        <p class="set-title-ko">초저예산 여행</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Have you ever done a trip with almost no budget?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Yeah, Southeast Asia on like 30 dollars a day. Three weeks.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">How did you even manage that?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Hostels, street food, night buses. That's what kept the costs so low.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">When did you do this? Before you got a job?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Right after graduation. It was rough but honestly the best trip of my life.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- SET 9 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🌋</span>
+      <div>
+        <p class="set-num">SET 9</p>
+        <p class="set-title">The Unexpected Detour</p>
+        <p class="set-title-ko">계획에 없던 일</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Where did you end up going after Osaka? You said plans changed?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">We randomly took a train to Hiroshima. Best detour ever.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Oh wow. Have you ever visited the Peace Memorial?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Yeah, that's what got me. I didn't expect to feel that emotional.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I've heard it's intense.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">It really is. Don't skip it if you ever go.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- SET 10 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🌅</span>
+      <div>
+        <p class="set-num">SET 10</p>
+        <p class="set-title">The Trip That Changed Things</p>
+        <p class="set-title-ko">생각이 바뀐 여행</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">You seem different since you got back from India. What did you experience there?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I don't know... it's hard to explain. Everything just felt so real and alive.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">That's why people say India changes you.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I totally get that now. Have you ever had a trip that shifted how you see things?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Peru did that for me. Came back and quit my job two months later.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Exactly. Some trips just do that to you.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+</div>
+</body>
+</html>
