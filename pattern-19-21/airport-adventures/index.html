@@ -368,6 +368,22 @@
       border-radius: 20px;
     }
 
+    /* Back button */
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 4px 0;
+      transition: color .2s;
+    }
+    .btn-back:hover { color: var(--gold); }
+    .btn-back svg { width: 15px; height: 15px; }
+
     .btn-next {
       margin-top: 16px;
       width: 100%;
@@ -385,6 +401,41 @@
     }
     .btn-next:hover { opacity: .9; transform: translateY(-1px); }
     .btn-next:active { transform: scale(.98); }
+
+    /* Wrong-answer action row */
+    .wrong-actions {
+      margin-top: 16px;
+      display: none;
+      gap: 10px;
+      animation: fadeIn .3s ease;
+    }
+    .wrong-actions.show { display: flex; }
+    .btn-retry-scene {
+      flex: 1;
+      padding: 15px;
+      background: var(--surface);
+      color: var(--text);
+      border: 1.5px solid var(--gold-dim);
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-retry-scene:hover { border-color: var(--gold); background: var(--surface2); }
+    .btn-continue {
+      flex: 1;
+      padding: 15px;
+      background: var(--gold);
+      color: #0d1117;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+    .btn-continue:hover { opacity: .9; }
 
     /* ═══════════════════════════ RESULT ═══════════════════════════ */
     #result-screen {
@@ -573,6 +624,12 @@
 
   <div class="topbar">
     <div class="topbar-row">
+      <button class="btn-back" onclick="history.back()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10 3L5 8l5 5"/>
+        </svg>
+        목록으로
+      </button>
       <span class="scene-counter" id="scene-counter">씬 1 / 6</span>
       <span class="score-display">
         <span class="star">⭐</span>
@@ -603,6 +660,11 @@
     <p class="feedback-head" id="feedback-head"></p>
     <p class="feedback-body" id="feedback-body"></p>
     <span class="feedback-pattern" id="feedback-pattern"></span>
+  </div>
+
+  <div class="wrong-actions" id="wrong-actions">
+    <button class="btn-retry-scene" onclick="retryScene()">🔄 다시 풀기</button>
+    <button class="btn-continue" onclick="nextScene()">그냥 진행하기 →</button>
   </div>
 
   <button class="btn-next" id="btn-next" onclick="nextScene()">다음 씬으로 →</button>
@@ -878,6 +940,7 @@
     fb.style.display = 'none';
     fb.className = 'feedback';
     document.getElementById('btn-next').style.display = 'none';
+    document.getElementById('wrong-actions').classList.remove('show');
 
     const card = document.getElementById('scene-card');
     card.style.animation = 'none';
@@ -896,6 +959,8 @@
 
     const btn = document.getElementById(`choice-${idx}`);
     const fb = document.getElementById('feedback-box');
+    const wrongActions = document.getElementById('wrong-actions');
+    const nextBtn = document.getElementById('btn-next');
 
     if (choice.correct) {
       btn.classList.add('correct');
@@ -903,6 +968,9 @@
       results.push(true);
       fb.className = 'feedback correct';
       document.getElementById('feedback-head').textContent = '✅ 정답이에요!';
+      wrongActions.classList.remove('show');
+      nextBtn.style.display = 'block';
+      nextBtn.textContent = currentScene < scenes.length - 1 ? '다음 씬으로 →' : '결과 보기 →';
     } else {
       btn.classList.add('wrong');
       results.push(false);
@@ -911,16 +979,19 @@
       });
       fb.className = 'feedback wrong';
       document.getElementById('feedback-head').textContent = '❌ 아쉬워요!';
+      nextBtn.style.display = 'none';
+      wrongActions.classList.add('show');
     }
 
     document.getElementById('feedback-body').innerHTML = choice.feedback;
     document.getElementById('feedback-pattern').textContent = data.pattern;
     fb.style.display = 'block';
-
-    const nextBtn = document.getElementById('btn-next');
-    nextBtn.style.display = 'block';
-    nextBtn.textContent = currentScene < scenes.length - 1 ? '다음 씬으로 →' : '결과 보기 →';
     document.getElementById('score-text').textContent = `${score}점`;
+  }
+
+  function retryScene() {
+    results.pop();
+    renderScene();
   }
 
   function nextScene() {
