@@ -1,618 +1,249 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>English Study Game</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Pattern Study</title>
+<style>
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #1c2230;
+  --border:    #21262d;
+  --gold:      #c9a227;
+  --gold-dim:  #8a6e1a;
+  --gold-glow: rgba(201,162,39,.15);
+  --text:      #e6edf3;
+  --muted:     #7d8590;
+  --green:     #3fb950;
+  --green-bg:  rgba(63,185,80,.12);
+  --radius:    14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh; padding-bottom: 48px;
+}
+.header { padding: 32px 20px 0; text-align: center; }
+.header-title {
+  font-size: 22px; font-weight: 800;
+  font-family: Georgia, serif; color: var(--gold); letter-spacing: .5px;
+}
+.header-sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
 
-    :root {
-      --bg: #0a0a0f;
-      --surface: #12121a;
-      --surface2: #1a1a26;
-      --border: #2a2a3e;
-      --accent: #f5c842;
-      --accent2: #ff6b35;
-      --text: #e8e8f0;
-      --text-muted: #6b6b8a;
-      --text-dim: #3a3a55;
-      --green: #4cde80;
-      --card-glow: rgba(245, 200, 66, 0.08);
-    }
+.stats-bar {
+  display: flex; margin: 20px 20px 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.stat {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; padding: 14px 0;
+}
+.stat + .stat { border-left: 1px solid var(--border); }
+.stat-num { font-size: 22px; font-weight: 800; color: var(--gold); }
+.stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+.section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+  color: var(--muted); text-transform: uppercase;
+  padding: 24px 20px 10px;
+}
+.card-list { display: flex; flex-direction: column; gap: 12px; padding: 0 20px; }
 
-    html {
-      scroll-behavior: smooth;
-    }
+a.card {
+  display: block; text-decoration: none;
+  background: var(--surface); border: 1.5px solid var(--gold-dim);
+  border-radius: var(--radius); padding: 18px;
+  position: relative; overflow: hidden;
+  transition: border-color .2s, box-shadow .2s, transform .15s;
+}
+a.card::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--gold-glow); opacity: 0; transition: opacity .2s;
+}
+a.card:hover { border-color: var(--gold); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(201,162,39,.12); }
+a.card:hover::before { opacity: 1; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Noto Sans KR', sans-serif;
-      min-height: 100dvh;
-      overflow-x: hidden;
-    }
+div.card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 18px;
+  opacity: .42; cursor: not-allowed;
+}
+.card-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 14px;
+}
+.card-num {
+  font-size: 28px; font-weight: 900;
+  font-family: Georgia, serif; color: var(--gold); line-height: 1;
+}
+.card-num span { font-size: 18px; color: var(--gold-dim); }
+.card-status {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;
+}
+.card-status.ready { background: var(--green-bg); color: var(--green); }
+.card-status.soon  { background: var(--surface2); color: var(--muted); }
+.dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.patterns { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
+.pattern-item { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.pattern-item strong {
+  color: var(--gold); font-weight: 700; font-size: 11px;
+  letter-spacing: .5px; margin-right: 6px;
+}
+.card-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 12px; border-top: 1px solid var(--border);
+}
+.content-count { font-size: 12px; color: var(--muted); }
+.content-count b { color: var(--text); }
+.arrow { color: var(--gold); font-size: 16px; transition: transform .2s; }
+a.card:hover .arrow { transform: translateX(4px); }
 
-    /* ── NOISE TEXTURE ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
-    }
-
-    /* ── GRID BG ── */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity: 0.18;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .wrapper {
-      position: relative;
-      z-index: 1;
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 0 20px 80px;
-    }
-
-    /* ── HEADER ── */
-    header {
-      padding-top: 52px;
-      padding-bottom: 40px;
-      text-align: center;
-    }
-
-    .badge {
-      display: inline-block;
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      color: var(--accent);
-      background: rgba(245, 200, 66, 0.1);
-      border: 1px solid rgba(245, 200, 66, 0.25);
-      border-radius: 2px;
-      padding: 4px 10px;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(52px, 14vw, 72px);
-      letter-spacing: 0.04em;
-      line-height: 0.92;
-      color: var(--text);
-    }
-
-    h1 .highlight {
-      color: var(--accent);
-      display: block;
-    }
-
-    .subtitle {
-      margin-top: 16px;
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 300;
-      line-height: 1.7;
-    }
-
-    /* ── DIVIDER ── */
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 32px 0 24px;
-    }
-
-    .divider-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .divider-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      color: var(--text-dim);
-      text-transform: uppercase;
-    }
-
-    /* ── STATS BAR ── */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 32px;
-    }
-
-    .stat {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 10px;
-      text-align: center;
-    }
-
-    .stat-value {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px;
-      color: var(--accent);
-      letter-spacing: 0.05em;
-      line-height: 1;
-    }
-
-    .stat-label {
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      letter-spacing: 0.05em;
-    }
-
-    /* ── SECTION LABEL ── */
-    .section-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.22em;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      margin-bottom: 14px;
-      padding-left: 2px;
-    }
-
-    /* ── PATTERN CARDS ── */
-    .cards {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .card {
-      display: block;
-      text-decoration: none;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
-      cursor: pointer;
-      animation: slideUp 0.5s ease both;
-    }
-
-    .card:nth-child(1) { animation-delay: 0.05s; }
-    .card:nth-child(2) { animation-delay: 0.1s; }
-    .card:nth-child(3) { animation-delay: 0.15s; }
-    .card:nth-child(4) { animation-delay: 0.2s; }
-    .card:nth-child(5) { animation-delay: 0.25s; }
-    .card:nth-child(6) { animation-delay: 0.3s; }
-    .card:nth-child(7) { animation-delay: 0.35s; }
-    .card:nth-child(8) { animation-delay: 0.4s; }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Active card */
-    .card.active {
-      border-color: rgba(245, 200, 66, 0.3);
-      background: linear-gradient(135deg, var(--surface) 0%, rgba(245,200,66,0.05) 100%);
-    }
-
-    .card.active:active {
-      transform: scale(0.985);
-      box-shadow: 0 0 0 2px var(--accent);
-    }
-
-    @media (hover: hover) {
-      .card.active:hover {
-        transform: translateY(-2px);
-        border-color: rgba(245, 200, 66, 0.55);
-        box-shadow: 0 8px 32px rgba(245, 200, 66, 0.1);
-      }
-    }
-
-    /* Glow orb behind active card */
-    .card.active::before {
-      content: '';
-      position: absolute;
-      top: -20px;
-      right: -20px;
-      width: 100px;
-      height: 100px;
-      background: radial-gradient(circle, rgba(245,200,66,0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    /* Disabled card */
-    .card.disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-
-    .card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-
-    .card-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 38px;
-      letter-spacing: 0.05em;
-      line-height: 1;
-      color: var(--text);
-    }
-
-    .card.active .card-num {
-      color: var(--accent);
-    }
-
-    .card-num span {
-      font-size: 14px;
-      color: var(--text-muted);
-      font-family: 'Space Mono', monospace;
-      letter-spacing: 0.05em;
-      vertical-align: middle;
-      margin-left: 2px;
-    }
-
-    .card-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.12em;
-      padding: 4px 8px;
-      border-radius: 4px;
-      text-transform: uppercase;
-    }
-
-    .card-status.ready {
-      background: rgba(76, 222, 128, 0.1);
-      border: 1px solid rgba(76, 222, 128, 0.3);
-      color: var(--green);
-    }
-
-    .card-status.soon {
-      background: rgba(107, 107, 138, 0.12);
-      border: 1px solid var(--border);
-      color: var(--text-dim);
-    }
-
-    .card-status .dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: currentColor;
-    }
-
-    .card-status.ready .dot {
-      animation: pulse 2s ease infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.3; }
-    }
-
-    /* Pattern chips */
-    .patterns {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-bottom: 14px;
-    }
-
-    .pattern-item {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 300;
-    }
-
-    .pattern-item strong {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: var(--text);
-      font-weight: 400;
-      margin-right: 6px;
-    }
-
-    /* Content count */
-    .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid var(--border);
-      padding-top: 12px;
-      margin-top: 4px;
-    }
-
-    .content-count {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-
-    .content-count b {
-      color: var(--text);
-    }
-
-    .arrow {
-      font-size: 16px;
-      color: var(--accent);
-      transition: transform 0.18s ease;
-    }
-
-    @media (hover: hover) {
-      .card.active:hover .arrow {
-        transform: translateX(4px);
-      }
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      margin-top: 56px;
-      text-align: center;
-    }
-
-    .footer-inner {
-      border-top: 1px solid var(--border);
-      padding-top: 28px;
-    }
-
-    .footer-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 20px;
-      letter-spacing: 0.15em;
-      color: var(--text-dim);
-    }
-
-    .footer-sub {
-      font-size: 11px;
-      color: var(--text-dim);
-      margin-top: 6px;
-    }
-
-    /* ── COMING SOON TOOLTIP ── */
-    .soon-tip {
-      display: none;
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 12px;
-      color: var(--text-muted);
-      z-index: 99;
-      white-space: nowrap;
-      pointer-events: none;
-    }
-
-    .soon-tip.show {
-      display: block;
-      animation: fadeInUp 0.25s ease;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateX(-50%) translateY(8px); }
-      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
-
-    /* ── MOBILE TOUCH FEEDBACK ── */
-    @media (max-width: 480px) {
-      header { padding-top: 40px; }
-    }
-  </style>
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--muted); font-size: 13px; padding: 10px 18px;
+  border-radius: 20px; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 100;
+}
+.toast.show { opacity: 1; }
+</style>
 </head>
 <body>
 
-<div class="wrapper">
+<div class="header">
+  <div class="header-title">✦ English Pattern Study</div>
+  <div class="header-sub">패턴으로 배우는 영어 회화</div>
+</div>
 
-  <!-- HEADER -->
-  <header>
-    <div class="badge">English Study Game · 영어 복습 게임</div>
-    <h1>
-      PATTERN
-      <span class="highlight">GAME</span>
-    </h1>
-    <p class="subtitle">
-      스터디 후 10분, 패턴으로 실력 굳히기<br>
-      <span style="color: var(--text-dim);">패턴을 선택해 복습을 시작하세요</span>
-    </p>
-  </header>
+<div class="stats-bar">
+  <div class="stat"><span class="stat-num">46</span><span class="stat-label">전체 패턴</span></div>
+  <div class="stat"><span class="stat-num">3</span><span class="stat-label">활성 세트</span></div>
+  <div class="stat"><span class="stat-num">3</span><span class="stat-label">게임 수</span></div>
+</div>
 
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-value" id="stat-total-patterns">46</div>
-      <div class="stat-label">전체 패턴</div>
+<div class="section-label">학습 가능</div>
+<div class="card-list">
+
+  <a class="card active" href="./pattern-19-21/index.html">
+    <div class="card-top">
+      <div class="card-num">19<span>– 21</span></div>
+      <span class="card-status ready"><span class="dot"></span>학습 가능</span>
     </div>
-    <div class="stat">
-      <div class="stat-value" id="stat-active">3</div>
-      <div class="stat-label">활성 세트</div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 19</strong>I feel like ~ing</div>
+      <div class="pattern-item"><strong>패턴 20</strong>문장 + to + 동사</div>
+      <div class="pattern-item"><strong>패턴 21</strong>접속사 활용</div>
     </div>
-    <div class="stat">
-      <div class="stat-value" id="stat-games">3</div>
-      <div class="stat-label">게임 수</div>
+    <div class="card-footer">
+      <span class="content-count">게임 <b>1</b>개 · 공항 ✈️</span>
+      <span class="arrow">→</span>
     </div>
-  </div>
+  </a>
 
-  <!-- PATTERN CARDS -->
-  <div class="section-label">패턴 세트 선택 · SELECT PATTERN SET</div>
-
-  <div class="cards" id="card-list">
-
-    <!-- ✅ ACTIVE: Pattern 19-21 -->
-    <a class="card active" href="./pattern-19-21/index.html">
-      <div class="card-top">
-        <div class="card-num">19<span>– 21</span></div>
-        <span class="card-status ready"><span class="dot"></span>학습 가능</span>
-      </div>
-      <div class="patterns">
-        <div class="pattern-item"><strong>패턴 19</strong>I feel like + 동사ing</div>
-        <div class="pattern-item"><strong>패턴 20</strong>문장(주어+동사) + to + 동사</div>
-        <div class="pattern-item"><strong>패턴 21</strong>and, or, so, but, because</div>
-      </div>
-      <div class="card-footer">
-        <span class="content-count">게임 <b>1</b>개 · 공항</span>
-        <span class="arrow">→</span>
-      </div>
-    </a>
-
-    <!-- ✅ ACTIVE: Pattern 22-24 -->
-    <a class="card active" href="./pattern-22-24/index.html">
-      <div class="card-top">
-        <div class="card-num">22<span>– 24</span></div>
-        <span class="card-status ready"><span class="dot"></span>학습 가능</span>
-      </div>
-      <div class="patterns">
-        <div class="pattern-item"><strong>패턴 22</strong>I think you should</div>
-        <div class="pattern-item"><strong>패턴 23</strong>Do you want to</div>
-        <div class="pattern-item"><strong>패턴 24</strong>I'm trying to</div>
-      </div>
-      <div class="card-footer">
-        <span class="content-count">게임 <b>1</b>개 · 호텔</span>
-        <span class="arrow">→</span>
-      </div>
-    </a>
-
-    <!-- ✅ ACTIVE: Pattern 25-27 -->
-    <a class="card active" href="./pattern-25-27/index.html">
-      <div class="card-top">
-        <div class="card-num">25<span>– 27</span></div>
-        <span class="card-status ready"><span class="dot"></span>학습 가능</span>
-      </div>
-      <div class="patterns">
-        <div class="pattern-item"><strong>패턴 25</strong>Why don't we + 동사?</div>
-        <div class="pattern-item"><strong>패턴 26</strong>What / Where / How can I + 동사?</div>
-        <div class="pattern-item"><strong>패턴 27</strong>What kind of + 명사 + do you ~?</div>
-      </div>
-      <div class="card-footer">
-        <span class="content-count">게임 <b>1</b>개 · 식당</span>
-        <span class="arrow">→</span>
-      </div>
-    </a>
-
-    <!-- 🔒 Pattern 28-30 -->
-    <div class="card disabled" data-soon>
-      <div class="card-top">
-        <div class="card-num">28<span>– 30</span></div>
-        <span class="card-status soon"><span class="dot"></span>준비 중</span>
-      </div>
-      <div class="patterns">
-        <div class="pattern-item"><strong>패턴 28</strong>—</div>
-        <div class="pattern-item"><strong>패턴 29</strong>—</div>
-        <div class="pattern-item"><strong>패턴 30</strong>—</div>
-      </div>
-      <div class="card-footer">
-        <span class="content-count">게임 <b>0</b>개</span>
-        <span class="arrow" style="color:var(--text-dim)">→</span>
-      </div>
+  <a class="card active" href="./pattern-22-24/index.html">
+    <div class="card-top">
+      <div class="card-num">22<span>– 24</span></div>
+      <span class="card-status ready"><span class="dot"></span>학습 가능</span>
     </div>
-
-    <!-- 🔒 Pattern 31-33 -->
-    <div class="card disabled" data-soon>
-      <div class="card-top">
-        <div class="card-num">31<span>– 33</span></div>
-        <span class="card-status soon"><span class="dot"></span>준비 중</span>
-      </div>
-      <div class="patterns">
-        <div class="pattern-item"><strong>패턴 31</strong>—</div>
-        <div class="pattern-item"><strong>패턴 32</strong>—</div>
-        <div class="pattern-item"><strong>패턴 33</strong>—</div>
-      </div>
-      <div class="card-footer">
-        <span class="content-count">게임 <b>0</b>개</span>
-        <span class="arrow" style="color:var(--text-dim)">→</span>
-      </div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 22</strong>I think you should ~</div>
+      <div class="pattern-item"><strong>패턴 23</strong>Do you want to ~?</div>
+      <div class="pattern-item"><strong>패턴 24</strong>I'm trying to ~</div>
     </div>
-
-    <!-- 🔒 Pattern 34-36 -->
-    <div class="card disabled" data-soon>
-      <div class="card-top">
-        <div class="card-num">34<span>– 36</span></div>
-        <span class="card-status soon"><span class="dot"></span>준비 중</span>
-      </div>
-      <div class="patterns">
-        <div class="pattern-item"><strong>패턴 34</strong>—</div>
-        <div class="pattern-item"><strong>패턴 35</strong>—</div>
-        <div class="pattern-item"><strong>패턴 36</strong>—</div>
-      </div>
-      <div class="card-footer">
-        <span class="content-count">게임 <b>0</b>개</span>
-        <span class="arrow" style="color:var(--text-dim)">→</span>
-      </div>
+    <div class="card-footer">
+      <span class="content-count">게임 <b>1</b>개 · 호텔 🏨</span>
+      <span class="arrow">→</span>
     </div>
+  </a>
 
-    <!-- 🔒 Pattern 46 (wrap-around) -->
-    <div class="card disabled" data-soon>
-      <div class="card-top">
-        <div class="card-num">37<span>– 46</span></div>
-        <span class="card-status soon"><span class="dot"></span>준비 중</span>
-      </div>
-      <div class="patterns">
-        <div class="pattern-item" style="color:var(--text-dim)">나머지 패턴</div>
-      </div>
-      <div class="card-footer">
-        <span class="content-count">게임 <b>0</b>개</span>
-        <span class="arrow" style="color:var(--text-dim)">→</span>
-      </div>
+  <a class="card active" href="./pattern-25-27/index.html">
+    <div class="card-top">
+      <div class="card-num">25<span>– 27</span></div>
+      <span class="card-status ready"><span class="dot"></span>학습 가능</span>
     </div>
-
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo">ENGLISH STUDY GAME</div>
-      <div class="footer-sub">매주 토·일 오프라인 스터디 복습용 &nbsp;·&nbsp; 총 46패턴</div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 25</strong>Why don't we + 동사?</div>
+      <div class="pattern-item"><strong>패턴 26</strong>What / Where / How can I + 동사?</div>
+      <div class="pattern-item"><strong>패턴 27</strong>What kind of + 명사 + do you ~?</div>
     </div>
-  </footer>
+    <div class="card-footer">
+      <span class="content-count">게임 <b>1</b>개 · 식당 🍽️</span>
+      <span class="arrow">→</span>
+    </div>
+  </a>
 
 </div>
 
-<!-- COMING SOON TOAST -->
-<div class="soon-tip" id="soon-tip">🔒 아직 준비 중인 패턴이에요</div>
+<div class="section-label">준비 중</div>
+<div class="card-list">
 
+  <div class="card" onclick="showToast()">
+    <div class="card-top">
+      <div class="card-num">28<span>– 30</span></div>
+      <span class="card-status soon">준비 중</span>
+    </div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 28</strong>—</div>
+      <div class="pattern-item"><strong>패턴 29</strong>—</div>
+      <div class="pattern-item"><strong>패턴 30</strong>—</div>
+    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
+  </div>
+
+  <div class="card" onclick="showToast()">
+    <div class="card-top">
+      <div class="card-num">31<span>– 33</span></div>
+      <span class="card-status soon">준비 중</span>
+    </div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 31</strong>—</div>
+      <div class="pattern-item"><strong>패턴 32</strong>—</div>
+      <div class="pattern-item"><strong>패턴 33</strong>—</div>
+    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
+  </div>
+
+  <div class="card" onclick="showToast()">
+    <div class="card-top">
+      <div class="card-num">34<span>– 36</span></div>
+      <span class="card-status soon">준비 중</span>
+    </div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 34</strong>—</div>
+      <div class="pattern-item"><strong>패턴 35</strong>—</div>
+      <div class="pattern-item"><strong>패턴 36</strong>—</div>
+    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
+  </div>
+
+  <div class="card" onclick="showToast()">
+    <div class="card-top">
+      <div class="card-num">37<span>– 46</span></div>
+      <span class="card-status soon">준비 중</span>
+    </div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 37–46</strong>—</div>
+    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
+  </div>
+
+</div>
+
+<div id="toast" class="toast">🔒 아직 준비 중이에요. 곧 오픈할게요!</div>
 <script>
-  // Coming soon toast
-  let toastTimer;
-  document.querySelectorAll('[data-soon]').forEach(card => {
-    card.addEventListener('click', () => {
-      const tip = document.getElementById('soon-tip');
-      clearTimeout(toastTimer);
-      tip.classList.add('show');
-      toastTimer = setTimeout(() => tip.classList.remove('show'), 2200);
-    });
-  });
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
 </script>
-
 </body>
 </html>
