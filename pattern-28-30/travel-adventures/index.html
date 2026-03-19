@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Adventures · 패턴 28–30</title>
+<style>
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #1c2230;
+  --border:    #21262d;
+  --gold:      #c9a227;
+  --gold-dim:  #8a6e1a;
+  --gold-glow: rgba(201,162,39,.15);
+  --text:      #e6edf3;
+  --muted:     #7d8590;
+  --green:     #3fb950;
+  --green-bg:  rgba(63,185,80,.12);
+  --red:       #f85149;
+  --red-bg:    rgba(248,81,73,.12);
+  --radius:    14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+/* ── INTRO ── */
+#intro-screen { display: flex; flex-direction: column; min-height: 100vh; padding: 0 20px 48px; }
+.intro-emoji-wrap { text-align: center; padding: 52px 0 20px; font-size: 72px; animation: floatEmoji 3s ease-in-out infinite; }
+@keyframes floatEmoji { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+.intro-title { text-align: center; font-size: 26px; font-weight: 900; font-family: Georgia, serif; color: var(--gold); margin-bottom: 6px; }
+.intro-sub { text-align: center; font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+
+.pattern-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 20px; }
+.pattern-box-title { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+.recap-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+.recap-item:last-child { margin-bottom: 0; }
+.recap-num { font-size: 11px; font-weight: 700; color: var(--gold); background: var(--gold-glow); padding: 2px 7px; border-radius: 5px; white-space: nowrap; margin-top: 2px; }
+.recap-expr { font-size: 13px; line-height: 1.6; }
+.recap-expr b { color: var(--text); display: block; }
+.recap-expr span { color: var(--muted); font-size: 12px; }
+
+.info-row { display: flex; gap: 10px; margin-bottom: 24px; }
+.info-pill { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+.info-val { font-size: 20px; font-weight: 800; color: var(--gold); }
+.info-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.btn-start { width: 100%; padding: 18px; background: var(--gold); color: #0d1117; border: none; border-radius: var(--radius); font-size: 16px; font-weight: 800; cursor: pointer; transition: opacity .2s, transform .15s; }
+.btn-start:hover { opacity: .9; transform: scale(1.01); }
+
+/* ── GAME ── */
+#game-screen { display: none; padding-bottom: 48px; }
+
+.topbar { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 20px 0; }
+.topbar-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.btn-back { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); background: none; border: none; cursor: pointer; font-size: 13px; padding: 4px 0; transition: color .2s; }
+.btn-back:hover { color: var(--gold); }
+.btn-back svg { width: 16px; height: 16px; }
+.scene-counter { font-size: 13px; font-weight: 700; color: var(--muted); }
+.score-display { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; color: var(--gold); }
+.progress-track { height: 3px; background: var(--surface2); border-radius: 2px; margin-bottom: 1px; }
+.progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width .4s ease; }
+
+.game-body { padding: 20px; }
+.scene-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+.scene-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.scene-emoji { font-size: 24px; }
+.scene-title { font-size: 15px; font-weight: 800; }
+.scene-situation { font-size: 13px; color: var(--muted); background: var(--surface2); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; line-height: 1.7; }
+
+.dialogue { display: flex; flex-direction: column; gap: 8px; }
+.d-line { display: flex; gap: 8px; align-items: flex-start; }
+.speaker { font-size: 12px; font-weight: 800; color: var(--gold); min-width: 16px; margin-top: 3px; }
+.speech { font-size: 14px; line-height: 1.65; color: var(--text); }
+.speech.blank { background: var(--surface2); border: 1.5px dashed var(--gold-dim); border-radius: 8px; padding: 8px 12px; color: var(--muted); font-style: italic; }
+
+.prompt-label { text-align: center; font-size: 13px; font-weight: 700; color: var(--muted); margin: 16px 0 12px; }
+
+.choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.choice-btn { width: 100%; text-align: left; padding: 14px 16px; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 14px; line-height: 1.5; cursor: pointer; transition: border-color .15s, background .15s; }
+.choice-btn:not(:disabled):hover { border-color: var(--gold); background: var(--surface2); }
+.choice-btn.correct { border-color: var(--green) !important; background: var(--green-bg) !important; color: var(--green); }
+.choice-btn.wrong   { border-color: var(--red)   !important; background: var(--red-bg)   !important; color: var(--red); }
+.choice-btn.dimmed  { opacity: .4; }
+
+.feedback { display: none; border-radius: var(--radius); padding: 14px 16px; border: 1px solid; margin-bottom: 0; line-height: 1.65; }
+.feedback.correct { background: var(--green-bg); border-color: var(--green); }
+.feedback.wrong   { background: var(--red-bg);   border-color: var(--red); }
+.feedback-head { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+.feedback.correct .feedback-head { color: var(--green); }
+.feedback.wrong   .feedback-head { color: var(--red); }
+.feedback-body { font-size: 13px; color: var(--muted); }
+
+.wrong-actions { margin-top: 12px; display: none; gap: 10px; animation: fadeIn .3s ease; }
+.wrong-actions.show { display: flex; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+.btn-retry-scene { flex: 1; padding: 15px; background: var(--surface); color: var(--text); border: 1.5px solid var(--gold-dim); border-radius: var(--radius); font-size: 14px; font-weight: 700; cursor: pointer; transition: border-color .2s, background .2s; }
+.btn-retry-scene:hover { border-color: var(--gold); background: var(--surface2); }
+.btn-continue { flex: 1; padding: 15px; background: var(--gold); color: #0d1117; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 700; cursor: pointer; }
+
+.btn-next { display: none; width: 100%; padding: 16px; background: var(--gold); color: #0d1117; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 800; cursor: pointer; margin-top: 12px; transition: opacity .2s; }
+.btn-next:hover { opacity: .9; }
+
+/* ── RESULT ── */
+#result-screen { display: none; padding: 0 20px 48px; }
+.result-hero { text-align: center; padding: 40px 0 24px; }
+.result-trophy { font-size: 64px; margin-bottom: 12px; }
+.result-score { font-size: 42px; font-weight: 900; color: var(--gold); font-family: Georgia, serif; }
+.result-score span { font-size: 20px; color: var(--gold-dim); }
+.result-comment { font-size: 15px; color: var(--muted); margin-top: 6px; }
+
+.acc-bar-wrap { margin-bottom: 20px; }
+.acc-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.acc-track { height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+.acc-fill { height: 100%; background: var(--gold); border-radius: 4px; transition: width .8s ease; }
+
+.dots-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
+.dot-item { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; }
+.dot-item.ok   { background: var(--green-bg); color: var(--green); }
+.dot-item.miss { background: var(--red-bg);   color: var(--red); }
+
+.recap-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 20px; }
+.recap-box-title { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+.recap-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+.recap-row:last-child { margin-bottom: 0; }
+.recap-badge { font-size: 11px; font-weight: 700; color: var(--gold); background: var(--gold-glow); padding: 2px 7px; border-radius: 5px; white-space: nowrap; margin-top: 2px; }
+.recap-text { font-size: 13px; line-height: 1.6; }
+.recap-text b { color: var(--text); display: block; }
+.recap-text span { color: var(--muted); font-size: 12px; }
+
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.btn-replay { width: 100%; padding: 16px; background: var(--gold); color: #0d1117; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 800; cursor: pointer; transition: opacity .2s; }
+.btn-replay:hover { opacity: .9; }
+.btn-home { width: 100%; padding: 16px; background: var(--surface); color: var(--text); border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; display: block; transition: border-color .2s; }
+.btn-home:hover { border-color: var(--gold-dim); }
+</style>
+</head>
+<body>
+
+<!-- ══ INTRO ══ -->
+<div id="intro-screen">
+  <div class="intro-emoji-wrap">🗺️</div>
+  <div class="intro-title">Travel Adventures</div>
+  <div class="intro-sub">패턴 28–30 · 여행 후기 편</div>
+
+  <div class="pattern-box">
+    <div class="pattern-box-title">이번 게임의 패턴</div>
+    <div class="recap-item">
+      <span class="recap-num">패턴 28</span>
+      <div class="recap-expr">
+        <b>What / When / Where did you ~?</b>
+        <span>뭘 / 언제 / 어디서 ~했어? / 과거 일을 물어볼 때</span>
+      </div>
+    </div>
+    <div class="recap-item">
+      <span class="recap-num">패턴 29</span>
+      <div class="recap-expr">
+        <b>That's what / why 주어 + 동사</b>
+        <span>그게 바로 ~야 / 그래서 ~한 거야 / 이유·핵심을 설명할 때</span>
+      </div>
+    </div>
+    <div class="recap-item">
+      <span class="recap-num">패턴 30</span>
+      <div class="recap-expr">
+        <b>Have you (ever) + 과거분사</b>
+        <span>~해본 적 있어? / 상대방의 경험을 물어볼 때</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-row">
+    <div class="info-pill"><div class="info-val">6</div><div class="info-lbl">씬</div></div>
+    <div class="info-pill"><div class="info-val">3</div><div class="info-lbl">패턴</div></div>
+    <div class="info-pill"><div class="info-val">5분</div><div class="info-lbl">소요</div></div>
+  </div>
+
+  <button class="btn-start" onclick="startGame()">게임 시작하기 →</button>
+</div>
+
+<!-- ══ GAME ══ -->
+<div id="game-screen">
+  <div class="topbar">
+    <div class="topbar-row">
+      <button class="btn-back" onclick="history.back()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg>
+        목록으로
+      </button>
+      <span class="scene-counter" id="scene-counter">씬 1 / 6</span>
+      <span class="score-display">⭐ <span id="score-text">0점</span></span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="game-body">
+    <div class="scene-card">
+      <div class="scene-header">
+        <span class="scene-emoji" id="scene-emoji"></span>
+        <span class="scene-title" id="scene-title"></span>
+      </div>
+      <div class="scene-situation" id="scene-situation"></div>
+      <div class="dialogue" id="dialogue"></div>
+    </div>
+
+    <div class="prompt-label" id="prompt-label"></div>
+    <div class="choices" id="choices"></div>
+
+    <div class="feedback" id="feedback-box">
+      <div class="feedback-head" id="feedback-head"></div>
+      <div class="feedback-body" id="feedback-body"></div>
+    </div>
+
+    <div class="wrong-actions" id="wrong-actions">
+      <button class="btn-retry-scene" onclick="retryScene()">🔄 다시 풀기</button>
+      <button class="btn-continue" onclick="nextScene()">그냥 진행하기 →</button>
+    </div>
+
+    <button class="btn-next" id="btn-next" onclick="nextScene()">다음 씬으로 →</button>
+  </div>
+</div>
+
+<!-- ══ RESULT ══ -->
+<div id="result-screen">
+  <div class="result-hero">
+    <div class="result-trophy" id="result-trophy">🏆</div>
+    <div class="result-score" id="result-score">6<span> / 6</span></div>
+    <div class="result-comment" id="result-comment">완벽해요! 패턴 마스터!</div>
+  </div>
+
+  <div class="acc-bar-wrap">
+    <div class="acc-label"><span>정답률</span><span id="acc-pct">100%</span></div>
+    <div class="acc-track"><div class="acc-fill" id="acc-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="dots-row" id="dots-row"></div>
+
+  <div class="recap-box">
+    <div class="recap-box-title">패턴 정리</div>
+    <div class="recap-row">
+      <span class="recap-badge">패턴 28</span>
+      <div class="recap-text">
+        <b>What / When / Where did you ~?</b>
+        <span>과거에 한 일을 물어볼 때. what(무엇), when(언제), where(어디서)를 상황에 맞게 골라 쓰면 돼요.</span>
+      </div>
+    </div>
+    <div class="recap-row">
+      <span class="recap-badge">패턴 29</span>
+      <div class="recap-text">
+        <b>That's what / why 주어 + 동사</b>
+        <span>That's why = "그래서 ~한 거야" (이유), That's what = "그게 바로 ~야" (핵심 강조). 자연스러운 리액션으로 많이 써요.</span>
+      </div>
+    </div>
+    <div class="recap-row">
+      <span class="recap-badge">패턴 30</span>
+      <div class="recap-text">
+        <b>Have you (ever) + 과거분사</b>
+        <span>상대방의 경험을 물어볼 때. ever를 넣으면 "혹시 ~해본 적 있어?"로 더 부드러운 뉘앙스가 돼요.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-actions">
+    <button class="btn-replay" onclick="replayGame()">🔄 다시 도전하기</button>
+    <a class="btn-home" href="./index.html">← 목록으로 돌아가기</a>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  SCENE DATA — 여행 후기 대화 연습 10세트 기반
+//  패턴 28 × 2씬, 패턴 29 × 2씬, 패턴 30 × 2씬
+// ══════════════════════════════════════════
+const scenes = [
+
+  // ── SCENE 1 ── Set 1: Just Got Back (패턴 30)
+  {
+    emoji: '✈️',
+    title: 'Just Got Back',
+    situation: '친구가 여행에서 돌아온 것 같아요. 얼굴이 많이 탔네요. A가 B에게 다낭이 처음인지 물어보려고 해요.',
+    dialogue: [
+      { s: 'A', t: "Hey, you look so tan! Where did you go last week?" },
+      { s: 'B', t: "Danang! Four days. It was amazing." },
+      { s: 'A', t: "???", blank: true },
+      { s: 'B', t: "No, first time. That's why I was so excited before I left." }
+    ],
+    prompt: "A가 B에게 다낭에 가본 적이 있는지 물어보려고 해요.",
+    choices: [
+      {
+        text: "Have you ever been there before?",
+        correct: true,
+        feedback: "정답! 🎉 <b>패턴 30 'Have you (ever) + 과거분사'</b>로 경험을 자연스럽게 물어봤어요. been은 be의 과거분사로, 'have you been to ~'는 여행 대화에서 정말 자주 쓰이는 표현이에요."
+      },
+      {
+        text: "Where did you stay when you were in Danang?",
+        correct: false,
+        feedback: "<b>패턴 28 'Where did you ~?'</b>는 과거의 장소를 물어볼 때 써요. 지금 A는 장소가 아니라 B가 다낭에 <b>가본 적이 있는지 경험</b>을 물어보려는 상황이에요. 패턴 30이 맞아요."
+      },
+      {
+        text: "That's why Danang is so popular these days.",
+        correct: false,
+        feedback: "<b>패턴 29 'That's why ~'</b>는 이유를 설명할 때 쓰는 표현이에요. 지금 A는 설명하는 게 아니라 B에게 <b>경험을 묻는</b> 상황이에요. 패턴 30이 적합해요."
+      }
+    ]
+  },
+
+  // ── SCENE 2 ── Set 2: The Hidden Spot (패턴 28)
+  {
+    emoji: '🏔️',
+    title: 'The Hidden Spot',
+    situation: 'B가 일본의 숨겨진 마을 시라카와고 이야기를 꺼냈어요. A가 언제 거기 갔는지 물어보려고 해요.',
+    dialogue: [
+      { s: 'A', t: "Have you ever heard of a village called Shirakawa-go?" },
+      { s: 'B', t: "No, what is it?" },
+      { s: 'A', t: "It's this tiny village in Japan. Thatched roof houses, super quiet." },
+      { s: 'B', t: "Sounds unreal. ???" },
+    ],
+    prompt: "B가 A에게 언제 시라카와고에 갔는지 물어보려고 해요.",
+    choices: [
+      {
+        text: "When did you go there?",
+        correct: true,
+        feedback: "정답! 🎉 <b>패턴 28 'When did you ~?'</b>로 과거의 시점을 자연스럽게 물어봤어요. 여행 대화에서 언제 갔는지 물어볼 때 딱 맞는 표현이에요."
+      },
+      {
+        text: "Have you ever been there in winter?",
+        correct: false,
+        feedback: "<b>패턴 30 'Have you ever ~?'</b>는 경험을 물어볼 때 써요. 지금 B는 A가 이미 거기 갔다는 걸 알고 있고, <b>언제 갔는지</b>를 물어보는 상황이에요. 패턴 28이 맞아요."
+      },
+      {
+        text: "That's why you love Japan so much.",
+        correct: false,
+        feedback: "<b>패턴 29 'That's why ~'</b>는 이유를 설명하는 표현이에요. 지금 B는 설명이 아니라 A에게 <b>시점을 묻는</b> 상황이에요. 패턴 28이 적합해요."
+      }
+    ]
+  },
+
+  // ── SCENE 3 ── Set 3: The Food Was The Trip (패턴 29)
+  {
+    emoji: '🍜',
+    title: 'The Food Was The Trip',
+    situation: 'B가 베트남에서 하루 다섯 끼를 먹었다고 해요. A가 그게 바로 자기가 다음 여행에서 하고 싶은 것이라고 공감하려고 해요.',
+    dialogue: [
+      { s: 'A', t: "What did you eat in Vietnam? I heard the food is unreal." },
+      { s: 'B', t: "Pho, banh mi, bun cha... everything. I ate like five times a day." },
+      { s: 'A', t: "???", blank: true },
+      { s: 'B', t: "Honestly, that's the best way. Have you ever tried bun cha?" }
+    ],
+    prompt: "A가 '그게 바로 내가 다음 여행에서 하고 싶은 것'이라고 말하려고 해요.",
+    choices: [
+      {
+        text: "That's what I want to do on my next trip. Just eat.",
+        correct: true,
+        feedback: "정답! 🎉 <b>패턴 29 'That's what 주어 + 동사'</b>는 '그게 바로 ~야'라는 뜻으로 핵심을 강조할 때 써요. B의 말을 듣고 '맞아, 그게 바로 내가 원하는 거야!'라고 공감하는 표현이에요."
+      },
+      {
+        text: "What did you eat the most while you were there?",
+        correct: false,
+        feedback: "<b>패턴 28 'What did you ~?'</b>는 과거 일을 물어볼 때 써요. 지금 A는 정보를 더 묻는 게 아니라 B의 말에 <b>공감하며 핵심을 강조</b>하는 상황이에요. 패턴 29가 맞아요."
+      },
+      {
+        text: "Have you ever eaten that much on one trip before?",
+        correct: false,
+        feedback: "<b>패턴 30 'Have you ever ~?'</b>는 경험을 물어볼 때 써요. 지금 A는 B에게 경험을 묻는 게 아니라 자신이 하고 싶은 것을 <b>공감하며 표현</b>하는 상황이에요. 패턴 29가 적합해요."
+      }
+    ]
+  },
+
+  // ── SCENE 4 ── Set 5: Solo Travel Convert (패턴 28)
+  {
+    emoji: '🏯',
+    title: 'Solo Travel Convert',
+    situation: 'B가 혼자 교토 여행을 다녀왔다고 해요. A가 혼자 여행하면서 뭘 했는지 물어보려고 해요.',
+    dialogue: [
+      { s: 'A', t: "Have you ever traveled alone?" },
+      { s: 'B', t: "Yeah, I went to Kyoto solo last spring. Best decision ever." },
+      { s: 'A', t: "???", blank: true },
+      { s: 'B', t: "That's what was so great — I just did whatever I wanted, whenever." }
+    ],
+    prompt: "A가 '함께 계획할 사람이 없는데 뭘 했어?'라고 물어보려고 해요.",
+    choices: [
+      {
+        text: "What did you do without anyone to plan with?",
+        correct: true,
+        feedback: "정답! 🎉 <b>패턴 28 'What did you ~?'</b>로 혼자 여행에서 한 일을 자연스럽게 물어봤어요. 'without anyone to plan with'라는 표현이 대화에 현실적인 맥락을 더해줘요."
+      },
+      {
+        text: "Have you ever felt lonely traveling alone?",
+        correct: false,
+        feedback: "<b>패턴 30 'Have you ever ~?'</b>는 경험을 물어볼 때 써요. 지금 A는 감정이 아니라 <b>혼자서 무엇을 했는지</b>를 물어보려는 상황이에요. 패턴 28이 자연스러워요."
+      },
+      {
+        text: "That's why solo travel is so popular these days.",
+        correct: false,
+        feedback: "<b>패턴 29 'That's why ~'</b>는 이유를 설명할 때 써요. 지금 A는 설명이 아니라 B에게 <b>혼자서 한 활동</b>을 묻는 상황이에요. 패턴 28이 맞아요."
+      }
+    ]
+  },
+
+  // ── SCENE 5 ── Set 4: The Flight From Hell (패턴 29)
+  {
+    emoji: '😬',
+    title: 'The Flight From Hell',
+    situation: 'B가 유럽에서 방금 돌아왔는데 너무 지쳐 보여요. A가 B가 그렇게 보이는 이유를 말하려고 해요.',
+    dialogue: [
+      { s: 'A', t: "You look exhausted. When did you get back from Europe?" },
+      { s: 'B', t: "Like two hours ago. The flight was brutal. 13 hours with a baby crying the whole time." },
+      { s: 'A', t: "Oh no. ???", blank: true },
+      { s: 'B', t: "I barely slept. Have you ever taken a flight that long?" }
+    ],
+    prompt: "A가 'B가 그렇게 보이는 게 당연하다'는 뉘앙스로 말하려고 해요.",
+    choices: [
+      {
+        text: "That's why you look like that.",
+        correct: true,
+        feedback: "정답! 🎉 <b>패턴 29 'That's why 주어 + 동사'</b>는 '그래서 ~한 거야'라는 뜻으로 이유를 자연스럽게 설명할 때 써요. B의 상황을 듣고 '아, 그래서 그렇게 보이는 거구나'라고 반응하는 딱 맞는 표현이에요."
+      },
+      {
+        text: "When did you book such a long flight?",
+        correct: false,
+        feedback: "<b>패턴 28 'When did you ~?'</b>는 과거의 시점을 물어볼 때 써요. 지금 A는 시점을 묻는 게 아니라 B가 지쳐 보이는 <b>이유를 설명</b>하는 상황이에요. 패턴 29가 맞아요."
+      },
+      {
+        text: "Have you ever had such a terrible flight before?",
+        correct: false,
+        feedback: "<b>패턴 30 'Have you ever ~?'</b>는 경험을 물어볼 때 써요. 지금 A는 경험을 묻는 게 아니라 B의 피곤한 모습에 대한 <b>이유를 설명</b>하는 상황이에요. 패턴 29가 적합해요."
+      }
+    ]
+  },
+
+  // ── SCENE 6 ── Set 9: The Unexpected Detour (패턴 30)
+  {
+    emoji: '🕊️',
+    title: 'The Unexpected Detour',
+    situation: '오사카 여행 중 히로시마로 즉흥 여행을 갔다는 A. B가 히로시마 평화기념관에 가본 적이 있는지 물어보려고 해요.',
+    dialogue: [
+      { s: 'A', t: "We randomly took a train to Hiroshima. Best detour ever." },
+      { s: 'B', t: "Oh wow. ???", blank: true },
+      { s: 'A', t: "Yeah, that's what got me. I didn't expect to feel that emotional." },
+      { s: 'B', t: "I've heard it's intense." }
+    ],
+    prompt: "B가 A에게 히로시마 평화기념관에 가본 적이 있는지 물어보려고 해요.",
+    choices: [
+      {
+        text: "Have you ever visited the Peace Memorial?",
+        correct: true,
+        feedback: "정답! 🎉 <b>패턴 30 'Have you (ever) + 과거분사'</b>로 특정 장소를 방문한 경험을 물어봤어요. visited가 visit의 과거분사예요. 여행 대화에서 '거기 가봤어?'라고 물을 때 자주 쓰이는 표현이에요."
+      },
+      {
+        text: "What did you feel when you saw the memorial?",
+        correct: false,
+        feedback: "<b>패턴 28 'What did you ~?'</b>는 과거 행동이나 감정을 물어볼 때 써요. 지금 B는 감정을 묻는 게 아니라 A가 평화기념관에 <b>가본 적이 있는지</b>를 먼저 확인하는 상황이에요. 패턴 30이 맞아요."
+      },
+      {
+        text: "That's why Hiroshima is such a meaningful place to visit.",
+        correct: false,
+        feedback: "<b>패턴 29 'That's why ~'</b>는 이유를 설명할 때 써요. 지금 B는 설명이 아니라 A에게 <b>방문 경험을 묻는</b> 상황이에요. 패턴 30이 적합해요."
+      }
+    ]
+  }
+
+];
+
+// ══════════════════════════════════════════
+//  GAME STATE
+// ══════════════════════════════════════════
+let currentScene = 0;
+let score = 0;
+let results = [];
+let shuffledChoices = [];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startGame() {
+  document.getElementById('intro-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+  currentScene = 0; score = 0; results = [];
+  renderScene();
+}
+
+function renderScene() {
+  const s = scenes[currentScene];
+
+  document.getElementById('scene-counter').textContent = `씬 ${currentScene + 1} / ${scenes.length}`;
+  document.getElementById('score-text').textContent = `${score}점`;
+  document.getElementById('progress-fill').style.width = `${(currentScene / scenes.length) * 100}%`;
+
+  document.getElementById('scene-emoji').textContent = s.emoji;
+  document.getElementById('scene-title').textContent = s.title;
+  document.getElementById('scene-situation').textContent = s.situation;
+
+  const dlg = document.getElementById('dialogue');
+  dlg.innerHTML = '';
+  s.dialogue.forEach(line => {
+    const div = document.createElement('div');
+    div.className = 'd-line';
+    const sp = document.createElement('span');
+    sp.className = 'speaker';
+    sp.textContent = line.s;
+    const txt = document.createElement('span');
+    txt.className = line.blank ? 'speech blank' : 'speech';
+    txt.textContent = line.blank ? '??? (빈칸)' : line.t;
+    div.appendChild(sp); div.appendChild(txt);
+    dlg.appendChild(div);
+  });
+
+  document.getElementById('prompt-label').textContent = s.prompt;
+
+  shuffledChoices = shuffle(s.choices);
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffledChoices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.id = `choice-${i}`;
+    btn.textContent = c.text;
+    btn.onclick = () => selectChoice(i);
+    choicesEl.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback-box');
+  fb.style.display = 'none';
+  fb.className = 'feedback';
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('wrong-actions').classList.remove('show');
+}
+
+function selectChoice(idx) {
+  const choice = shuffledChoices[idx];
+  document.querySelectorAll('.choice-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i !== idx) btn.classList.add('dimmed');
+  });
+
+  const btn = document.getElementById(`choice-${idx}`);
+  const fb = document.getElementById('feedback-box');
+  const wrongActions = document.getElementById('wrong-actions');
+  const nextBtn = document.getElementById('btn-next');
+
+  if (choice.correct) {
+    btn.classList.add('correct');
+    score++;
+    results.push(true);
+    fb.className = 'feedback correct';
+    document.getElementById('feedback-head').textContent = '✅ 정답이에요!';
+    wrongActions.classList.remove('show');
+    nextBtn.style.display = 'block';
+    nextBtn.textContent = currentScene < scenes.length - 1 ? '다음 씬으로 →' : '결과 보기 →';
+  } else {
+    btn.classList.add('wrong');
+    results.push(false);
+    shuffledChoices.forEach((c, i) => {
+      if (c.correct) document.getElementById(`choice-${i}`).classList.add('correct');
+    });
+    fb.className = 'feedback wrong';
+    document.getElementById('feedback-head').textContent = '❌ 아쉬워요!';
+    nextBtn.style.display = 'none';
+    wrongActions.classList.add('show');
+  }
+
+  document.getElementById('feedback-body').innerHTML = choice.feedback;
+  fb.style.display = 'block';
+  document.getElementById('score-text').textContent = `${score}점`;
+}
+
+function retryScene() {
+  results.pop();
+  renderScene();
+}
+
+function nextScene() {
+  currentScene++;
+  if (currentScene < scenes.length) {
+    renderScene();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'block';
+
+  let trophy, comment;
+  if      (score === 6) { trophy = '🏆'; comment = '완벽해요! 패턴 마스터!'; }
+  else if (score === 5) { trophy = '🌟'; comment = '훌륭해요! 거의 완벽!'; }
+  else if (score === 4) { trophy = '👍'; comment = '잘 하셨어요!'; }
+  else if (score === 3) { trophy = '📚'; comment = '절반 맞았어요!'; }
+  else                  { trophy = '💪'; comment = '다시 도전해봐요!'; }
+
+  document.getElementById('result-trophy').textContent = trophy;
+  document.getElementById('result-score').innerHTML = `${score}<span> / 6</span>`;
+  document.getElementById('result-comment').textContent = comment;
+
+  const pct = Math.round((score / scenes.length) * 100);
+  document.getElementById('acc-pct').textContent = `${pct}%`;
+  setTimeout(() => { document.getElementById('acc-fill').style.width = `${pct}%`; }, 100);
+
+  const dots = document.getElementById('dots-row');
+  dots.innerHTML = '';
+  results.forEach(ok => {
+    const d = document.createElement('div');
+    d.className = `dot-item ${ok ? 'ok' : 'miss'}`;
+    d.textContent = ok ? '○' : '✕';
+    dots.appendChild(d);
+  });
+}
+
+function replayGame() {
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+  currentScene = 0; score = 0; results = [];
+  renderScene();
+}
+</script>
+</body>
+</html>
