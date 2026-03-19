@@ -26,30 +26,16 @@ body {
   min-height: 100vh; padding-bottom: 48px;
 }
 .header { padding: 32px 20px 0; text-align: center; }
-.header-title {
-  font-size: 22px; font-weight: 800;
-  font-family: Georgia, serif; color: var(--gold); letter-spacing: .5px;
-}
+.header-title { font-size: 22px; font-weight: 800; font-family: Georgia, serif; color: var(--gold); letter-spacing: .5px; }
 .header-sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
 
-.stats-bar {
-  display: flex; margin: 20px 20px 0;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); overflow: hidden;
-}
-.stat {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; padding: 14px 0;
-}
+.stats-bar { display: flex; margin: 20px 20px 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.stat { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 14px 0; }
 .stat + .stat { border-left: 1px solid var(--border); }
 .stat-num { font-size: 22px; font-weight: 800; color: var(--gold); }
 .stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
 
-.section-label {
-  font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
-  color: var(--muted); text-transform: uppercase;
-  padding: 24px 20px 10px;
-}
+.section-label { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; color: var(--muted); text-transform: uppercase; padding: 24px 20px 10px; }
 .card-list { display: flex; flex-direction: column; gap: 12px; padding: 0 20px; }
 
 a.card {
@@ -59,60 +45,32 @@ a.card {
   position: relative; overflow: hidden;
   transition: border-color .2s, box-shadow .2s, transform .15s;
 }
-a.card::before {
-  content: ''; position: absolute; inset: 0;
-  background: var(--gold-glow); opacity: 0; transition: opacity .2s;
-}
+a.card::before { content: ''; position: absolute; inset: 0; background: var(--gold-glow); opacity: 0; transition: opacity .2s; }
 a.card:hover { border-color: var(--gold); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(201,162,39,.12); }
 a.card:hover::before { opacity: 1; }
 
-div.card {
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: var(--radius); padding: 18px;
-  opacity: .42; cursor: not-allowed;
-}
-.card-top {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  margin-bottom: 14px;
-}
-.card-num {
-  font-size: 28px; font-weight: 900;
-  font-family: Georgia, serif; color: var(--gold); line-height: 1;
-}
+div.card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 18px; opacity: .42; cursor: not-allowed; }
+
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+.card-num { font-size: 28px; font-weight: 900; font-family: Georgia, serif; color: var(--gold); line-height: 1; }
 .card-num span { font-size: 18px; color: var(--gold-dim); }
-.card-status {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;
-}
+.card-status { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
 .card-status.ready { background: var(--green-bg); color: var(--green); }
 .card-status.soon  { background: var(--surface2); color: var(--muted); }
-.dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--green); animation: pulse 2s infinite;
-}
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
 .patterns { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
 .pattern-item { font-size: 13px; color: var(--muted); line-height: 1.5; }
-.pattern-item strong {
-  color: var(--gold); font-weight: 700; font-size: 11px;
-  letter-spacing: .5px; margin-right: 6px;
-}
-.card-footer {
-  display: flex; justify-content: space-between; align-items: center;
-  padding-top: 12px; border-top: 1px solid var(--border);
-}
+.pattern-item strong { color: var(--gold); font-weight: 700; font-size: 11px; letter-spacing: .5px; margin-right: 6px; }
+
+.card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
 .content-count { font-size: 12px; color: var(--muted); }
 .content-count b { color: var(--text); }
 .arrow { color: var(--gold); font-size: 16px; transition: transform .2s; }
 a.card:hover .arrow { transform: translateX(4px); }
 
-.toast {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-  background: var(--surface2); border: 1px solid var(--border);
-  color: var(--muted); font-size: 13px; padding: 10px 18px;
-  border-radius: 20px; white-space: nowrap;
-  opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 100;
-}
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-size: 13px; padding: 10px 18px; border-radius: 20px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 100; }
 .toast.show { opacity: 1; }
 </style>
 </head>
@@ -125,8 +83,8 @@ a.card:hover .arrow { transform: translateX(4px); }
 
 <div class="stats-bar">
   <div class="stat"><span class="stat-num">46</span><span class="stat-label">전체 패턴</span></div>
-  <div class="stat"><span class="stat-num">3</span><span class="stat-label">활성 세트</span></div>
-  <div class="stat"><span class="stat-num">3</span><span class="stat-label">게임 수</span></div>
+  <div class="stat"><span class="stat-num">4</span><span class="stat-label">활성 세트</span></div>
+  <div class="stat"><span class="stat-num">4</span><span class="stat-label">게임 수</span></div>
 </div>
 
 <div class="section-label">학습 가능</div>
@@ -180,23 +138,26 @@ a.card:hover .arrow { transform: translateX(4px); }
     </div>
   </a>
 
+  <a class="card active" href="./pattern-28-30/index.html">
+    <div class="card-top">
+      <div class="card-num">28<span>– 30</span></div>
+      <span class="card-status ready"><span class="dot"></span>학습 가능</span>
+    </div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 28</strong>What / When / Where did you ~?</div>
+      <div class="pattern-item"><strong>패턴 29</strong>That's what / why 주어 + 동사</div>
+      <div class="pattern-item"><strong>패턴 30</strong>Have you (ever) + 과거분사</div>
+    </div>
+    <div class="card-footer">
+      <span class="content-count">게임 <b>1</b>개 · 여행 후기 🗺️</span>
+      <span class="arrow">→</span>
+    </div>
+  </a>
+
 </div>
 
 <div class="section-label">준비 중</div>
 <div class="card-list">
-
-  <div class="card" onclick="showToast()">
-    <div class="card-top">
-      <div class="card-num">28<span>– 30</span></div>
-      <span class="card-status soon">준비 중</span>
-    </div>
-    <div class="patterns">
-      <div class="pattern-item"><strong>패턴 28</strong>—</div>
-      <div class="pattern-item"><strong>패턴 29</strong>—</div>
-      <div class="pattern-item"><strong>패턴 30</strong>—</div>
-    </div>
-    <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
-  </div>
 
   <div class="card" onclick="showToast()">
     <div class="card-top">
@@ -226,11 +187,24 @@ a.card:hover .arrow { transform: translateX(4px); }
 
   <div class="card" onclick="showToast()">
     <div class="card-top">
-      <div class="card-num">37<span>– 46</span></div>
+      <div class="card-num">37<span>– 39</span></div>
       <span class="card-status soon">준비 중</span>
     </div>
     <div class="patterns">
-      <div class="pattern-item"><strong>패턴 37–46</strong>—</div>
+      <div class="pattern-item"><strong>패턴 37</strong>—</div>
+      <div class="pattern-item"><strong>패턴 38</strong>—</div>
+      <div class="pattern-item"><strong>패턴 39</strong>—</div>
+    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
+  </div>
+
+  <div class="card" onclick="showToast()">
+    <div class="card-top">
+      <div class="card-num">40<span>– 46</span></div>
+      <span class="card-status soon">준비 중</span>
+    </div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 40–46</strong>—</div>
     </div>
     <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
   </div>
