@@ -373,44 +373,6 @@
       }
     }
 
-    /* ── PROGRESS ── */
-    .progress-section {
-      margin-bottom: 32px;
-    }
-
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .progress-title {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .progress-pct {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: var(--accent);
-    }
-
-    .progress-bar-bg {
-      height: 4px;
-      background: var(--surface2);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      border-radius: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      width: 0%;
-      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
     /* ── FOOTER ── */
     footer {
       margin-top: 56px;
@@ -499,17 +461,6 @@
     <div class="stat">
       <div class="stat-value" id="stat-games">3</div>
       <div class="stat-label">게임 수</div>
-    </div>
-  </div>
-
-  <!-- PROGRESS -->
-  <div class="progress-section">
-    <div class="progress-header">
-      <span class="progress-title">학습 진행 패턴</span>
-      <span class="progress-pct" id="progress-pct">0%</span>
-    </div>
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progress-fill"></div>
     </div>
   </div>
 
@@ -651,17 +602,6 @@
 <div class="soon-tip" id="soon-tip">🔒 아직 준비 중인 패턴이에요</div>
 
 <script>
-  // Progress bar animation
-  window.addEventListener('load', () => {
-    const pct = Math.round((9 / 46) * 100); // 9 out of 46 patterns active
-    const fill = document.getElementById('progress-fill');
-    const pctEl = document.getElementById('progress-pct');
-    setTimeout(() => {
-      fill.style.width = pct + '%';
-      pctEl.textContent = pct + '%';
-    }, 300);
-  });
-
   // Coming soon toast
   let toastTimer;
   document.querySelectorAll('[data-soon]').forEach(card => {
