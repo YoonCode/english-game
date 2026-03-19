@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restaurant Dialogue | 패턴 25–27</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface2:  #1c2230;
+      --border:    #21262d;
+      --gold:      #c9a227;
+      --gold-dim:  #8a6e1a;
+      --gold-glow: rgba(201,162,39,.15);
+      --text:      #e6edf3;
+      --muted:     #7d8590;
+      --blue:      #58a6ff;
+      --purple:    #bc8cff;
+      --radius:    14px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100dvh;
+      padding-bottom: 60px;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      z-index: 10;
+      padding: 14px 20px;
+    }
+    .header-inner {
+      max-width: 540px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 4px 0;
+      transition: color .2s;
+      text-decoration: none;
+    }
+    .btn-back:hover { color: var(--gold); }
+    .btn-back svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .header-title {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: .04em;
+    }
+
+    /* ── PATTERN BAR ── */
+    .pattern-bar {
+      max-width: 540px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .pattern-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+    .p-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      background: var(--gold-glow);
+      border-radius: 6px;
+      padding: 2px 8px;
+      white-space: nowrap;
+    }
+    .p-expr {
+      font-family: Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      flex: 1;
+    }
+    .p-role {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── GUIDE ── */
+    .guide {
+      max-width: 540px;
+      margin: 14px auto 0;
+      padding: 0 20px;
+    }
+    .guide p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── DIVIDER ── */
+    .section-label {
+      max-width: 540px;
+      margin: 28px auto 0;
+      padding: 0 20px;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── DIALOGUE SETS ── */
+    .sets {
+      max-width: 540px;
+      margin: 12px auto 0;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .set-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    /* Set header */
+    .set-header {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .set-emoji { font-size: 20px; line-height: 1; }
+    .set-num {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .set-title {
+      font-size: 16px;
+      font-weight: 700;
+      font-family: Georgia, serif;
+    }
+    .set-title-ko {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* Dialogue lines */
+    .dialogue {
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .line {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .speaker {
+      font-size: 11px;
+      font-weight: 700;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .speaker.a {
+      background: rgba(88,166,255,.15);
+      color: var(--blue);
+      border: 1px solid rgba(88,166,255,.3);
+    }
+    .speaker.b {
+      background: rgba(188,140,255,.15);
+      color: var(--purple);
+      border: 1px solid rgba(188,140,255,.3);
+    }
+    .speech {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text);
+      flex: 1;
+    }
+
+    /* Speak it */
+    .speak-it {
+      margin: 4px 18px 16px;
+      padding: 10px 14px;
+      background: rgba(201,162,39,.06);
+      border: 1px solid rgba(201,162,39,.2);
+      border-left: 3px solid var(--gold-dim);
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .speak-it .icon { font-size: 15px; flex-shrink: 0; }
+
+    /* ── FOOTER ── */
+    .footer {
+      max-width: 540px;
+      margin: 40px auto 0;
+      padding: 0 20px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+    }
+    .footer p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <a class="btn-back" href="./index.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10 3L5 8l5 5"/>
+      </svg>
+      목록으로
+    </a>
+    <span class="header-title">패턴 25–27 · 대화 연습</span>
+    <span style="width:60px"></span>
+  </div>
+</div>
+
+<!-- PATTERN BAR -->
+<div class="pattern-bar">
+  <div class="pattern-row">
+    <span class="p-num">패턴 25</span>
+    <span class="p-expr">Why don't we + 동사?</span>
+    <span class="p-role">제안</span>
+  </div>
+  <div class="pattern-row">
+    <span class="p-num">패턴 26</span>
+    <span class="p-expr">What / Where / How can I + 동사?</span>
+    <span class="p-role">방법 묻기</span>
+  </div>
+  <div class="pattern-row">
+    <span class="p-num">패턴 27</span>
+    <span class="p-expr">What kind of + 명사 + do you ~?</span>
+    <span class="p-role">선호 묻기</span>
+  </div>
+</div>
+
+<!-- GUIDE -->
+<div class="guide">
+  <p>A와 B 역할을 나눠서 소리 내어 읽어보세요. 자연스러워질 때까지 반복하고, 역할을 바꿔서 한 번 더!</p>
+</div>
+
+<p class="section-label">대화 연습 · 10 SETS</p>
+
+<!-- SETS -->
+<div class="sets">
+
+  <!-- Set 1 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🍽️</span>
+      <div>
+        <p class="set-num">SET 1</p>
+        <p class="set-title">What Are You In the Mood For?</p>
+        <p class="set-title-ko">오늘 뭐 먹고 싶어?</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm so hungry. What kind of food do you usually want after work?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Honestly, something warm. Like soup or stew.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Oh nice. Why don't we try that Korean stew place near the station?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">The one with the spicy broth? Yes please.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'll look it up. Where can I find their menu online?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Just search the name on Naver. It pops right up!</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- Set 2 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🍜</span>
+      <div>
+        <p class="set-num">SET 2</p>
+        <p class="set-title">Too Many Options</p>
+        <p class="set-title-ko">선택지가 너무 많아</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">There are like ten restaurants here. Why don't we just pick one and go?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Okay but what kind of cuisine do you feel like today?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm good with anything. Italian? Japanese?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Italian sounds great. How can I check if they take reservations?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Try Kakao Map. You can call directly from there too.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Perfect. Let's go before it gets crowded!</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- Set 3 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🥩</span>
+      <div>
+        <p class="set-num">SET 3</p>
+        <p class="set-title">Meat Lovers</p>
+        <p class="set-title-ko">고기 먹으러 가자</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Why don't we go for Korean BBQ tonight? I'm craving meat.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I mean... I had BBQ yesterday though.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">What kind of meat places do you like other than BBQ?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I really like pork belly restaurants. Or beef soup.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Oh! There's a good pork belly spot nearby. Where can I find a good table at this hour?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Just walk in. It's usually not that packed on weekdays.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- Set 4 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🌮</span>
+      <div>
+        <p class="set-num">SET 4</p>
+        <p class="set-title">Trying Something New</p>
+        <p class="set-title-ko">새로운 거 도전해볼까?</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Why don't we try something different today? Like Mexican food?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Ooh, I've never had real Mexican food. What kind of dishes do they have?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Things like tacos, burritos, nachos... super fun stuff.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Sounds good! How can I tell if it's actually authentic?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Check the reviews. Look for photos of the inside too.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Good idea. Let's go for it!</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- Set 5 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🍱</span>
+      <div>
+        <p class="set-num">SET 5</p>
+        <p class="set-title">Lunch Break Rush</p>
+        <p class="set-title-ko">점심시간 30분</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">We only have 30 minutes. Why don't we just grab something fast?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Yeah. What kind of place can we eat quickly around here?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">There's a kimbap place right downstairs. Super fast.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Oh but I want something a bit more filling. How can I find nearby lunch spots?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Use Baemin or Coupang Eats for the map view. Lots of options.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Oh that works! Let's check it together.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- Set 6 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🥗</span>
+      <div>
+        <p class="set-num">SET 6</p>
+        <p class="set-title">A Friend Who Doesn't Eat Meat</p>
+        <p class="set-title-ko">채식 친구와 함께</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">My friend is coming and she doesn't eat meat. Why don't we find a place that works for everyone?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Good thinking. What kind of food does she usually like?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">She loves salads, pasta, things like that.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">There's a nice Italian place that has a lot of veggie options.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Oh perfect. Where can I make a reservation for tonight?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">On their Instagram actually. They have a link in bio.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- Set 7 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🍣</span>
+      <div>
+        <p class="set-num">SET 7</p>
+        <p class="set-title">Payday Lunch</p>
+        <p class="set-title-ko">월급날 특별 점심</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">It's payday! Why don't we treat ourselves to something nice?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Yes! What kind of place are you thinking? Sushi?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Exactly. That high-end sushi spot on the second floor.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Ooh fancy. How can I check the lunch set menu price?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">It's on their website. I think it's around 25,000 won.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">That's actually not bad. Let's do it!</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- Set 8 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🍛</span>
+      <div>
+        <p class="set-num">SET 8</p>
+        <p class="set-title">It's Cold Outside</p>
+        <p class="set-title-ko">밖이 너무 추워</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">It's freezing out there. Why don't we find somewhere warm and cozy?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Agreed. What kind of food do you think of when it's this cold?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Curry or hot pot for sure.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Yes! There's a curry place around the corner I've been wanting to try.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Let's go then. How can I get there from here?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Just turn left at the convenience store. Five minutes walk.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- Set 9 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🥘</span>
+      <div>
+        <p class="set-num">SET 9</p>
+        <p class="set-title">Group Dinner Planning</p>
+        <p class="set-title-ko">단체 회식 장소 고르기</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">We need to pick a dinner spot for six people. Why don't we go somewhere private?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Good idea. What kind of restaurant usually has private rooms?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Korean BBQ places often do. Or Japanese izakayas.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I think BBQ is safer for a group. How can I book a room in advance?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Call them directly or check Naver Booking. Some places need 24 hours notice.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Got it. I'll call now before someone else takes the spot.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <!-- Set 10 -->
+  <div class="set-card">
+    <div class="set-header">
+      <span class="set-emoji">🍝</span>
+      <div>
+        <p class="set-num">SET 10</p>
+        <p class="set-title">Can't Decide</p>
+        <p class="set-title-ko">결정 장애</p>
+      </div>
+    </div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Okay I seriously can't decide. Why don't you just pick for us?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Ha, fine. What kind of vibe do you want though? Chill or fancy?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Chill. Somewhere I don't have to dress up.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Okay. There's a pasta place I love. Super casual, great food.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Sounds perfect. How can I see the menu before we go?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I'll send you the link right now. You're gonna love it.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>패턴 25–27 · Restaurant Dialogue Practice · 10 Sets</p>
+</div>
+
+</body>
+</html>
