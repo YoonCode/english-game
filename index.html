@@ -493,11 +493,11 @@
       <div class="stat-label">전체 패턴</div>
     </div>
     <div class="stat">
-      <div class="stat-value" id="stat-active">2</div>
+      <div class="stat-value" id="stat-active">3</div>
       <div class="stat-label">활성 세트</div>
     </div>
     <div class="stat">
-      <div class="stat-value" id="stat-games">2</div>
+      <div class="stat-value" id="stat-games">3</div>
       <div class="stat-label">게임 수</div>
     </div>
   </div>
@@ -552,22 +552,22 @@
       </div>
     </a>
 
-    <!-- 🔒 Pattern 25-27 -->
-    <div class="card disabled" data-soon>
+    <!-- ✅ ACTIVE: Pattern 25-27 -->
+    <a class="card active" href="./pattern-25-27/index.html">
       <div class="card-top">
         <div class="card-num">25<span>– 27</span></div>
-        <span class="card-status soon"><span class="dot"></span>준비 중</span>
+        <span class="card-status ready"><span class="dot"></span>학습 가능</span>
       </div>
       <div class="patterns">
-        <div class="pattern-item"><strong>패턴 25</strong>—</div>
-        <div class="pattern-item"><strong>패턴 26</strong>—</div>
-        <div class="pattern-item"><strong>패턴 27</strong>—</div>
+        <div class="pattern-item"><strong>패턴 25</strong>Why don't we + 동사?</div>
+        <div class="pattern-item"><strong>패턴 26</strong>What / Where / How can I + 동사?</div>
+        <div class="pattern-item"><strong>패턴 27</strong>What kind of + 명사 + do you ~?</div>
       </div>
       <div class="card-footer">
-        <span class="content-count">게임 <b>0</b>개</span>
-        <span class="arrow" style="color:var(--text-dim)">→</span>
+        <span class="content-count">게임 <b>1</b>개 · 식당</span>
+        <span class="arrow">→</span>
       </div>
-    </div>
+    </a>
 
     <!-- 🔒 Pattern 28-30 -->
     <div class="card disabled" data-soon>
@@ -653,7 +653,7 @@
 <script>
   // Progress bar animation
   window.addEventListener('load', () => {
-    const pct = Math.round((6 / 46) * 100); // 6 out of 46 patterns active
+    const pct = Math.round((9 / 46) * 100); // 9 out of 46 patterns active
     const fill = document.getElementById('progress-fill');
     const pctEl = document.getElementById('progress-pct');
     setTimeout(() => {
