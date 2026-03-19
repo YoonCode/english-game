@@ -47,6 +47,15 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
 
 .btn-start { width: 100%; padding: 18px; background: var(--gold); color: #0d1117; border: none; border-radius: var(--radius); font-size: 16px; font-weight: 800; cursor: pointer; transition: opacity .2s, transform .15s; }
 .btn-start:hover { opacity: .9; transform: scale(1.01); }
+.btn-dialogue {
+  display: block; width: 100%; padding: 15px;
+  background: transparent; color: var(--text);
+  border: 1.5px solid var(--border); border-radius: var(--radius);
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  text-align: center; text-decoration: none;
+  transition: border-color .2s, background .2s; margin-top: 10px;
+}
+.btn-dialogue:hover { border-color: var(--gold-dim); background: var(--surface2); }
 
 /* ── GAME ── */
 #game-screen { display: none; padding-bottom: 48px; }
@@ -176,13 +185,14 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
   </div>
 
   <button class="btn-start" onclick="startGame()">게임 시작하기 →</button>
+  <a class="btn-dialogue" href="./travel-dialogue.html">📄 대화 연습 먼저 보기</a>
 </div>
 
 <!-- ══ GAME ══ -->
 <div id="game-screen">
   <div class="topbar">
     <div class="topbar-row">
-      <button class="btn-back" onclick="history.back()">
+      <button class="btn-back" onclick="location.href='./index.html'">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg>
         목록으로
       </button>
