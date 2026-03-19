@@ -1,309 +1,510 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Restaurant Adventures · 패턴 25–27</title>
-<style>
-:root {
-  --bg:        #0d1117;
-  --surface:   #161b22;
-  --surface2:  #1c2230;
-  --border:    #21262d;
-  --gold:      #c9a227;
-  --gold-dim:  #8a6e1a;
-  --gold-glow: rgba(201,162,39,.15);
-  --text:      #e6edf3;
-  --muted:     #7d8590;
-  --green:     #3fb950;
-  --green-bg:  rgba(63,185,80,.12);
-  --red:       #f85149;
-  --red-bg:    rgba(248,81,73,.12);
-  --radius:    14px;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg); color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  min-height: 100vh;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restaurant Adventures | 패턴 25–27</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ═══════════════════════════════
-   INTRO SCREEN
-═══════════════════════════════ */
-#intro-screen { display: flex; flex-direction: column; min-height: 100vh; padding: 0 20px 48px; }
+    :root {
+      --bg:         #0d1117;
+      --surface:    #161b22;
+      --surface2:   #1c2230;
+      --border:     #21262d;
+      --gold:       #c9a227;
+      --gold-dim:   #8a6e1a;
+      --gold-glow:  rgba(201,162,39,.15);
+      --text:       #e6edf3;
+      --muted:      #7d8590;
+      --green:      #3fb950;
+      --green-bg:   rgba(63,185,80,.12);
+      --red:        #f85149;
+      --red-bg:     rgba(248,81,73,.12);
+      --radius:     14px;
+    }
 
-.intro-emoji-wrap {
-  text-align: center; padding: 52px 0 20px;
-  font-size: 72px; animation: floatEmoji 3s ease-in-out infinite;
-}
-@keyframes floatEmoji { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-.intro-title {
-  text-align: center; font-size: 26px; font-weight: 900;
-  font-family: Georgia, serif; color: var(--gold); margin-bottom: 6px;
-}
-.intro-sub { text-align: center; font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+    .screen {
+      width: 100%;
+      max-width: 540px;
+      padding: 0 20px 60px;
+      display: none;
+      flex-direction: column;
+    }
+    .screen.active { display: flex; }
 
-.pattern-box {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 18px; margin-bottom: 20px;
-}
-.pattern-box-title {
-  font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
-  color: var(--gold); text-transform: uppercase; margin-bottom: 14px;
-}
-.recap-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
-.recap-item:last-child { margin-bottom: 0; }
-.recap-num {
-  font-size: 11px; font-weight: 700; color: var(--gold);
-  background: var(--gold-glow); padding: 2px 7px; border-radius: 5px;
-  white-space: nowrap; margin-top: 2px;
-}
-.recap-expr { font-size: 13px; line-height: 1.6; }
-.recap-expr b { color: var(--text); display: block; }
-.recap-expr span { color: var(--muted); font-size: 12px; }
+    /* ═══ INTRO ═══ */
+    #intro-screen {
+      justify-content: center;
+      min-height: 100dvh;
+      gap: 0;
+    }
+    .intro-hero {
+      margin-top: 40px;
+      text-align: center;
+      padding: 40px 0 32px;
+    }
+    .intro-emoji {
+      font-size: 56px;
+      display: block;
+      margin-bottom: 18px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+    .intro-label {
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .intro-title {
+      font-size: 34px;
+      font-weight: 800;
+      font-family: Georgia, serif;
+      line-height: 1.1;
+    }
+    .intro-sub {
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .pattern-list {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .pattern-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .p-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      background: var(--gold-glow);
+      border-radius: 6px;
+      padding: 3px 8px;
+      white-space: nowrap;
+    }
+    .p-expr {
+      font-family: Georgia, serif;
+      font-size: 15px;
+      font-weight: 600;
+      flex: 1;
+    }
+    .p-role {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .btn-start {
+      margin-top: 28px;
+      width: 100%;
+      padding: 18px;
+      background: var(--gold);
+      color: #0d1117;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s;
+    }
+    .btn-start:hover { opacity: .9; transform: translateY(-1px); }
+    .btn-start:active { transform: scale(.98); }
 
-.info-row { display: flex; gap: 10px; margin-bottom: 24px; }
-.info-pill {
-  flex: 1; background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; padding: 12px; text-align: center;
-}
-.info-val { font-size: 20px; font-weight: 800; color: var(--gold); }
-.info-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .btn-dialogue {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: border-color .2s, background .2s;
+      margin-top: 10px;
+    }
+    .btn-dialogue:hover {
+      border-color: var(--gold-dim);
+      background: var(--surface2);
+    }
+    .intro-meta {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 14px;
+    }
 
-.btn-start {
-  width: 100%; padding: 18px; background: var(--gold); color: #0d1117;
-  border: none; border-radius: var(--radius);
-  font-size: 16px; font-weight: 800; cursor: pointer;
-  transition: opacity .2s, transform .15s;
-}
-.btn-start:hover { opacity: .9; transform: scale(1.01); }
+    /* ═══ GAME ═══ */
+    #game-screen { padding-top: 0; }
 
-/* ═══════════════════════════════
-   GAME SCREEN
-═══════════════════════════════ */
-#game-screen { display: none; padding-bottom: 48px; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+      padding: 16px 0 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .scene-counter { font-size: 13px; color: var(--muted); font-weight: 600; }
+    .score-display {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .score-display .star { font-size: 13px; }
+    .progress-track {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: width .5s cubic-bezier(.4,0,.2,1);
+    }
 
-.topbar {
-  position: sticky; top: 0; z-index: 10;
-  background: var(--bg); border-bottom: 1px solid var(--border);
-  padding: 12px 20px 0;
-}
-.topbar-row {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 10px;
-}
-.btn-back {
-  display: inline-flex; align-items: center; gap: 6px;
-  color: var(--muted); background: none; border: none;
-  cursor: pointer; font-size: 13px; padding: 4px 0; transition: color .2s;
-}
-.btn-back:hover { color: var(--gold); }
-.btn-back svg { width: 16px; height: 16px; }
-.scene-counter { font-size: 13px; font-weight: 700; color: var(--muted); }
-.score-display { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; color: var(--gold); }
-.progress-track { height: 3px; background: var(--surface2); border-radius: 2px; margin-bottom: 1px; }
-.progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width .4s ease; }
+    .scene-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      animation: slideUp .35s ease;
+    }
+    @keyframes slideUp {
+      from { opacity:0; transform:translateY(12px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .scene-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .scene-emoji { font-size: 22px; }
+    .scene-num { font-size: 11px; color: var(--gold); font-weight: 600; letter-spacing: .08em; }
+    .scene-title { font-size: 17px; font-weight: 700; font-family: Georgia, serif; }
 
-.game-body { padding: 20px; }
+    .situation {
+      background: var(--surface2);
+      border-left: 3px solid var(--gold-dim);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 14px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
 
-.scene-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 18px; margin-bottom: 16px;
-}
-.scene-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-.scene-emoji { font-size: 24px; }
-.scene-title { font-size: 15px; font-weight: 800; }
+    .dialogue { display: flex; flex-direction: column; gap: 8px; }
+    .line { display: flex; gap: 10px; align-items: flex-start; }
+    .speaker {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      background: var(--gold-glow);
+      border-radius: 5px;
+      padding: 3px 7px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+    .speech { font-size: 14.5px; line-height: 1.55; color: var(--text); }
+    .speech.blank { color: var(--muted); font-style: italic; }
 
-.scene-situation {
-  font-size: 13px; color: var(--muted);
-  background: var(--surface2); border-radius: 8px;
-  padding: 10px 12px; margin-bottom: 14px; line-height: 1.7;
-}
+    .question-label {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: .05em;
+    }
 
-.dialogue { display: flex; flex-direction: column; gap: 8px; }
-.d-line { display: flex; gap: 8px; align-items: flex-start; }
-.speaker { font-size: 12px; font-weight: 800; color: var(--gold); min-width: 16px; margin-top: 3px; }
-.speech { font-size: 14px; line-height: 1.65; color: var(--text); }
-.speech.blank {
-  background: var(--surface2); border: 1.5px dashed var(--gold-dim);
-  border-radius: 8px; padding: 8px 12px;
-  color: var(--muted); font-style: italic;
-}
+    .choices { display: flex; flex-direction: column; gap: 10px; }
+    .choice-btn {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      text-align: left;
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.5;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, transform .15s;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .choice-btn:hover:not(:disabled) {
+      border-color: var(--gold-dim);
+      background: var(--surface2);
+      transform: translateY(-1px);
+    }
+    .choice-btn:active:not(:disabled) { transform: scale(.99); }
+    .choice-btn .choice-letter {
+      font-size: 11px;
+      font-weight: 700;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--border);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: background .2s, color .2s;
+    }
+    .choice-btn .choice-text { flex: 1; }
+    .choice-btn.correct { border-color: var(--green); background: var(--green-bg); }
+    .choice-btn.correct .choice-letter { background: var(--green); color: #0d1117; }
+    .choice-btn.wrong { border-color: var(--red); background: var(--red-bg); }
+    .choice-btn.wrong .choice-letter { background: var(--red); color: #fff; }
+    .choice-btn.dimmed { opacity: .35; }
+    .choice-btn:disabled { cursor: default; transform: none; }
 
-.prompt-label {
-  text-align: center; font-size: 13px; font-weight: 700;
-  color: var(--muted); margin: 16px 0 12px;
-}
+    .feedback {
+      margin-top: 14px;
+      border-radius: var(--radius);
+      padding: 16px;
+      font-size: 14px;
+      line-height: 1.65;
+      display: none;
+      animation: fadeIn .3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity:0; transform:translateY(6px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .feedback.correct { background: var(--green-bg); border: 1px solid rgba(63,185,80,.3); }
+    .feedback.wrong   { background: var(--red-bg);   border: 1px solid rgba(248,81,73,.25); }
+    .feedback-head { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+    .feedback.correct .feedback-head { color: var(--green); }
+    .feedback.wrong   .feedback-head { color: var(--red); }
+    .feedback-body { color: var(--text); }
+    .feedback-body b { color: var(--gold); }
 
-.choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-.choice-btn {
-  width: 100%; text-align: left; padding: 14px 16px;
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: var(--radius); color: var(--text);
-  font-size: 14px; line-height: 1.5; cursor: pointer;
-  transition: border-color .15s, background .15s;
-}
-.choice-btn:not(:disabled):hover { border-color: var(--gold); background: var(--surface2); }
-.choice-btn.correct { border-color: var(--green) !important; background: var(--green-bg) !important; color: var(--green); }
-.choice-btn.wrong   { border-color: var(--red)   !important; background: var(--red-bg)   !important; color: var(--red); }
-.choice-btn.dimmed  { opacity: .4; }
+    /* Back button */
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 4px 0;
+      transition: color .2s;
+    }
+    .btn-back:hover { color: var(--gold); }
+    .btn-back svg { width: 15px; height: 15px; }
 
-.feedback {
-  display: none; border-radius: var(--radius); padding: 14px 16px;
-  border: 1px solid; margin-bottom: 0; line-height: 1.65;
-}
-.feedback.correct { background: var(--green-bg); border-color: var(--green); }
-.feedback.wrong   { background: var(--red-bg);   border-color: var(--red); }
-.feedback-head { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
-.feedback.correct .feedback-head { color: var(--green); }
-.feedback.wrong   .feedback-head { color: var(--red); }
-.feedback-body { font-size: 13px; color: var(--muted); }
+    .btn-next {
+      margin-top: 16px;
+      width: 100%;
+      padding: 16px;
+      background: var(--gold);
+      color: #0d1117;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: none;
+      transition: opacity .2s, transform .15s;
+      animation: fadeIn .3s ease;
+    }
+    .btn-next:hover { opacity: .9; transform: translateY(-1px); }
+    .btn-next:active { transform: scale(.98); }
 
-.wrong-actions {
-  margin-top: 12px; display: none; gap: 10px;
-  animation: fadeIn .3s ease;
-}
-.wrong-actions.show { display: flex; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+    /* Wrong-answer action row */
+    .wrong-actions {
+      margin-top: 16px;
+      display: none;
+      gap: 10px;
+      animation: fadeIn .3s ease;
+    }
+    .wrong-actions.show { display: flex; }
+    .btn-retry-scene {
+      flex: 1;
+      padding: 15px;
+      background: var(--surface);
+      color: var(--text);
+      border: 1.5px solid var(--gold-dim);
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-retry-scene:hover { border-color: var(--gold); background: var(--surface2); }
+    .btn-continue {
+      flex: 1;
+      padding: 15px;
+      background: var(--gold);
+      color: #0d1117;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+    .btn-continue:hover { opacity: .9; }
 
-.btn-retry-scene {
-  flex: 1; padding: 15px;
-  background: var(--surface); color: var(--text);
-  border: 1.5px solid var(--gold-dim); border-radius: var(--radius);
-  font-size: 14px; font-weight: 700; cursor: pointer;
-  transition: border-color .2s, background .2s;
-}
-.btn-retry-scene:hover { border-color: var(--gold); background: var(--surface2); }
+    /* ═══ RESULT ═══ */
+    #result-screen { min-height: 100dvh; padding-top: 40px; justify-content: flex-start; }
 
-.btn-continue {
-  flex: 1; padding: 15px;
-  background: var(--gold); color: #0d1117;
-  border: none; border-radius: var(--radius);
-  font-size: 14px; font-weight: 700; cursor: pointer;
-}
+    .result-hero { text-align: center; margin-bottom: 28px; }
+    .result-trophy { font-size: 52px; margin-bottom: 16px; }
+    .result-label { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+    .result-score-big { font-size: 52px; font-weight: 800; font-family: Georgia, serif; line-height: 1; }
+    .result-score-big span { color: var(--muted); font-size: 28px; }
+    .result-comment { margin-top: 10px; font-size: 16px; color: var(--text); font-weight: 600; }
+    .result-sub { margin-top: 6px; font-size: 13px; color: var(--muted); }
 
-.btn-next {
-  display: none; width: 100%; padding: 16px;
-  background: var(--gold); color: #0d1117;
-  border: none; border-radius: var(--radius);
-  font-size: 15px; font-weight: 800; cursor: pointer;
-  margin-top: 12px; transition: opacity .2s;
-}
-.btn-next:hover { opacity: .9; }
+    .score-bar-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .score-bar-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+    .score-bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .score-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+      border-radius: 4px;
+      transition: width 1s cubic-bezier(.4,0,.2,1) .3s;
+    }
+    .score-dot-row { display: flex; gap: 8px; margin-top: 10px; }
+    .score-dot {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .score-dot.hit  { border-color: var(--green); background: var(--green-bg); }
+    .score-dot.miss { border-color: var(--red);   background: var(--red-bg); }
 
-/* ═══════════════════════════════
-   RESULT SCREEN
-═══════════════════════════════ */
-#result-screen { display: none; padding: 0 20px 48px; }
+    .recap-title {
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .recap-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .recap-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+    .recap-item-expr { font-size: 15px; font-weight: 700; font-family: Georgia, serif; color: var(--gold); }
+    .recap-item-desc { margin-top: 4px; font-size: 13px; color: var(--muted); line-height: 1.55; }
 
-.result-hero { text-align: center; padding: 40px 0 24px; }
-.result-trophy { font-size: 64px; margin-bottom: 12px; }
-.result-score { font-size: 42px; font-weight: 900; color: var(--gold); font-family: Georgia, serif; }
-.result-score span { font-size: 20px; color: var(--gold-dim); }
-.result-comment { font-size: 15px; color: var(--muted); margin-top: 6px; }
-
-.acc-bar-wrap { margin-bottom: 20px; }
-.acc-label {
-  display: flex; justify-content: space-between;
-  font-size: 12px; color: var(--muted); margin-bottom: 8px;
-}
-.acc-track { height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
-.acc-fill { height: 100%; background: var(--gold); border-radius: 4px; transition: width .8s ease; }
-
-.dots-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
-.dot-item {
-  width: 32px; height: 32px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 800;
-}
-.dot-item.ok   { background: var(--green-bg); color: var(--green); }
-.dot-item.miss { background: var(--red-bg);   color: var(--red); }
-
-.recap-box {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 18px; margin-bottom: 20px;
-}
-.recap-box-title {
-  font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
-  color: var(--gold); text-transform: uppercase; margin-bottom: 14px;
-}
-.recap-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
-.recap-row:last-child { margin-bottom: 0; }
-.recap-badge {
-  font-size: 11px; font-weight: 700; color: var(--gold);
-  background: var(--gold-glow); padding: 2px 7px; border-radius: 5px;
-  white-space: nowrap; margin-top: 2px;
-}
-.recap-text { font-size: 13px; line-height: 1.6; }
-.recap-text b { color: var(--text); display: block; }
-.recap-text span { color: var(--muted); font-size: 12px; }
-
-.result-actions { display: flex; flex-direction: column; gap: 10px; }
-.btn-replay {
-  width: 100%; padding: 16px; background: var(--gold); color: #0d1117;
-  border: none; border-radius: var(--radius);
-  font-size: 15px; font-weight: 800; cursor: pointer; transition: opacity .2s;
-}
-.btn-replay:hover { opacity: .9; }
-.btn-home {
-  width: 100%; padding: 16px; background: var(--surface); color: var(--text);
-  border: 1.5px solid var(--border); border-radius: var(--radius);
-  font-size: 15px; font-weight: 700; cursor: pointer; text-align: center;
-  text-decoration: none; display: block; transition: border-color .2s;
-}
-.btn-home:hover { border-color: var(--gold-dim); }
-</style>
+    .result-btns { display: flex; gap: 10px; }
+    .btn-retry {
+      flex: 1; padding: 16px;
+      background: var(--gold); color: #0d1117;
+      border: none; border-radius: var(--radius);
+      font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: opacity .2s;
+    }
+    .btn-retry:hover { opacity: .9; }
+    .btn-list {
+      flex: 1; padding: 16px;
+      background: var(--surface); color: var(--text);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 15px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      text-align: center;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .2s;
+    }
+    .btn-list:hover { border-color: var(--gold-dim); }
+  </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════
-     INTRO SCREEN
-══════════════════════════════════════════ -->
-<div id="intro-screen">
-  <div class="intro-emoji-wrap">🍽️</div>
-  <div class="intro-title">Restaurant Adventures</div>
-  <div class="intro-sub">패턴 25–27 · 식당 편</div>
-
-  <div class="pattern-box">
-    <div class="pattern-box-title">이번 게임의 패턴</div>
-    <div class="recap-item">
-      <span class="recap-num">패턴 25</span>
-      <div class="recap-expr">
-        <b>Why don't we + 동사?</b>
-        <span>~하는 게 어때? / 제안할 때</span>
-      </div>
-    </div>
-    <div class="recap-item">
-      <span class="recap-num">패턴 26</span>
-      <div class="recap-expr">
-        <b>What / Where / How can I + 동사?</b>
-        <span>어디서 / 어떻게 ~할 수 있어? / 방법·장소 물을 때</span>
-      </div>
-    </div>
-    <div class="recap-item">
-      <span class="recap-num">패턴 27</span>
-      <div class="recap-expr">
-        <b>What kind of + 명사 + do you ~?</b>
-        <span>어떤 종류의 ~을 좋아해? / 취향 물을 때</span>
-      </div>
-    </div>
+<!-- ═══════════ INTRO ═══════════ -->
+<div id="intro-screen" class="screen active">
+  <div class="intro-hero">
+    <span class="intro-emoji">🍽️</span>
+    <p class="intro-label">패턴 25–27 복습 게임</p>
+    <h1 class="intro-title">Restaurant Adventures</h1>
+    <p class="intro-sub">식당에서 벌어지는 6가지 상황, 올바른 패턴을 골라보세요!</p>
   </div>
 
-  <div class="info-row">
-    <div class="info-pill"><div class="info-val">6</div><div class="info-lbl">씬</div></div>
-    <div class="info-pill"><div class="info-val">3</div><div class="info-lbl">패턴</div></div>
-    <div class="info-pill"><div class="info-val">5분</div><div class="info-lbl">소요</div></div>
+  <div class="pattern-list">
+    <div class="pattern-item">
+      <span class="p-num">패턴 25</span>
+      <span class="p-expr">Why don't we + 동사?</span>
+      <span class="p-role">제안</span>
+    </div>
+    <div class="pattern-item">
+      <span class="p-num">패턴 26</span>
+      <span class="p-expr">What / Where / How can I + 동사?</span>
+      <span class="p-role">방법 묻기</span>
+    </div>
+    <div class="pattern-item">
+      <span class="p-num">패턴 27</span>
+      <span class="p-expr">What kind of + 명사 + do you ~?</span>
+      <span class="p-role">선호 묻기</span>
+    </div>
   </div>
 
   <button class="btn-start" onclick="startGame()">게임 시작하기 →</button>
+  <a class="btn-dialogue" href="./dialogue.html">📄 대화 연습 먼저 보기</a>
+  <p class="intro-meta">6개 씬 · 약 5분 소요</p>
 </div>
 
-<!-- ══════════════════════════════════════════
-     GAME SCREEN
-══════════════════════════════════════════ -->
-<div id="game-screen">
+<!-- ═══════════ GAME ═══════════ -->
+<div id="game-screen" class="screen">
   <div class="topbar">
     <div class="topbar-row">
       <button class="btn-back" onclick="history.back()">
@@ -313,452 +514,411 @@ body {
         목록으로
       </button>
       <span class="scene-counter" id="scene-counter">씬 1 / 6</span>
-      <span class="score-display">⭐ <span id="score-text">0점</span></span>
+      <span class="score-display">
+        <span class="star">⭐</span>
+        <span id="score-text">0점</span>
+      </span>
     </div>
     <div class="progress-track">
       <div class="progress-fill" id="progress-fill" style="width:0%"></div>
     </div>
   </div>
 
-  <div class="game-body">
-    <div class="scene-card">
-      <div class="scene-header">
-        <span class="scene-emoji" id="scene-emoji">🍽️</span>
-        <span class="scene-title" id="scene-title"></span>
+  <div class="scene-card" id="scene-card">
+    <div class="scene-header">
+      <span class="scene-emoji" id="scene-emoji">🍽️</span>
+      <div class="scene-title-wrap">
+        <p class="scene-num" id="scene-num">SCENE 1</p>
+        <h2 class="scene-title" id="scene-title"></h2>
       </div>
-      <div class="scene-situation" id="scene-situation"></div>
-      <div class="dialogue" id="dialogue"></div>
     </div>
-
-    <div class="prompt-label" id="prompt-label"></div>
-    <div class="choices" id="choices"></div>
-
-    <div class="feedback" id="feedback-box">
-      <div class="feedback-head" id="feedback-head"></div>
-      <div class="feedback-body" id="feedback-body"></div>
-    </div>
-
-    <div class="wrong-actions" id="wrong-actions">
-      <button class="btn-retry-scene" onclick="retryScene()">🔄 다시 풀기</button>
-      <button class="btn-continue" onclick="nextScene()">그냥 진행하기 →</button>
-    </div>
-
-    <button class="btn-next" id="btn-next" onclick="nextScene()">다음 씬으로 →</button>
+    <div class="situation" id="situation-text"></div>
+    <div class="dialogue" id="dialogue-area"></div>
   </div>
+
+  <p class="question-label">💬 무엇이라고 말할까요?</p>
+  <div class="choices" id="choices-area"></div>
+
+  <div class="feedback" id="feedback-box">
+    <p class="feedback-head" id="feedback-head"></p>
+    <p class="feedback-body" id="feedback-body"></p>
+  </div>
+
+  <div class="wrong-actions" id="wrong-actions">
+    <button class="btn-retry-scene" onclick="retryScene()">🔄 다시 풀기</button>
+    <button class="btn-continue" onclick="nextScene()">그냥 진행하기 →</button>
+  </div>
+
+  <button class="btn-next" id="btn-next" onclick="nextScene()">다음 씬으로 →</button>
 </div>
 
-<!-- ══════════════════════════════════════════
-     RESULT SCREEN
-══════════════════════════════════════════ -->
-<div id="result-screen">
+<!-- ═══════════ RESULT ═══════════ -->
+<div id="result-screen" class="screen">
   <div class="result-hero">
     <div class="result-trophy" id="result-trophy">🏆</div>
-    <div class="result-score" id="result-score">6<span> / 6</span></div>
-    <div class="result-comment" id="result-comment">완벽해요! 패턴 마스터!</div>
+    <p class="result-label">게임 완료!</p>
+    <p class="result-score-big" id="result-score">0 <span>/ 6</span></p>
+    <p class="result-comment" id="result-comment"></p>
+    <p class="result-sub" id="result-sub"></p>
   </div>
 
-  <div class="acc-bar-wrap">
-    <div class="acc-label">
-      <span>정답률</span>
-      <span id="acc-pct">100%</span>
+  <div class="score-bar-wrap">
+    <p class="score-bar-label">정답률</p>
+    <div class="score-bar-track">
+      <div class="score-bar-fill" id="score-bar-fill" style="width:0%"></div>
     </div>
-    <div class="acc-track"><div class="acc-fill" id="acc-fill" style="width:0%"></div></div>
+    <div class="score-dot-row" id="score-dots"></div>
   </div>
 
-  <div class="dots-row" id="dots-row"></div>
-
-  <div class="recap-box">
-    <div class="recap-box-title">패턴 정리</div>
-    <div class="recap-row">
-      <span class="recap-badge">패턴 25</span>
-      <div class="recap-text">
-        <b>Why don't we + 동사?</b>
-        <span>상대방에게 함께 뭔가를 하자고 제안할 때. "~하는 게 어때?" 뉘앙스.</span>
-      </div>
+  <p class="recap-title">오늘 배운 패턴 정리</p>
+  <div class="recap-list">
+    <div class="recap-item">
+      <p class="recap-item-expr">패턴 25 — Why don't we ~?</p>
+      <p class="recap-item-desc">함께 무언가를 하자고 제안할 때 사용해요.<br>예: "Why don't we try the pasta here?"</p>
     </div>
-    <div class="recap-row">
-      <span class="recap-badge">패턴 26</span>
-      <div class="recap-text">
-        <b>What / Where / How can I + 동사?</b>
-        <span>방법이나 장소를 물어볼 때. "어떻게/어디서 ~할 수 있어?"</span>
-      </div>
+    <div class="recap-item">
+      <p class="recap-item-expr">패턴 26 — What / Where / How can I ~?</p>
+      <p class="recap-item-desc">방법이나 장소를 물어볼 때 사용해요.<br>예: "How can I get the server's attention?"</p>
     </div>
-    <div class="recap-row">
-      <span class="recap-badge">패턴 27</span>
-      <div class="recap-text">
-        <b>What kind of + 명사 + do you ~?</b>
-        <span>상대방의 취향이나 선호를 물어볼 때. "어떤 종류의 ~을 좋아해?"</span>
-      </div>
+    <div class="recap-item">
+      <p class="recap-item-expr">패턴 27 — What kind of + 명사 + do you ~?</p>
+      <p class="recap-item-desc">상대방의 취향이나 선호를 물어볼 때 사용해요.<br>예: "What kind of food do you usually prefer?"</p>
     </div>
   </div>
 
-  <div class="result-actions">
-    <button class="btn-replay" onclick="replayGame()">🔄 다시 도전하기</button>
-    <a class="btn-home" href="./index.html">← 목록으로 돌아가기</a>
+  <div class="result-btns">
+    <button class="btn-retry" onclick="retryGame()">다시 도전하기</button>
+    <a class="btn-list" href="../index.html">목록으로</a>
   </div>
 </div>
 
 <script>
-// ══════════════════════════════════════════
-//  SCENE DATA  (대화 연습 10세트 기반)
-// ══════════════════════════════════════════
-const scenes = [
-  // ── SCENE 1 ── Set 1: What Are You In the Mood For? (패턴 25)
-  {
-    emoji: '🍲',
-    title: "What Are You In the Mood For?",
-    situation: "퇴근 후 배가 고픈 A와 B. 오늘 뭘 먹을지 이야기하고 있어요.",
-    dialogue: [
-      { s: 'A', t: "I'm so hungry. What kind of food do you usually want after work?" },
-      { s: 'B', t: "Honestly, something warm. Like soup or stew." },
-      { s: 'A', t: "???", blank: true },
-      { s: 'B', t: "The one with the spicy broth? Yes please." }
-    ],
-    prompt: "A가 근처 한식당을 제안하려고 해요. 뭐라고 할까요?",
-    choices: [
-      {
-        text: "Why don't we try that Korean stew place near the station?",
-        correct: true,
-        feedback: "정답! 🎉 <b>패턴 25 'Why don't we + 동사?'</b>는 상대방에게 함께 뭔가를 하자고 제안할 때 쓰는 표현이에요. 'Let's ~'보다 더 부드럽고 자연스러운 뉘앙스예요."
-      },
-      {
-        text: "Where can I find a Korean stew place near the station?",
-        correct: false,
-        feedback: "<b>패턴 26 'Where can I ~?'</b>는 혼자 장소를 찾을 때 쓰는 표현이에요. 지금은 B에게 함께 가자고 <b>제안</b>하는 상황이니 패턴 25가 더 적합해요."
-      },
-      {
-        text: "What kind of stew place do you like near the station?",
-        correct: false,
-        feedback: "<b>패턴 27 'What kind of ~?'</b>은 취향을 물어볼 때 써요. 지금 A는 B의 취향을 묻는 게 아니라 함께 가자고 <b>제안</b>하는 상황이에요. 패턴 25가 맞아요."
-      }
-    ]
-  },
+  const scenes = [
+    {
+      emoji: "🍕",
+      title: "Picking a Restaurant",
+      situation: "저녁을 먹으러 나왔는데 어디서 먹을지 못 정했어요. 두 사람이 길을 걸으며 식당을 고르고 있어요.",
+      dialogue: [
+        { s: "A", t: "I'm starving. That place on the corner looks busy." },
+        { s: "B", t: "Busy is usually a good sign! ???", blank: true }
+      ],
+      prompt: "B가 이어서 할 말로 가장 자연스러운 것은?",
+      choices: [
+        {
+          text: "Why don't we check if they have a table?",
+          correct: true,
+          feedback: "정답! 🎉 <b>Why don't we ~?</b> (패턴 25)는 '우리 ~하는 게 어때?'처럼 함께 무언가를 하자고 제안할 때 써요. 자리가 있는지 같이 확인해보자고 제안하는 이 상황에 딱 맞는 표현이에요!"
+        },
+        {
+          text: "What kind of food do you want to check first?",
+          correct: false,
+          feedback: "<b>'What kind of ~' (패턴 27)는 여기서 어색해요.</b> 패턴 27은 상대방의 취향을 물어볼 때 써요. 하지만 지금은 식당이 있는지 확인해보자고 제안하는 상황이에요. 함께 행동을 제안할 때는 패턴 25 (Why don't we ~?)가 맞아요."
+        },
+        {
+          text: "How can I check if they have a table?",
+          correct: false,
+          feedback: "<b>'How can I ~' (패턴 26)는 여기서 어색해요.</b> 패턴 26은 내가 혼자 방법을 물어볼 때 써요. 하지만 지금은 둘이 함께 확인해보자고 제안하는 상황이에요. 함께 하자는 제안은 패턴 25 (Why don't we ~?)로 해야 해요."
+        }
+      ]
+    },
+    {
+      emoji: "📖",
+      title: "Looking at the Menu",
+      situation: "메뉴가 너무 많아서 뭘 시킬지 모르겠어요. 서버에게 인기 메뉴를 물어보려고 해요.",
+      dialogue: [
+        { s: "A", t: "This menu is huge. I have no idea where to start." },
+        { s: "B", t: "Same. ???", blank: true }
+      ],
+      prompt: "B가 이어서 할 말로 가장 자연스러운 것은?",
+      choices: [
+        {
+          text: "Why don't we ask the server what they're known for?",
+          correct: true,
+          feedback: "정답! 🎉 <b>Why don't we ~?</b> (패턴 25)로 서버에게 함께 물어보자고 제안하고 있어요. 'What they're known for'는 '이 집이 유명한 것'이라는 뜻으로, 인기 메뉴를 찾을 때 아주 자연스러운 표현이에요!"
+        },
+        {
+          text: "What kind of menu do you think is popular here?",
+          correct: false,
+          feedback: "<b>패턴은 맞지만 상황이 어색해요.</b> 패턴 27은 상대방의 취향을 물어볼 때 쓰는데, 지금은 둘 다 처음 온 식당이라 서로 모르는 상황이에요. 이럴 때는 같이 서버에게 물어보자고 제안하는 패턴 25 (Why don't we ~?)가 훨씬 자연스러워요."
+        },
+        {
+          text: "How can I find the most popular dish here?",
+          correct: false,
+          feedback: "<b>패턴 26도 쓸 수 있지만 여기선 어색해요.</b> 'How can I ~'는 내가 혼자 방법을 찾을 때 써요. 하지만 지금은 둘이 함께 있고, 서버에게 같이 물어보자고 하는 상황이에요. 함께 행동을 제안할 때는 패턴 25 (Why don't we ~?)가 더 자연스러워요."
+        }
+      ]
+    },
+    {
+      emoji: "🥗",
+      title: "Ordering Food",
+      situation: "파스타를 시키기로 했는데 소스를 골라야 해요. 친구가 어떤 걸 좋아하는지 물어봐야 해요.",
+      dialogue: [
+        { s: "A", t: "I think I'm going with the pasta." },
+        { s: "B", t: "Me too! ???", blank: true }
+      ],
+      prompt: "B가 이어서 할 말로 가장 자연스러운 것은?",
+      choices: [
+        {
+          text: "What kind of sauce do you usually prefer, tomato or cream?",
+          correct: true,
+          feedback: "정답! 🎉 <b>What kind of + 명사 + do you ~?</b> (패턴 27)로 친구의 소스 취향을 물어보고 있어요. 선택지를 'A or B?' 형식으로 함께 제시하면 더 친근하고 자연스러운 표현이 돼요!"
+        },
+        {
+          text: "Why don't we order one tomato and one cream?",
+          correct: false,
+          feedback: "<b>좋은 아이디어지만 상황이 안 맞아요.</b> 패턴 25는 둘이 같이 행동할 걸 제안할 때 써요. 하지만 지금 B는 상대방의 취향을 먼저 확인해야 하는 상황이에요. 친구가 어떤 소스를 좋아하는지 먼저 묻는 패턴 27 (What kind of ~?)이 더 자연스러운 순서예요."
+        },
+        {
+          text: "How can I choose between tomato and cream sauce?",
+          correct: false,
+          feedback: "<b>'How can I ~' (패턴 26)는 여기서 어색해요.</b> 패턴 26은 내가 방법을 모를 때 도움을 구하는 표현이에요. 지금은 내가 도움을 구하는 게 아니라 친구의 취향을 묻는 상황이에요. 취향을 물을 때는 패턴 27 (What kind of ~?)이 맞아요."
+        }
+      ]
+    },
+    {
+      emoji: "😬",
+      title: "Wrong Order Arrives",
+      situation: "주문한 것과 다른 음식이 나왔어요. 서버를 다시 불러야 하는데 어떻게 해야 할지 모르겠어요.",
+      dialogue: [
+        { s: "A", t: "Wait, this isn't what I ordered." },
+        { s: "B", t: "Oh no. ???", blank: true }
+      ],
+      prompt: "B가 이어서 할 말로 가장 자연스러운 것은?",
+      choices: [
+        {
+          text: "How can I get the server's attention?",
+          correct: true,
+          feedback: "정답! 🎉 <b>How can I ~?</b> (패턴 26)는 방법을 모를 때 물어보는 표현이에요. 서버를 어떻게 부를지 모르는 상황에서 자연스럽게 쓸 수 있어요. 실제 식당에서도 자주 쓰는 표현이에요!"
+        },
+        {
+          text: "Why don't we call the server over?",
+          correct: false,
+          feedback: "<b>패턴 25도 쓸 수 있지만 뉘앙스가 달라요.</b> 'Why don't we ~?'는 함께 행동을 제안할 때 써요. 이 상황에서는 틀리지 않지만, B가 막막함을 느끼며 '어떻게 하지?'라는 반응을 보이는 맥락이라면 방법을 묻는 패턴 26이 더 자연스러운 첫 반응이에요."
+        },
+        {
+          text: "What kind of service do you expect from here?",
+          correct: false,
+          feedback: "<b>'What kind of ~' (패턴 27)는 여기서 완전히 어색해요.</b> 패턴 27은 상대방의 취향을 물어볼 때 써요. 주문이 잘못 나온 긴급한 상황에서 서비스 기대치를 묻는 건 전혀 맞지 않아요. 이럴 때는 방법을 묻는 패턴 26 (How can I ~?)이 맞아요."
+        }
+      ]
+    },
+    {
+      emoji: "🎂",
+      title: "Ordering Dessert",
+      situation: "배가 부르지만 디저트 메뉴가 맛있어 보여요. 어떻게 해결할지 친구에게 제안해야 해요.",
+      dialogue: [
+        { s: "A", t: "I'm so full but that dessert menu is calling my name." },
+        { s: "B", t: "???", blank: true }
+      ],
+      prompt: "B가 할 말로 가장 자연스러운 것은?",
+      choices: [
+        {
+          text: "Why don't we share one? That way we don't feel too guilty.",
+          correct: true,
+          feedback: "정답! 🎉 <b>Why don't we ~?</b> (패턴 25)로 디저트를 함께 나눠먹자고 제안하고 있어요. 'That way ~'를 덧붙여 이유까지 설명해주면 훨씬 더 자연스럽고 설득력 있는 제안이 돼요!"
+        },
+        {
+          text: "What kind of dessert do you want to share?",
+          correct: false,
+          feedback: "<b>순서가 맞지 않아요.</b> 아직 나눠먹자는 제안도 안 했는데 바로 뭘 고를지 묻는 건 어색해요. 먼저 패턴 25 (Why don't we share one?)로 나눠먹자고 제안한 다음, 그 뒤에 패턴 27로 어떤 걸 원하는지 물어보는 게 자연스러운 순서예요."
+        },
+        {
+          text: "How can I stop myself from ordering dessert?",
+          correct: false,
+          feedback: "<b>재미있는 표현이지만 대화 흐름에 맞지 않아요.</b> 패턴 26은 방법을 물어볼 때 써요. 혼자 고민을 털어놓는 느낌이라 친구와 함께 해결책을 찾는 대화로는 어색해요. 같이 나눠먹자고 제안하는 패턴 25 (Why don't we ~?)가 훨씬 자연스러운 흐름이에요."
+        }
+      ]
+    },
+    {
+      emoji: "💳",
+      title: "Splitting the Bill",
+      situation: "식사가 끝났어요. 계산서를 나눠 내고 싶은데 어떻게 해야 할지 모르겠어요.",
+      dialogue: [
+        { s: "A", t: "Okay, I think we're ready for the bill." },
+        { s: "B", t: "Yeah. I want to split it but ???", blank: true }
+      ],
+      prompt: "B가 이어서 할 말로 가장 자연스러운 것은?",
+      choices: [
+        {
+          text: "how can I ask without making it awkward?",
+          correct: true,
+          feedback: "정답! 🎉 <b>How can I ~?</b> (패턴 26)로 방법을 물어보고 있어요. 계산서를 나눠 달라고 어떻게 말해야 할지 모르는 상황에서 자연스럽게 쓸 수 있어요. 'without making it awkward'는 '어색하지 않게'라는 뜻으로 실생활에서 자주 쓰는 표현이에요!"
+        },
+        {
+          text: "why don't we ask them to split the bill?",
+          correct: false,
+          feedback: "<b>패턴 25도 맞는 표현이지만 문장 구조가 어색해요.</b> 'I want to split it but why don't we ~?'는 앞뒤 흐름이 자연스럽지 않아요. 앞에서 이미 나눠 내고 싶다고 했으니, 이어지는 말은 '어떻게 할지'를 묻는 패턴 26이 더 자연스러운 연결이에요."
+        },
+        {
+          text: "what kind of payment do you usually prefer?",
+          correct: false,
+          feedback: "<b>'What kind of ~' (패턴 27)는 여기서 맞지 않아요.</b> 패턴 27은 취향을 물어볼 때 써요. 하지만 지금 B는 계산서를 나눠 달라고 말하는 방법을 모르는 상황이에요. 방법을 물어볼 때는 패턴 26 (How can I ~?)이 맞아요."
+        }
+      ]
+    }
+  ];
 
-  // ── SCENE 2 ── Set 2: Too Many Options (패턴 27)
-  {
-    emoji: '🍝',
-    title: "Too Many Options",
-    situation: "식당가에 왔는데 선택지가 너무 많아요. B가 A의 오늘 기분을 물어보려고 해요.",
-    dialogue: [
-      { s: 'A', t: "There are like ten restaurants here. Why don't we just pick one and go?" },
-      { s: 'B', t: "???", blank: true },
-      { s: 'A', t: "I'm good with anything. Italian? Japanese?" },
-      { s: 'B', t: "Italian sounds great. How can I check if they take reservations?" }
-    ],
-    prompt: "B가 A에게 오늘 먹고 싶은 음식 종류를 물어보려고 해요.",
-    choices: [
-      {
-        text: "What kind of cuisine do you feel like today?",
-        correct: true,
-        feedback: "정답! 🎉 <b>패턴 27 'What kind of + 명사 + do you ~?'</b>는 상대방의 취향이나 선호를 물어볼 때 딱이에요. cuisine(요리 종류)이 명사 자리에 자연스럽게 들어갔어요."
-      },
-      {
-        text: "Why don't we just pick Italian food today?",
-        correct: false,
-        feedback: "<b>패턴 25 'Why don't we ~?'</b>는 제안하는 표현이에요. 지금 B는 A의 취향을 먼저 확인하고 싶은 거니까, 취향을 묻는 <b>패턴 27</b>이 맞아요."
-      },
-      {
-        text: "How can I find a good restaurant around here?",
-        correct: false,
-        feedback: "<b>패턴 26 'How can I ~?'</b>는 방법을 물어볼 때 써요. 지금은 B가 A에게 '어떤 종류의 음식'을 원하는지 <b>취향을 묻는</b> 상황이에요. 패턴 27이 적합해요."
-      }
-    ]
-  },
+  let currentScene = 0;
+  let score = 0;
+  let results = [];
+  let shuffledChoices = [];
 
-  // ── SCENE 3 ── Set 5: Lunch Break Rush (패턴 26)
-  {
-    emoji: '⏱️',
-    title: "Lunch Break Rush",
-    situation: "점심시간이 30분밖에 없어요. B가 근처 식당을 빠르게 찾는 방법을 물어보려고 해요.",
-    dialogue: [
-      { s: 'A', t: "We only have 30 minutes. Why don't we just grab something fast?" },
-      { s: 'B', t: "Yeah. But I want something a bit more filling than kimbap." },
-      { s: 'A', t: "I get it. There are apps for that." },
-      { s: 'B', t: "???", blank: true }
-    ],
-    prompt: "B가 근처 점심 식당을 찾는 방법을 물어보려고 해요.",
-    choices: [
-      {
-        text: "How can I find nearby lunch spots?",
-        correct: true,
-        feedback: "정답! 🎉 <b>패턴 26 'How can I + 동사?'</b>는 방법을 물어볼 때 써요. '어떻게 ~할 수 있어?'라는 뜻으로 실용적인 정보를 구할 때 자주 쓰이는 표현이에요."
-      },
-      {
-        text: "Why don't we look for lunch spots together?",
-        correct: false,
-        feedback: "<b>패턴 25 'Why don't we ~?'</b>는 제안 표현이에요. 지금 B는 A에게 함께 뭔가를 하자는 게 아니라 <b>방법을 묻는</b> 상황이에요. 패턴 26이 맞아요."
-      },
-      {
-        text: "What kind of apps do you use for lunch?",
-        correct: false,
-        feedback: "<b>패턴 27 'What kind of ~?'</b>은 취향을 묻는 표현이에요. 지금 B는 취향이 아니라 <b>찾는 방법</b>을 물어보는 상황이에요. 패턴 26이 적합해요."
-      }
-    ]
-  },
-
-  // ── SCENE 4 ── Set 3: Meat Lovers (패턴 27)
-  {
-    emoji: '🥩',
-    title: "Meat Lovers",
-    situation: "A가 고기가 먹고 싶어서 BBQ를 제안했는데, B는 어제 이미 BBQ를 먹었어요. A가 B의 다른 고기 식당 취향을 물어보려고 해요.",
-    dialogue: [
-      { s: 'A', t: "Why don't we go for Korean BBQ tonight? I'm craving meat." },
-      { s: 'B', t: "I mean... I had BBQ yesterday though." },
-      { s: 'A', t: "???", blank: true },
-      { s: 'B', t: "I really like pork belly restaurants. Or beef soup." }
-    ],
-    prompt: "A가 B에게 BBQ 말고 어떤 고기 식당을 좋아하는지 물어보려고 해요.",
-    choices: [
-      {
-        text: "What kind of meat places do you like other than BBQ?",
-        correct: true,
-        feedback: "정답! 🎉 <b>패턴 27 'What kind of + 명사 + do you ~?'</b>로 B가 선호하는 고기 식당 종류를 자연스럽게 물어봤어요. 대화 흐름에 딱 맞는 표현이에요."
-      },
-      {
-        text: "Why don't we try pork belly instead of BBQ?",
-        correct: false,
-        feedback: "<b>패턴 25 'Why don't we ~?'</b>는 제안 표현이에요. A는 아직 B의 취향을 모르는 상태라 먼저 물어봐야 해요. 제안 전에 <b>패턴 27로 취향을 물어보는 게</b> 자연스러워요."
-      },
-      {
-        text: "Where can I find a good pork belly place?",
-        correct: false,
-        feedback: "<b>패턴 26 'Where can I ~?'</b>는 장소를 찾는 방법을 물어볼 때 써요. 지금은 장소보다 B가 어떤 종류의 식당을 <b>좋아하는지 취향</b>을 묻는 상황이에요. 패턴 27이 맞아요."
-      }
-    ]
-  },
-
-  // ── SCENE 5 ── Set 7: Payday Lunch (패턴 26)
-  {
-    emoji: '💰',
-    title: "Payday Lunch",
-    situation: "월급날이라 A와 B가 고급 초밥집에 가기로 했어요. B가 런치 세트 메뉴 가격을 미리 확인하는 방법을 물어보려고 해요.",
-    dialogue: [
-      { s: 'A', t: "It's payday! Why don't we treat ourselves to something nice?" },
-      { s: 'B', t: "Yes! That high-end sushi spot on the second floor sounds perfect." },
-      { s: 'A', t: "Right? I think the lunch set is around 25,000 won." },
-      { s: 'B', t: "???", blank: true }
-    ],
-    prompt: "B가 런치 세트 메뉴 가격을 확인하는 방법을 물어보려고 해요.",
-    choices: [
-      {
-        text: "How can I check the lunch set menu price?",
-        correct: true,
-        feedback: "정답! 🎉 <b>패턴 26 'How can I + 동사?'</b>로 런치 세트 가격 확인하는 방법을 물어봤어요. 정보를 얻는 방법을 구체적으로 물어볼 때 딱 맞는 표현이에요."
-      },
-      {
-        text: "Why don't we check the lunch set menu together?",
-        correct: false,
-        feedback: "<b>패턴 25 'Why don't we ~?'</b>는 함께 하자고 제안할 때 써요. 지금 B는 혼자 가격을 확인하는 <b>방법을 묻는</b> 상황이에요. 패턴 26이 맞아요."
-      },
-      {
-        text: "What kind of lunch set do you want to order?",
-        correct: false,
-        feedback: "<b>패턴 27 'What kind of ~?'</b>는 취향을 물어볼 때 써요. 지금 B는 취향이 아니라 가격을 <b>확인하는 방법</b>을 묻고 싶은 거예요. 패턴 26이 적합해요."
-      }
-    ]
-  },
-
-  // ── SCENE 6 ── Set 9: Group Dinner Planning (패턴 25)
-  {
-    emoji: '🥘',
-    title: "Group Dinner Planning",
-    situation: "6명 회식 장소를 골라야 해요. A가 단체석이 있는 곳을 찾자고 제안하려고 해요.",
-    dialogue: [
-      { s: 'A', t: "???", blank: true },
-      { s: 'B', t: "Good idea. What kind of restaurant usually has private rooms?" },
-      { s: 'A', t: "Korean BBQ places often do. Or Japanese izakayas." },
-      { s: 'B', t: "I think BBQ is safer for a group. How can I book a room in advance?" }
-    ],
-    prompt: "A가 6명이 편하게 앉을 수 있도록 단체석 있는 식당을 찾자고 제안하려고 해요.",
-    choices: [
-      {
-        text: "We need to pick a dinner spot for six people. Why don't we go somewhere with a private room?",
-        correct: true,
-        feedback: "정답! 🎉 <b>패턴 25 'Why don't we + 동사?'</b>로 단체석 있는 식당으로 가자고 자연스럽게 제안했어요. 뒤이어 B가 'What kind of restaurant ~?'으로 이어가는 대화 흐름이 완벽해요."
-      },
-      {
-        text: "What kind of restaurant has a private room for six people?",
-        correct: false,
-        feedback: "<b>패턴 27 'What kind of ~?'</b>는 취향이나 종류를 물어볼 때 써요. A는 지금 정보를 묻는 게 아니라 B에게 방향을 <b>제안</b>하는 상황이에요. 패턴 25가 자연스러워요."
-      },
-      {
-        text: "How can I find a restaurant with a private room for six?",
-        correct: false,
-        feedback: "<b>패턴 26 'How can I ~?'</b>는 방법을 혼자 묻는 표현이에요. 지금 A는 B에게 함께 특정 방향으로 <b>제안</b>하는 상황이에요. 패턴 25가 더 어울려요."
-      }
-    ]
-  }
-];
-
-// ══════════════════════════════════════════
-//  GAME STATE
-// ══════════════════════════════════════════
-let currentScene = 0;
-let score = 0;
-let results = [];
-let shuffledChoices = [];
-
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-function startGame() {
-  document.getElementById('intro-screen').style.display = 'none';
-  document.getElementById('game-screen').style.display = 'block';
-  currentScene = 0; score = 0; results = [];
-  renderScene();
-}
-
-function renderScene() {
-  const s = scenes[currentScene];
-
-  // topbar
-  document.getElementById('scene-counter').textContent = `씬 ${currentScene + 1} / ${scenes.length}`;
-  document.getElementById('score-text').textContent = `${score}점`;
-  document.getElementById('progress-fill').style.width = `${(currentScene / scenes.length) * 100}%`;
-
-  // scene header
-  document.getElementById('scene-emoji').textContent = s.emoji;
-  document.getElementById('scene-title').textContent = s.title;
-  document.getElementById('scene-situation').textContent = s.situation;
-
-  // dialogue
-  const dlg = document.getElementById('dialogue');
-  dlg.innerHTML = '';
-  s.dialogue.forEach(line => {
-    const div = document.createElement('div');
-    div.className = 'd-line';
-    const sp = document.createElement('span');
-    sp.className = 'speaker';
-    sp.textContent = line.s;
-    const txt = document.createElement('span');
-    txt.className = line.blank ? 'speech blank' : 'speech';
-    txt.textContent = line.blank ? '??? (빈칸)' : line.t;
-    div.appendChild(sp); div.appendChild(txt);
-    dlg.appendChild(div);
-  });
-
-  // prompt
-  document.getElementById('prompt-label').textContent = s.prompt;
-
-  // choices (shuffled)
-  shuffledChoices = shuffle(s.choices);
-  const choicesEl = document.getElementById('choices');
-  choicesEl.innerHTML = '';
-  shuffledChoices.forEach((c, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.id = `choice-${i}`;
-    btn.textContent = c.text;
-    btn.onclick = () => selectChoice(i);
-    choicesEl.appendChild(btn);
-  });
-
-  // reset feedback
-  const fb = document.getElementById('feedback-box');
-  fb.style.display = 'none';
-  fb.className = 'feedback';
-  document.getElementById('btn-next').style.display = 'none';
-  document.getElementById('wrong-actions').classList.remove('show');
-}
-
-function selectChoice(idx) {
-  const choice = shuffledChoices[idx];
-  document.querySelectorAll('.choice-btn').forEach((btn, i) => {
-    btn.disabled = true;
-    if (i !== idx) btn.classList.add('dimmed');
-  });
-
-  const btn = document.getElementById(`choice-${idx}`);
-  const fb = document.getElementById('feedback-box');
-  const wrongActions = document.getElementById('wrong-actions');
-  const nextBtn = document.getElementById('btn-next');
-
-  if (choice.correct) {
-    btn.classList.add('correct');
-    score++;
-    results.push(true);
-    fb.className = 'feedback correct';
-    document.getElementById('feedback-head').textContent = '✅ 정답이에요!';
-    wrongActions.classList.remove('show');
-    nextBtn.style.display = 'block';
-    nextBtn.textContent = currentScene < scenes.length - 1 ? '다음 씬으로 →' : '결과 보기 →';
-  } else {
-    btn.classList.add('wrong');
-    results.push(false);
-    shuffledChoices.forEach((c, i) => {
-      if (c.correct) document.getElementById(`choice-${i}`).classList.add('correct');
-    });
-    fb.className = 'feedback wrong';
-    document.getElementById('feedback-head').textContent = '❌ 아쉬워요!';
-    nextBtn.style.display = 'none';
-    wrongActions.classList.add('show');
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
   }
 
-  document.getElementById('feedback-body').innerHTML = choice.feedback;
-  fb.style.display = 'block';
-  document.getElementById('score-text').textContent = `${score}점`;
-}
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
 
-function retryScene() {
-  results.pop();
-  renderScene();
-}
-
-function nextScene() {
-  currentScene++;
-  if (currentScene < scenes.length) {
+  function startGame() {
+    currentScene = 0; score = 0; results = [];
+    show('game-screen');
     renderScene();
-  } else {
-    showResult();
   }
-}
 
-function showResult() {
-  document.getElementById('game-screen').style.display = 'none';
-  document.getElementById('result-screen').style.display = 'block';
+  function renderScene() {
+    const data = scenes[currentScene];
+    const letters = ['A', 'B', 'C'];
 
-  // trophy + comment
-  let trophy, comment;
-  if      (score === 6) { trophy = '🏆'; comment = '완벽해요! 패턴 마스터!'; }
-  else if (score === 5) { trophy = '🌟'; comment = '훌륭해요! 거의 완벽!'; }
-  else if (score === 4) { trophy = '👍'; comment = '잘 하셨어요!'; }
-  else if (score === 3) { trophy = '📚'; comment = '절반 맞았어요!'; }
-  else                  { trophy = '💪'; comment = '다시 도전해봐요!'; }
+    document.getElementById('scene-counter').textContent = `씬 ${currentScene + 1} / ${scenes.length}`;
+    document.getElementById('score-text').textContent = `${score}점`;
+    document.getElementById('progress-fill').style.width = `${(currentScene / scenes.length) * 100}%`;
 
-  document.getElementById('result-trophy').textContent = trophy;
-  document.getElementById('result-score').innerHTML = `${score}<span> / 6</span>`;
-  document.getElementById('result-comment').textContent = comment;
+    document.getElementById('scene-emoji').textContent = data.emoji;
+    document.getElementById('scene-num').textContent = `SCENE ${currentScene + 1}`;
+    document.getElementById('scene-title').textContent = data.title;
+    document.getElementById('situation-text').textContent = data.situation;
 
-  // accuracy bar
-  const pct = Math.round((score / scenes.length) * 100);
-  document.getElementById('acc-pct').textContent = `${pct}%`;
-  setTimeout(() => {
-    document.getElementById('acc-fill').style.width = `${pct}%`;
-  }, 100);
+    const dArea = document.getElementById('dialogue-area');
+    dArea.innerHTML = data.dialogue.map(line => `
+      <div class="line">
+        <span class="speaker">${line.s}</span>
+        <span class="speech${line.blank ? ' blank' : ''}">${line.blank ? '( ? ? ? )' : line.t}</span>
+      </div>
+    `).join('');
 
-  // dots
-  const dots = document.getElementById('dots-row');
-  dots.innerHTML = '';
-  results.forEach((ok, i) => {
-    const d = document.createElement('div');
-    d.className = `dot-item ${ok ? 'ok' : 'miss'}`;
-    d.textContent = ok ? '○' : '✕';
-    dots.appendChild(d);
-  });
-}
+    shuffledChoices = shuffle(data.choices);
+    const cArea = document.getElementById('choices-area');
+    cArea.innerHTML = shuffledChoices.map((c, i) => `
+      <button class="choice-btn" onclick="selectChoice(${i})" id="choice-${i}">
+        <span class="choice-letter">${letters[i]}</span>
+        <span class="choice-text">${c.text}</span>
+      </button>
+    `).join('');
 
-function replayGame() {
-  document.getElementById('result-screen').style.display = 'none';
-  document.getElementById('game-screen').style.display = 'block';
-  currentScene = 0; score = 0; results = [];
-  renderScene();
-}
+    const fb = document.getElementById('feedback-box');
+    fb.style.display = 'none';
+    fb.className = 'feedback';
+    document.getElementById('btn-next').style.display = 'none';
+    document.getElementById('wrong-actions').classList.remove('show');
+
+    const card = document.getElementById('scene-card');
+    card.style.animation = 'none';
+    void card.offsetWidth;
+    card.style.animation = 'slideUp .35s ease';
+  }
+
+  function selectChoice(idx) {
+    const choice = shuffledChoices[idx];
+    const allBtns = document.querySelectorAll('.choice-btn');
+
+    allBtns.forEach((btn, i) => {
+      btn.disabled = true;
+      if (i !== idx) btn.classList.add('dimmed');
+    });
+
+    const btn = document.getElementById(`choice-${idx}`);
+    const fb = document.getElementById('feedback-box');
+    const wrongActions = document.getElementById('wrong-actions');
+    const nextBtn = document.getElementById('btn-next');
+
+    if (choice.correct) {
+      btn.classList.add('correct');
+      score++;
+      results.push(true);
+      fb.className = 'feedback correct';
+      document.getElementById('feedback-head').textContent = '✅ 정답이에요!';
+      wrongActions.classList.remove('show');
+      nextBtn.style.display = 'block';
+      nextBtn.textContent = currentScene < scenes.length - 1 ? '다음 씬으로 →' : '결과 보기 →';
+    } else {
+      btn.classList.add('wrong');
+      results.push(false);
+      shuffledChoices.forEach((c, i) => {
+        if (c.correct) document.getElementById(`choice-${i}`).classList.add('correct');
+      });
+      fb.className = 'feedback wrong';
+      document.getElementById('feedback-head').textContent = '❌ 아쉬워요!';
+      nextBtn.style.display = 'none';
+      wrongActions.classList.add('show');
+    }
+
+    document.getElementById('feedback-body').innerHTML = choice.feedback;
+    fb.style.display = 'block';
+    document.getElementById('score-text').textContent = `${score}점`;
+  }
+
+  function retryScene() {
+    results.pop();
+    renderScene();
+  }
+
+  function nextScene() {
+    currentScene++;
+    if (currentScene >= scenes.length) {
+      showResult();
+    } else {
+      renderScene();
+    }
+  }
+
+  function showResult() {
+    document.getElementById('progress-fill').style.width = '100%';
+    show('result-screen');
+
+    let trophy, comment, sub;
+    if (score === 6) {
+      trophy = '🏆'; comment = '완벽해요! 패턴 마스터!';
+      sub = '세 가지 패턴을 완벽하게 구분해냈어요. 훌륭해요!';
+    } else if (score === 5) {
+      trophy = '🌟'; comment = '훌륭해요! 거의 완벽!';
+      sub = '아주 잘 하셨어요! 아쉬운 한 문제도 다시 확인해보세요.';
+    } else if (score === 4) {
+      trophy = '👍'; comment = '잘 하셨어요!';
+      sub = '패턴을 잘 이해하고 있어요. 조금 더 연습하면 완벽해질 거예요!';
+    } else if (score === 3) {
+      trophy = '📚'; comment = '절반 맞았어요!';
+      sub = '패턴 25, 26, 27의 차이를 다시 한번 살펴봐요.';
+    } else {
+      trophy = '💪'; comment = '다시 도전해봐요!';
+      sub = '패턴 표현을 다시 확인하고 한 번 더 도전해봐요!';
+    }
+
+    document.getElementById('result-trophy').textContent = trophy;
+    document.getElementById('result-score').innerHTML = `${score} <span>/ ${scenes.length}</span>`;
+    document.getElementById('result-comment').textContent = comment;
+    document.getElementById('result-sub').textContent = sub;
+
+    setTimeout(() => {
+      document.getElementById('score-bar-fill').style.width =
+        `${((score / scenes.length) * 100).toFixed(0)}%`;
+    }, 100);
+
+    const dotsEl = document.getElementById('score-dots');
+    dotsEl.innerHTML = results.map(r =>
+      `<div class="score-dot ${r ? 'hit' : 'miss'}">${r ? '✓' : '✗'}</div>`
+    ).join('');
+  }
+
+  function retryGame() { startGame(); }
 </script>
 </body>
 </html>
