@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNS Dialogue · 패턴 31–33</title>
+<style>
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #1c2230;
+  --border:    #21262d;
+  --gold:      #c9a227;
+  --gold-dim:  #8a6e1a;
+  --gold-glow: rgba(201,162,39,.15);
+  --text:      #e6edf3;
+  --muted:     #7d8590;
+  --blue:      #58a6ff;
+  --purple:    #bc8cff;
+  --radius:    14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; padding-bottom: 48px; }
+
+.header { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 20px; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+.btn-back { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); background: none; border: none; cursor: pointer; font-size: 13px; padding: 4px 0; transition: color .2s; text-decoration: none; width: 60px; }
+.btn-back:hover { color: var(--gold); }
+.btn-back svg { width: 16px; height: 16px; }
+.header-title { font-size: 14px; font-weight: 700; color: var(--muted); }
+
+.pattern-bar { margin: 16px 20px 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.pattern-bar-row { display: flex; gap: 8px; align-items: flex-start; }
+.pbar-num { font-size: 11px; font-weight: 700; color: var(--gold); background: var(--gold-glow); padding: 2px 7px; border-radius: 5px; white-space: nowrap; margin-top: 1px; }
+.pbar-expr { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.pbar-expr b { color: var(--text); }
+
+.guide { margin: 14px 20px 0; font-size: 13px; color: var(--muted); line-height: 1.7; background: var(--surface2); border-radius: 10px; padding: 12px 14px; }
+
+.sets { display: flex; flex-direction: column; gap: 14px; padding: 16px 20px 0; }
+
+.set-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.set-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px 12px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+.set-emoji { font-size: 22px; flex-shrink: 0; }
+.set-num { font-size: 11px; font-weight: 700; letter-spacing: .8px; color: var(--gold); text-transform: uppercase; margin-bottom: 2px; }
+.set-title { font-size: 14px; font-weight: 800; color: var(--text); line-height: 1.2; }
+.set-title-ko { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+.dialogue { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.line { display: flex; gap: 10px; align-items: flex-start; }
+.speaker { font-size: 11px; font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.speaker.a { background: rgba(88,166,255,.15); color: var(--blue); border: 1px solid rgba(88,166,255,.3); }
+.speaker.b { background: rgba(188,140,255,.15); color: var(--purple); border: 1px solid rgba(188,140,255,.3); }
+.speech { font-size: 14px; line-height: 1.7; color: var(--text); }
+
+.speak-it { display: flex; align-items: flex-start; gap: 8px; padding: 10px 16px 14px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); line-height: 1.6; }
+.speak-it .icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a class="btn-back" href="./index.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg>
+      목록으로
+    </a>
+    <span class="header-title">패턴 31–33 · 대화 연습</span>
+    <span style="width:60px"></span>
+  </div>
+</div>
+
+<div class="pattern-bar">
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 31</span>
+    <span class="pbar-expr"><b>I've been + 동사ing</b> — 요즘 ~를 해오고 있어</span>
+  </div>
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 32</span>
+    <span class="pbar-expr"><b>Will you + 동사?</b> — ~ 할래?</span>
+  </div>
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 33</span>
+    <span class="pbar-expr"><b>Do you ever + 동사?</b> — 평소에 ~ 해?</span>
+  </div>
+</div>
+
+<div class="guide">
+  A와 B 역할을 나눠서 소리 내어 읽어보세요. 자연스러워질 때까지 반복하고, 역할을 바꿔서 한 번 더!
+</div>
+
+<div class="sets">
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">📺</span><div><p class="set-num">SET 1</p><p class="set-title">The New Obsession</p><p class="set-title-ko">요즘 빠진 드라마</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Do you ever watch Korean dramas?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Not really, but my friend keeps recommending one.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Which one? I've been watching so many lately.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Something about a chef? She says it's really good.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Oh I think I know it. Will you try watching the first episode tonight?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Maybe. If I start I'll probably finish the whole thing by tomorrow.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">📸</span><div><p class="set-num">SET 2</p><p class="set-title">Instagram Rabbit Hole</p><p class="set-title-ko">릴스 구멍에 빠졌어</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I've been spending way too much time on Instagram lately.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Same. Do you ever open it for like two minutes and suddenly it's been an hour?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Every single night. It's a problem.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Will you try deleting it for a week? I did it once and it actually helped.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I want to but I feel like I'd miss stuff.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">That's exactly what they want you to think.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🎬</span><div><p class="set-num">SET 3</p><p class="set-title">The Binge</p><p class="set-title-ko">정주행 중</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Will you watch The Bear with me this weekend?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I've been meaning to start that. Everyone's talking about it.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">It's so good. I've been rewatching it actually.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Do you ever rewatch shows? I never do that.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Only when they're really good. It's like comfort food.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Okay fine. Saturday night. Bring snacks.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🎙️</span><div><p class="set-num">SET 4</p><p class="set-title">The YouTuber Phase</p><p class="set-title-ko">유튜버 구독 폭발</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Do you ever just fall down a YouTube rabbit hole at midnight?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">All the time. I've been watching this one cooking channel nonstop.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">What channel?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">It's a Japanese guy. Super quiet, just cooking. So calming.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Will you send me the link? I need something like that.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Yeah it's perfect for when you can't sleep.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">💬</span><div><p class="set-num">SET 5</p><p class="set-title">The Comment Section</p><p class="set-title-ko">댓글 읽는 사람</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I've been reading YouTube comments way too much lately.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Do you ever reply to them?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Sometimes. When someone says something really wrong I can't help it.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Ha, I totally get that. Will you just scroll past next time?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm trying. It's harder than it sounds.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I know. I've been there. Just close the tab.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">📲</span><div><p class="set-num">SET 6</p><p class="set-title">Phone at Dinner</p><p class="set-title-ko">밥 먹으면서 폰 보기</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Do you ever watch YouTube while eating?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Every meal honestly. I can't eat alone without it.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Same. I've been watching a true crime series during lunch.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Isn't that kind of intense for lunchtime?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Probably. Will you judge me if I keep doing it?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">No, I watch drama fight scenes during breakfast so.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🌙</span><div><p class="set-num">SET 7</p><p class="set-title">Revenge Bedtime Procrastination</p><p class="set-title-ko">취침 시간 미루기</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I've been staying up until like 2am watching stuff every night.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Do you ever feel guilty about it the next morning?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Every time. And then I do it again anyway.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Will you try setting a phone alarm for 11pm to actually stop?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I have one. I just ignore it.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">We're the same person honestly.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🖥️</span><div><p class="set-num">SET 8</p><p class="set-title">The Subtitles Debate</p><p class="set-title-ko">자막 논쟁</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Do you ever watch things without subtitles?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Never. Even in Korean I use them.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Same. I've been trying to watch English shows without subs to practice.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Oh that's actually smart. How's it going?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Slow. Will you try it with me? Pick one show, no subs.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Okay but if I miss something important I'm turning them back on.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">✨</span><div><p class="set-num">SET 9</p><p class="set-title">The TikTok Effect</p><p class="set-title-ko">틱톡 효과</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I've been seeing this audio everywhere on Reels lately.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Which one? Send it to me.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Hold on. Do you ever get a song stuck in your head from a 10-second clip?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Always. It's actually scary how fast that happens.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Will you listen to the full version with me? It's actually really good.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Okay don't laugh. It's a Taylor Swift deep cut.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🎭</span><div><p class="set-num">SET 10</p><p class="set-title">The Spoiler Problem</p><p class="set-title-ko">스포일러 공포</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Will you please stop posting drama spoilers on your story?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I only post vague hints! Do you ever even watch in real time?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm always three episodes behind. I've been so busy lately.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Okay fine. I'll start adding a spoiler warning.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Thank you. I almost found out who died last night.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Oh that scene. You're not ready.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+</div>
+</body>
+</html>
