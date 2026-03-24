@@ -17,13 +17,19 @@
   --muted:     #7d8590;
   --green:     #3fb950;
   --green-bg:  rgba(63,185,80,.12);
+  --blue:      #58a6ff;
+  --purple:    #bc8cff;
   --radius:    14px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  background: var(--bg); color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  min-height: 100vh; padding-bottom: 48px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  max-width: 540px;
+  margin: 0 auto;
+  padding-bottom: 48px;
 }
 .header { padding: 32px 20px 0; text-align: center; }
 .header-title { font-size: 22px; font-weight: 800; font-family: Georgia, serif; color: var(--gold); letter-spacing: .5px; }
@@ -49,7 +55,7 @@ a.card::before { content: ''; position: absolute; inset: 0; background: var(--go
 a.card:hover { border-color: var(--gold); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(201,162,39,.12); }
 a.card:hover::before { opacity: 1; }
 
-div.card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 18px; opacity: .42; cursor: not-allowed; }
+div.card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 18px; opacity: .45; cursor: not-allowed; }
 
 .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
 .card-num { font-size: 28px; font-weight: 900; font-family: Georgia, serif; color: var(--gold); line-height: 1; }
@@ -63,7 +69,6 @@ div.card { background: var(--surface); border: 1.5px solid var(--border); border
 .patterns { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
 .pattern-item { font-size: 13px; color: var(--muted); line-height: 1.5; }
 .pattern-item strong { color: var(--gold); font-weight: 700; font-size: 11px; letter-spacing: .5px; margin-right: 6px; }
-
 .card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
 .content-count { font-size: 12px; color: var(--muted); }
 .content-count b { color: var(--text); }
@@ -83,91 +88,71 @@ a.card:hover .arrow { transform: translateX(4px); }
 
 <div class="stats-bar">
   <div class="stat"><span class="stat-num">46</span><span class="stat-label">전체 패턴</span></div>
-  <div class="stat"><span class="stat-num">5</span><span class="stat-label">활성 세트</span></div>
-  <div class="stat"><span class="stat-num">5</span><span class="stat-label">게임 수</span></div>
+  <div class="stat"><span class="stat-num">6</span><span class="stat-label">활성 세트</span></div>
+  <div class="stat"><span class="stat-num">6</span><span class="stat-label">게임 수</span></div>
 </div>
 
 <div class="section-label">학습 가능</div>
 <div class="card-list">
 
   <a class="card active" href="./pattern-19-21/index.html">
-    <div class="card-top">
-      <div class="card-num">19<span>– 21</span></div>
-      <span class="card-status ready"><span class="dot"></span>학습 가능</span>
-    </div>
+    <div class="card-top"><div class="card-num">19<span>– 21</span></div><span class="card-status ready"><span class="dot"></span>학습 가능</span></div>
     <div class="patterns">
       <div class="pattern-item"><strong>패턴 19</strong>I feel like ~ing</div>
       <div class="pattern-item"><strong>패턴 20</strong>문장 + to + 동사</div>
       <div class="pattern-item"><strong>패턴 21</strong>접속사 활용</div>
     </div>
-    <div class="card-footer">
-      <span class="content-count">게임 <b>1</b>개 · 공항 ✈️</span>
-      <span class="arrow">→</span>
-    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 공항 ✈️</span><span class="arrow">→</span></div>
   </a>
 
   <a class="card active" href="./pattern-22-24/index.html">
-    <div class="card-top">
-      <div class="card-num">22<span>– 24</span></div>
-      <span class="card-status ready"><span class="dot"></span>학습 가능</span>
-    </div>
+    <div class="card-top"><div class="card-num">22<span>– 24</span></div><span class="card-status ready"><span class="dot"></span>학습 가능</span></div>
     <div class="patterns">
       <div class="pattern-item"><strong>패턴 22</strong>I think you should ~</div>
       <div class="pattern-item"><strong>패턴 23</strong>Do you want to ~?</div>
       <div class="pattern-item"><strong>패턴 24</strong>I'm trying to ~</div>
     </div>
-    <div class="card-footer">
-      <span class="content-count">게임 <b>1</b>개 · 호텔 🏨</span>
-      <span class="arrow">→</span>
-    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 호텔 🏨</span><span class="arrow">→</span></div>
   </a>
 
   <a class="card active" href="./pattern-25-27/index.html">
-    <div class="card-top">
-      <div class="card-num">25<span>– 27</span></div>
-      <span class="card-status ready"><span class="dot"></span>학습 가능</span>
-    </div>
+    <div class="card-top"><div class="card-num">25<span>– 27</span></div><span class="card-status ready"><span class="dot"></span>학습 가능</span></div>
     <div class="patterns">
       <div class="pattern-item"><strong>패턴 25</strong>Why don't we + 동사?</div>
       <div class="pattern-item"><strong>패턴 26</strong>What / Where / How can I + 동사?</div>
       <div class="pattern-item"><strong>패턴 27</strong>What kind of + 명사 + do you ~?</div>
     </div>
-    <div class="card-footer">
-      <span class="content-count">게임 <b>1</b>개 · 식당 🍽️</span>
-      <span class="arrow">→</span>
-    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 식당 🍽️</span><span class="arrow">→</span></div>
   </a>
 
   <a class="card active" href="./pattern-28-30/index.html">
-    <div class="card-top">
-      <div class="card-num">28<span>– 30</span></div>
-      <span class="card-status ready"><span class="dot"></span>학습 가능</span>
-    </div>
+    <div class="card-top"><div class="card-num">28<span>– 30</span></div><span class="card-status ready"><span class="dot"></span>학습 가능</span></div>
     <div class="patterns">
       <div class="pattern-item"><strong>패턴 28</strong>What / When / Where did you ~?</div>
       <div class="pattern-item"><strong>패턴 29</strong>That's what / why 주어 + 동사</div>
       <div class="pattern-item"><strong>패턴 30</strong>Have you (ever) + 과거분사</div>
     </div>
-    <div class="card-footer">
-      <span class="content-count">게임 <b>1</b>개 · 여행 후기 🗺️</span>
-      <span class="arrow">→</span>
-    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 여행 후기 🗺️</span><span class="arrow">→</span></div>
   </a>
 
   <a class="card active" href="./pattern-31-33/index.html">
-    <div class="card-top">
-      <div class="card-num">31<span>– 33</span></div>
-      <span class="card-status ready"><span class="dot"></span>학습 가능</span>
-    </div>
+    <div class="card-top"><div class="card-num">31<span>– 33</span></div><span class="card-status ready"><span class="dot"></span>학습 가능</span></div>
     <div class="patterns">
       <div class="pattern-item"><strong>패턴 31</strong>I've been + 동사ing</div>
       <div class="pattern-item"><strong>패턴 32</strong>Will you + 동사?</div>
       <div class="pattern-item"><strong>패턴 33</strong>Do you ever + 동사?</div>
     </div>
-    <div class="card-footer">
-      <span class="content-count">게임 <b>1</b>개 · 유튜브·SNS·드라마 📱</span>
-      <span class="arrow">→</span>
+    <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 유튜브·SNS·드라마 📱</span><span class="arrow">→</span></div>
+  </a>
+
+  <a class="card active" href="./pattern-34-36/index.html">
+    <div class="card-top"><div class="card-num">34<span>– 36</span></div><span class="card-status ready"><span class="dot"></span>학습 가능</span></div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 34</strong>How often do you + 동사?</div>
+      <div class="pattern-item"><strong>패턴 35</strong>I hope to + 동사</div>
+      <div class="pattern-item"><strong>패턴 36</strong>I agree with + 명사 / I agree that 주어 + 동사</div>
     </div>
+    <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 인간관계·연애 💬</span><span class="arrow">→</span></div>
   </a>
 
 </div>
@@ -176,23 +161,7 @@ a.card:hover .arrow { transform: translateX(4px); }
 <div class="card-list">
 
   <div class="card" onclick="showToast()">
-    <div class="card-top">
-      <div class="card-num">34<span>– 36</span></div>
-      <span class="card-status soon">준비 중</span>
-    </div>
-    <div class="patterns">
-      <div class="pattern-item"><strong>패턴 34</strong>—</div>
-      <div class="pattern-item"><strong>패턴 35</strong>—</div>
-      <div class="pattern-item"><strong>패턴 36</strong>—</div>
-    </div>
-    <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
-  </div>
-
-  <div class="card" onclick="showToast()">
-    <div class="card-top">
-      <div class="card-num">37<span>– 39</span></div>
-      <span class="card-status soon">준비 중</span>
-    </div>
+    <div class="card-top"><div class="card-num">37<span>– 39</span></div><span class="card-status soon">준비 중</span></div>
     <div class="patterns">
       <div class="pattern-item"><strong>패턴 37</strong>—</div>
       <div class="pattern-item"><strong>패턴 38</strong>—</div>
@@ -202,12 +171,19 @@ a.card:hover .arrow { transform: translateX(4px); }
   </div>
 
   <div class="card" onclick="showToast()">
-    <div class="card-top">
-      <div class="card-num">40<span>– 46</span></div>
-      <span class="card-status soon">준비 중</span>
-    </div>
+    <div class="card-top"><div class="card-num">40<span>– 42</span></div><span class="card-status soon">준비 중</span></div>
     <div class="patterns">
-      <div class="pattern-item"><strong>패턴 40–46</strong>—</div>
+      <div class="pattern-item"><strong>패턴 40</strong>—</div>
+      <div class="pattern-item"><strong>패턴 41</strong>—</div>
+      <div class="pattern-item"><strong>패턴 42</strong>—</div>
+    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
+  </div>
+
+  <div class="card" onclick="showToast()">
+    <div class="card-top"><div class="card-num">43<span>– 46</span></div><span class="card-status soon">준비 중</span></div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 43–46</strong>—</div>
     </div>
     <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
   </div>
