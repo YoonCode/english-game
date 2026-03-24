@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relationship Adventures · 패턴 34–36</title>
+<style>
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #1c2230;
+  --border:    #21262d;
+  --gold:      #c9a227;
+  --gold-dim:  #8a6e1a;
+  --gold-glow: rgba(201,162,39,.15);
+  --text:      #e6edf3;
+  --muted:     #7d8590;
+  --green:     #3fb950;
+  --green-bg:  rgba(63,185,80,.12);
+  --red:       #f85149;
+  --red-bg:    rgba(248,81,73,.12);
+  --blue:      #58a6ff;
+  --purple:    #bc8cff;
+  --radius:    14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* ── INTRO ── */
+#intro-screen { display: flex; flex-direction: column; width: 100%; min-height: 100dvh; padding: 0 20px 48px; }
+.intro-emoji-wrap { text-align: center; padding: 52px 0 20px; font-size: 72px; animation: floatEmoji 3s ease-in-out infinite; }
+@keyframes floatEmoji { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+.intro-title { text-align: center; font-size: 26px; font-weight: 900; font-family: Georgia, serif; color: var(--gold); margin-bottom: 6px; }
+.intro-sub { text-align: center; font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+
+.pattern-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 20px; }
+.pattern-box-title { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+.recap-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+.recap-item:last-child { margin-bottom: 0; }
+.recap-num { font-size: 11px; font-weight: 700; color: var(--gold); background: var(--gold-glow); padding: 2px 7px; border-radius: 5px; white-space: nowrap; margin-top: 2px; }
+.recap-expr b { color: var(--text); display: block; font-size: 13px; }
+.recap-expr span { color: var(--muted); font-size: 12px; }
+
+.info-row { display: flex; gap: 10px; margin-bottom: 24px; }
+.info-pill { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+.info-val { font-size: 20px; font-weight: 800; color: var(--gold); }
+.info-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.btn-start { width: 100%; padding: 18px; background: var(--gold); color: #0d1117; border: none; border-radius: var(--radius); font-size: 16px; font-weight: 800; cursor: pointer; transition: opacity .2s, transform .15s; }
+.btn-start:hover { opacity: .9; transform: scale(1.01); }
+
+.btn-dialogue {
+  display: block; width: 100%; padding: 15px;
+  background: transparent; color: var(--text);
+  border: 1.5px solid var(--border); border-radius: var(--radius);
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  text-align: center; text-decoration: none;
+  transition: border-color .2s, background .2s; margin-top: 10px;
+}
+.btn-dialogue:hover { border-color: var(--gold-dim); background: var(--surface2); }
+
+.intro-meta { text-align: center; font-size: 12px; color: var(--muted); margin-top: 14px; }
+
+/* ── GAME ── */
+#game-screen { display: none; width: 100%; padding-bottom: 48px; }
+.topbar { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 20px 0; width: 100%; }
+.topbar-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.btn-back { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); background: none; border: none; cursor: pointer; font-size: 13px; padding: 4px 0; transition: color .2s; }
+.btn-back:hover { color: var(--gold); }
+.btn-back svg { width: 16px; height: 16px; }
+.scene-counter { font-size: 13px; font-weight: 700; color: var(--muted); }
+.score-display { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; color: var(--gold); }
+.progress-track { height: 3px; background: var(--surface2); border-radius: 2px; margin-bottom: 1px; }
+.progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width .4s ease; }
+
+.game-body { padding: 20px; }
+.scene-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+.scene-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.scene-emoji { font-size: 24px; }
+.scene-title { font-size: 15px; font-weight: 800; }
+.scene-situation { font-size: 13px; color: var(--muted); background: var(--surface2); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; line-height: 1.7; }
+.dialogue { display: flex; flex-direction: column; gap: 8px; }
+.d-line { display: flex; gap: 8px; align-items: flex-start; }
+.speaker { font-size: 12px; font-weight: 800; color: var(--gold); min-width: 16px; margin-top: 3px; }
+.speech { font-size: 14px; line-height: 1.65; color: var(--text); }
+.speech.blank { background: var(--surface2); border: 1.5px dashed var(--gold-dim); border-radius: 8px; padding: 8px 12px; color: var(--muted); font-style: italic; }
+
+.prompt-label { text-align: center; font-size: 13px; font-weight: 700; color: var(--muted); margin: 16px 0 12px; }
+.choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.choice-btn { width: 100%; text-align: left; padding: 14px 16px; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 14px; line-height: 1.5; cursor: pointer; transition: border-color .15s, background .15s; }
+.choice-btn:not(:disabled):hover { border-color: var(--gold); background: var(--surface2); }
+.choice-btn.correct { border-color: var(--green) !important; background: var(--green-bg) !important; color: var(--green); }
+.choice-btn.wrong   { border-color: var(--red)   !important; background: var(--red-bg)   !important; color: var(--red); }
+.choice-btn.dimmed  { opacity: .4; }
+
+.feedback { display: none; border-radius: var(--radius); padding: 14px 16px; border: 1px solid; line-height: 1.65; }
+.feedback.correct { background: var(--green-bg); border-color: var(--green); }
+.feedback.wrong   { background: var(--red-bg);   border-color: var(--red); }
+.feedback-head { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+.feedback.correct .feedback-head { color: var(--green); }
+.feedback.wrong   .feedback-head { color: var(--red); }
+.feedback-body { font-size: 13px; color: var(--muted); }
+
+.wrong-actions { margin-top: 12px; display: none; gap: 10px; animation: fadeIn .3s ease; }
+.wrong-actions.show { display: flex; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+.btn-retry-scene { flex: 1; padding: 15px; background: var(--surface); color: var(--text); border: 1.5px solid var(--gold-dim); border-radius: var(--radius); font-size: 14px; font-weight: 700; cursor: pointer; transition: border-color .2s, background .2s; }
+.btn-retry-scene:hover { border-color: var(--gold); background: var(--surface2); }
+.btn-continue { flex: 1; padding: 15px; background: var(--gold); color: #0d1117; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 700; cursor: pointer; }
+.btn-next { display: none; width: 100%; padding: 16px; background: var(--gold); color: #0d1117; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 800; cursor: pointer; margin-top: 12px; transition: opacity .2s; }
+.btn-next:hover { opacity: .9; }
+
+/* ── RESULT ── */
+#result-screen { display: none; width: 100%; padding: 0 20px 48px; }
+.result-hero { text-align: center; padding: 40px 0 24px; }
+.result-trophy { font-size: 64px; margin-bottom: 12px; }
+.result-score { font-size: 42px; font-weight: 900; color: var(--gold); font-family: Georgia, serif; }
+.result-score span { font-size: 20px; color: var(--gold-dim); }
+.result-comment { font-size: 15px; color: var(--muted); margin-top: 6px; }
+.acc-bar-wrap { margin-bottom: 20px; }
+.acc-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.acc-track { height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+.acc-fill { height: 100%; background: var(--gold); border-radius: 4px; transition: width .8s ease; }
+.dots-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
+.dot-item { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; }
+.dot-item.ok   { background: var(--green-bg); color: var(--green); }
+.dot-item.miss { background: var(--red-bg);   color: var(--red); }
+.recap-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 20px; }
+.recap-box-title { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+.recap-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+.recap-row:last-child { margin-bottom: 0; }
+.recap-badge { font-size: 11px; font-weight: 700; color: var(--gold); background: var(--gold-glow); padding: 2px 7px; border-radius: 5px; white-space: nowrap; margin-top: 2px; }
+.recap-text b { color: var(--text); display: block; font-size: 13px; }
+.recap-text span { color: var(--muted); font-size: 12px; line-height: 1.6; display: block; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.btn-replay { width: 100%; padding: 16px; background: var(--gold); color: #0d1117; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 800; cursor: pointer; transition: opacity .2s; }
+.btn-replay:hover { opacity: .9; }
+.btn-home { width: 100%; padding: 16px; background: var(--surface); color: var(--text); border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; display: block; transition: border-color .2s; }
+.btn-home:hover { border-color: var(--gold-dim); }
+</style>
+</head>
+<body>
+
+<!-- ══ INTRO ══ -->
+<div id="intro-screen">
+  <div class="intro-emoji-wrap">💬</div>
+  <div class="intro-title">Relationship Adventures</div>
+  <div class="intro-sub">패턴 34–36 · 인간관계·연애 편</div>
+
+  <div class="pattern-box">
+    <div class="pattern-box-title">이번 게임의 패턴</div>
+    <div class="recap-item">
+      <span class="recap-num">패턴 34</span>
+      <div class="recap-expr">
+        <b>How often do you + 동사?</b>
+        <span>얼마나 자주 ~해? / 빈도나 습관을 물어볼 때</span>
+      </div>
+    </div>
+    <div class="recap-item">
+      <span class="recap-num">패턴 35</span>
+      <div class="recap-expr">
+        <b>I hope to + 동사</b>
+        <span>~하면 좋겠어 / 바라는 것, 원하는 것을 말할 때</span>
+      </div>
+    </div>
+    <div class="recap-item">
+      <span class="recap-num">패턴 36</span>
+      <div class="recap-expr">
+        <b>I agree with + 명사 / I agree that 주어 + 동사</b>
+        <span>~에 동의해 / ~라는 거 맞아 / 공감하거나 동의할 때</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-row">
+    <div class="info-pill"><div class="info-val">6</div><div class="info-lbl">씬</div></div>
+    <div class="info-pill"><div class="info-val">3</div><div class="info-lbl">패턴</div></div>
+    <div class="info-pill"><div class="info-val">5분</div><div class="info-lbl">소요</div></div>
+  </div>
+
+  <button class="btn-start" onclick="startGame()">게임 시작하기 →</button>
+  <a class="btn-dialogue" href="./relationship-dialogue.html">📄 대화 연습 먼저 보기</a>
+  <p class="intro-meta">6개 씬 · 약 5분 소요</p>
+</div>
+
+<!-- ══ GAME ══ -->
+<div id="game-screen">
+  <div class="topbar">
+    <div class="topbar-row">
+      <button class="btn-back" onclick="location.href='./index.html'">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg>
+        목록으로
+      </button>
+      <span class="scene-counter" id="scene-counter">씬 1 / 6</span>
+      <span class="score-display"><span>⭐</span><span id="score-text">0점</span></span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+  <div class="game-body">
+    <div class="scene-card">
+      <div class="scene-header">
+        <span class="scene-emoji" id="scene-emoji"></span>
+        <span class="scene-title" id="scene-title"></span>
+      </div>
+      <div class="scene-situation" id="scene-situation"></div>
+      <div class="dialogue" id="dialogue"></div>
+    </div>
+    <div class="prompt-label" id="prompt-label"></div>
+    <div class="choices" id="choices"></div>
+    <div class="feedback" id="feedback-box">
+      <div class="feedback-head" id="feedback-head"></div>
+      <div class="feedback-body" id="feedback-body"></div>
+    </div>
+    <div class="wrong-actions" id="wrong-actions">
+      <button class="btn-retry-scene" onclick="retryScene()">🔄 다시 풀기</button>
+      <button class="btn-continue" onclick="nextScene()">그냥 진행하기 →</button>
+    </div>
+    <button class="btn-next" id="btn-next" onclick="nextScene()">다음 씬으로 →</button>
+  </div>
+</div>
+
+<!-- ══ RESULT ══ -->
+<div id="result-screen">
+  <div class="result-hero">
+    <div class="result-trophy" id="result-trophy">🏆</div>
+    <div class="result-score" id="result-score">6<span> / 6</span></div>
+    <div class="result-comment" id="result-comment">완벽해요! 패턴 마스터!</div>
+  </div>
+  <div class="acc-bar-wrap">
+    <div class="acc-label"><span>정답률</span><span id="acc-pct">100%</span></div>
+    <div class="acc-track"><div class="acc-fill" id="acc-fill" style="width:0%"></div></div>
+  </div>
+  <div class="dots-row" id="dots-row"></div>
+  <div class="recap-box">
+    <div class="recap-box-title">패턴 정리</div>
+    <div class="recap-row">
+      <span class="recap-badge">패턴 34</span>
+      <div class="recap-text">
+        <b>How often do you + 동사?</b>
+        <span>얼마나 자주 ~해? 상대방의 행동 빈도를 물어볼 때. "every day", "once a week" 같은 답이 자연스럽게 따라와요.</span>
+      </div>
+    </div>
+    <div class="recap-row">
+      <span class="recap-badge">패턴 35</span>
+      <div class="recap-text">
+        <b>I hope to + 동사</b>
+        <span>~하면 좋겠어. 미래에 대한 바람이나 소망을 말할 때. "I want to"보다 더 부드럽고 감성적인 뉘앙스예요.</span>
+      </div>
+    </div>
+    <div class="recap-row">
+      <span class="recap-badge">패턴 36</span>
+      <div class="recap-text">
+        <b>I agree with + 명사 / I agree that 주어 + 동사</b>
+        <span>동의하거나 공감할 때. with 뒤에는 사람·의견, that 뒤에는 문장이 와요.</span>
+      </div>
+    </div>
+  </div>
+  <div class="result-actions">
+    <button class="btn-replay" onclick="replayGame()">🔄 다시 도전하기</button>
+    <a class="btn-home" href="./index.html">← 목록으로 돌아가기</a>
+  </div>
+</div>
+
+<script>
+const scenes = [
+  {
+    emoji: '💬',
+    title: 'Keeping In Touch',
+    situation: '친한 친구에게 먼저 연락하는 편인지 이야기하고 있어요. A가 B에게 얼마나 자주 먼저 문자하는지 물어보려고 해요.',
+    dialogue: [
+      { s: 'A', t: '???', blank: true },
+      { s: 'B', t: "Honestly, not that often. I kind of wait for them to reach out." },
+      { s: 'A', t: "Same. I hope to get better at that. It's a bad habit." },
+      { s: 'B', t: "I agree. I always feel guilty when too much time passes." }
+    ],
+    prompt: "A가 B에게 '친한 친구에게 얼마나 자주 먼저 문자해?'라고 물어보려고 해요.",
+    choices: [
+      { text: "How often do you text your close friends first?", correct: true, feedback: "정답! 🎉 <b>패턴 34 'How often do you + 동사?'</b>로 행동의 빈도를 자연스럽게 물어봤어요. text를 동사로 쓴 것도 포인트예요 — '문자하다'는 뜻으로 일상 대화에서 자주 쓰여요." },
+      { text: "I hope to text my friends more often this year.", correct: false, feedback: "<b>패턴 35 'I hope to ~'</b>는 자신의 바람을 말할 때 써요. 지금 A는 자기 얘기가 아니라 B에게 <b>빈도를 물어보는</b> 상황이에요. 패턴 34가 맞아요." },
+      { text: "I agree that texting first is really hard sometimes.", correct: false, feedback: "<b>패턴 36 'I agree that ~'</b>는 공감하거나 동의할 때 써요. 지금 A는 공감하는 게 아니라 B에게 <b>먼저 연락하는 빈도</b>를 묻는 상황이에요. 패턴 34가 적합해요." }
+    ]
+  },
+  {
+    emoji: '💔',
+    title: 'The Breakup Debrief',
+    situation: '이별 후 조금씩 나아지고 있다는 B. A가 시간이 정말 도움이 된다는 걸 공감하고, B가 여름쯤엔 완전히 털어내고 싶다는 바람을 말하려고 해요.',
+    dialogue: [
+      { s: 'A', t: "How often do you think about your ex?" },
+      { s: 'B', t: "Less than before. Maybe once a week now? It's getting better." },
+      { s: 'A', t: "I agree that time really does help. It's cliché but true." },
+      { s: 'B', t: '???', blank: true },
+      { s: 'A', t: "You will. You've already come so far." }
+    ],
+    prompt: "B가 '여름쯤엔 완전히 털어냈으면 좋겠어'라고 말하려고 해요.",
+    choices: [
+      { text: "Yeah. I hope to feel totally over it by summer.", correct: true, feedback: "정답! 🎉 <b>패턴 35 'I hope to + 동사'</b>로 미래에 대한 바람을 감성적으로 표현했어요. 'feel over it'은 '완전히 극복하다'는 뜻의 자연스러운 표현이에요." },
+      { text: "How often do you think about getting over someone?", correct: false, feedback: "<b>패턴 34 'How often do you ~?'</b>는 빈도를 물어볼 때 써요. 지금 B는 A에게 질문하는 게 아니라 자신의 <b>바람을 표현</b>하는 상황이에요. 패턴 35가 맞아요." },
+      { text: "I agree that summer is a good time to move on.", correct: false, feedback: "<b>패턴 36 'I agree that ~'</b>는 상대의 말에 동의할 때 써요. 지금 B는 동의하는 게 아니라 자신이 <b>원하는 것을 표현</b>하는 상황이에요. 패턴 35가 적합해요." }
+    ]
+  },
+  {
+    emoji: '😬',
+    title: 'The Awkward One',
+    situation: '매일 봐야 하는 불편한 직장 동료 이야기예요. A가 B의 말을 듣고 어떤 사람들은 뭘 해도 힘들다는 것에 동의하려고 해요.',
+    dialogue: [
+      { s: 'A', t: "How often do you have to see that coworker you don't like?" },
+      { s: 'B', t: "Every single day. It's exhausting." },
+      { s: 'A', t: '???', blank: true },
+      { s: 'B', t: "Exactly. I hope to find a way to just feel neutral about it." }
+    ],
+    prompt: "A가 '어떤 사람들은 뭘 해도 그냥 힘들다는 거 맞아'라고 공감하려고 해요.",
+    choices: [
+      { text: "I agree that some people are just draining no matter what you do.", correct: true, feedback: "정답! 🎉 <b>패턴 36 'I agree that 주어 + 동사'</b>로 B의 말에 완벽하게 공감했어요. 'draining'은 '에너지를 소진시키는'이라는 뜻으로 이런 상황에서 딱 맞는 단어예요." },
+      { text: "How often do you feel drained after seeing them?", correct: false, feedback: "<b>패턴 34 'How often do you ~?'</b>는 빈도를 물어볼 때 써요. 지금 A는 질문이 아니라 B의 상황에 <b>공감하고 동의</b>하는 상황이에요. 패턴 36이 맞아요." },
+      { text: "I hope to never have a coworker like that.", correct: false, feedback: "<b>패턴 35 'I hope to ~'</b>는 자신의 바람을 말할 때 써요. 지금 A는 자기 바람이 아니라 B의 힘든 상황에 <b>동의하며 공감</b>하는 상황이에요. 패턴 36이 적합해요." }
+    ]
+  },
+  {
+    emoji: '💌',
+    title: 'Sliding Into DMs',
+    situation: '좋아하는 사람에게 먼저 연락하는 용기에 대해 이야기하고 있어요. A가 B에게 얼마나 자주 먼저 시도하는지 물어보려고 해요.',
+    dialogue: [
+      { s: 'A', t: '???', blank: true },
+      { s: 'B', t: "Almost never. I just wait and hope they do something." },
+      { s: 'A', t: "I hope to be braver about that. It's just scary." },
+      { s: 'B', t: "I agree with you. But also the worst they can say is no, right?" }
+    ],
+    prompt: "A가 B에게 '좋아하는 사람한테 먼저 연락하는 거 얼마나 자주 해?'라고 물어보려고 해요.",
+    choices: [
+      { text: "How often do you make the first move when you like someone?", correct: true, feedback: "정답! 🎉 <b>패턴 34 'How often do you + 동사?'</b>로 먼저 시도하는 빈도를 물어봤어요. 'make the first move'는 '먼저 행동하다, 먼저 연락하다'는 뜻의 자주 쓰이는 표현이에요." },
+      { text: "I hope to make the first move more often this year.", correct: false, feedback: "<b>패턴 35 'I hope to ~'</b>는 자신의 바람을 말할 때 써요. 지금 A는 자기 얘기가 아니라 B에게 <b>빈도를 물어보는</b> 상황이에요. 패턴 34가 맞아요." },
+      { text: "I agree that making the first move is really scary.", correct: false, feedback: "<b>패턴 36 'I agree that ~'</b>는 동의할 때 써요. 지금 A는 동의하는 게 아니라 B에게 <b>행동 빈도를 묻는</b> 상황이에요. 패턴 34가 적합해요." }
+    ]
+  },
+  {
+    emoji: '🥂',
+    title: 'Blind Date Talk',
+    situation: '소개팅 이야기예요. B가 소개팅이 면접 같아서 지쳤다고 해요. B가 자연스럽게 만나고 싶다는 바람을 말하려고 해요.',
+    dialogue: [
+      { s: 'A', t: "How often do you go on blind dates?" },
+      { s: 'B', t: "I went through a phase last year. Like once a month." },
+      { s: 'A', t: "How was it?" },
+      { s: 'B', t: '???', blank: true },
+      { s: 'A', t: "I agree with that. Blind dates feel like job interviews sometimes." }
+    ],
+    prompt: "B가 '대부분 괜찮았는데 지쳤어. 그냥 자연스럽게 만났으면 좋겠어'라고 말하려고 해요.",
+    choices: [
+      { text: "Mostly fine but exhausting. I hope to just meet someone naturally.", correct: true, feedback: "정답! 🎉 <b>패턴 35 'I hope to + 동사'</b>로 자연스럽게 만나고 싶다는 바람을 표현했어요. 'meet someone naturally'는 '자연스럽게 인연을 만나다'는 뜻이에요." },
+      { text: "How often do you feel like a blind date is like a job interview?", correct: false, feedback: "<b>패턴 34 'How often do you ~?'</b>는 빈도를 물어볼 때 써요. 지금 B는 A에게 질문하는 게 아니라 소개팅 경험을 말하고 <b>자신의 바람을 표현</b>하는 상황이에요. 패턴 35가 맞아요." },
+      { text: "I agree that blind dates are exhausting and unnatural.", correct: false, feedback: "<b>패턴 36 'I agree that ~'</b>는 상대의 말에 동의할 때 써요. 지금 B는 동의가 아니라 자신의 경험을 공유하며 <b>바람을 표현</b>하는 상황이에요. 패턴 35가 적합해요." }
+    ]
+  },
+  {
+    emoji: '🌱',
+    title: 'Growing Apart',
+    situation: '예전 친구와 멀어지는 이야기예요. A가 멀어지는 건 자연스럽다는 B의 말에 동의하면서도 슬프다고 공감하려고 해요.',
+    dialogue: [
+      { s: 'A', t: "How often do you feel like you're drifting from an old friend?" },
+      { s: 'B', t: "More than I'd like. People just change, I guess." },
+      { s: 'A', t: '???', blank: true },
+      { s: 'B', t: "It does. I hope to stay close to the people who actually matter." }
+    ],
+    prompt: "A가 '멀어지는 게 자연스럽다는 건 맞아. 그래도 여전히 슬프긴 해'라고 공감하려고 해요.",
+    choices: [
+      { text: "I agree that it's natural. But it still feels sad.", correct: true, feedback: "정답! 🎉 <b>패턴 36 'I agree that 주어 + 동사'</b>로 B의 말에 공감하면서도 솔직한 감정을 덧붙였어요. 동의 표현 뒤에 'but'으로 자신의 감정을 이어가는 자연스러운 대화 흐름이에요." },
+      { text: "How often do you feel sad about losing touch with old friends?", correct: false, feedback: "<b>패턴 34 'How often do you ~?'</b>는 빈도를 물어볼 때 써요. 지금 A는 질문이 아니라 B의 말에 <b>공감하고 동의</b>하는 상황이에요. 패턴 36이 맞아요." },
+      { text: "I hope to never drift apart from my close friends.", correct: false, feedback: "<b>패턴 35 'I hope to ~'</b>는 자신의 바람을 말할 때 써요. 지금 A는 바람을 말하는 게 아니라 B의 말에 먼저 <b>공감하고 동의</b>해야 하는 상황이에요. 패턴 36이 적합해요." }
+    ]
+  }
+];
+
+let currentScene = 0, score = 0, results = [], shuffledChoices = [];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startGame() {
+  document.getElementById('intro-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+  currentScene = 0; score = 0; results = [];
+  renderScene();
+}
+
+function renderScene() {
+  const s = scenes[currentScene];
+  document.getElementById('scene-counter').textContent = `씬 ${currentScene + 1} / ${scenes.length}`;
+  document.getElementById('score-text').textContent = `${score}점`;
+  document.getElementById('progress-fill').style.width = `${(currentScene / scenes.length) * 100}%`;
+  document.getElementById('scene-emoji').textContent = s.emoji;
+  document.getElementById('scene-title').textContent = s.title;
+  document.getElementById('scene-situation').textContent = s.situation;
+
+  const dlg = document.getElementById('dialogue');
+  dlg.innerHTML = '';
+  s.dialogue.forEach(line => {
+    const div = document.createElement('div'); div.className = 'd-line';
+    const sp = document.createElement('span'); sp.className = 'speaker'; sp.textContent = line.s;
+    const txt = document.createElement('span');
+    txt.className = line.blank ? 'speech blank' : 'speech';
+    txt.textContent = line.blank ? '??? (빈칸)' : line.t;
+    div.appendChild(sp); div.appendChild(txt); dlg.appendChild(div);
+  });
+
+  document.getElementById('prompt-label').textContent = s.prompt;
+  shuffledChoices = shuffle(s.choices);
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  shuffledChoices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn'; btn.id = `choice-${i}`;
+    btn.textContent = c.text; btn.onclick = () => selectChoice(i);
+    choicesEl.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback-box');
+  fb.style.display = 'none'; fb.className = 'feedback';
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('wrong-actions').classList.remove('show');
+}
+
+function selectChoice(idx) {
+  const choice = shuffledChoices[idx];
+  document.querySelectorAll('.choice-btn').forEach((btn, i) => {
+    btn.disabled = true; if (i !== idx) btn.classList.add('dimmed');
+  });
+  const btn = document.getElementById(`choice-${idx}`);
+  const fb = document.getElementById('feedback-box');
+  const wrongActions = document.getElementById('wrong-actions');
+  const nextBtn = document.getElementById('btn-next');
+
+  if (choice.correct) {
+    btn.classList.add('correct'); score++; results.push(true);
+    fb.className = 'feedback correct';
+    document.getElementById('feedback-head').textContent = '✅ 정답이에요!';
+    wrongActions.classList.remove('show');
+    nextBtn.style.display = 'block';
+    nextBtn.textContent = currentScene < scenes.length - 1 ? '다음 씬으로 →' : '결과 보기 →';
+  } else {
+    btn.classList.add('wrong'); results.push(false);
+    shuffledChoices.forEach((c, i) => { if (c.correct) document.getElementById(`choice-${i}`).classList.add('correct'); });
+    fb.className = 'feedback wrong';
+    document.getElementById('feedback-head').textContent = '❌ 아쉬워요!';
+    nextBtn.style.display = 'none';
+    wrongActions.classList.add('show');
+  }
+  document.getElementById('feedback-body').innerHTML = choice.feedback;
+  fb.style.display = 'block';
+  document.getElementById('score-text').textContent = `${score}점`;
+}
+
+function retryScene() { results.pop(); renderScene(); }
+
+function nextScene() {
+  currentScene++;
+  if (currentScene < scenes.length) renderScene(); else showResult();
+}
+
+function showResult() {
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'block';
+  let trophy, comment;
+  if      (score === 6) { trophy = '🏆'; comment = '완벽해요! 패턴 마스터!'; }
+  else if (score === 5) { trophy = '🌟'; comment = '훌륭해요! 거의 완벽!'; }
+  else if (score === 4) { trophy = '👍'; comment = '잘 하셨어요!'; }
+  else if (score === 3) { trophy = '📚'; comment = '절반 맞았어요!'; }
+  else                  { trophy = '💪'; comment = '다시 도전해봐요!'; }
+  document.getElementById('result-trophy').textContent = trophy;
+  document.getElementById('result-score').innerHTML = `${score}<span> / 6</span>`;
+  document.getElementById('result-comment').textContent = comment;
+  const pct = Math.round((score / scenes.length) * 100);
+  document.getElementById('acc-pct').textContent = `${pct}%`;
+  setTimeout(() => { document.getElementById('acc-fill').style.width = `${pct}%`; }, 100);
+  const dots = document.getElementById('dots-row');
+  dots.innerHTML = '';
+  results.forEach(ok => {
+    const d = document.createElement('div');
+    d.className = `dot-item ${ok ? 'ok' : 'miss'}`;
+    d.textContent = ok ? '○' : '✕';
+    dots.appendChild(d);
+  });
+}
+
+function replayGame() {
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+  currentScene = 0; score = 0; results = []; renderScene();
+}
+</script>
+</body>
+</html>
