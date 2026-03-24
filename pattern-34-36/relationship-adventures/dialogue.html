@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relationship Dialogue · 패턴 34–36</title>
+<style>
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #1c2230;
+  --border:    #21262d;
+  --gold:      #c9a227;
+  --gold-dim:  #8a6e1a;
+  --gold-glow: rgba(201,162,39,.15);
+  --text:      #e6edf3;
+  --muted:     #7d8590;
+  --blue:      #58a6ff;
+  --purple:    #bc8cff;
+  --radius:    14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 540px;
+  margin: 0 auto;
+  padding-bottom: 48px;
+}
+
+.header { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 20px; width: 100%; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+.btn-back { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); background: none; border: none; cursor: pointer; font-size: 13px; padding: 4px 0; transition: color .2s; text-decoration: none; width: 60px; }
+.btn-back:hover { color: var(--gold); }
+.btn-back svg { width: 16px; height: 16px; }
+.header-title { font-size: 14px; font-weight: 700; color: var(--muted); }
+
+.pattern-bar { margin: 16px 20px 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; width: calc(100% - 40px); }
+.pattern-bar-row { display: flex; gap: 8px; align-items: flex-start; }
+.pbar-num { font-size: 11px; font-weight: 700; color: var(--gold); background: var(--gold-glow); padding: 2px 7px; border-radius: 5px; white-space: nowrap; margin-top: 1px; }
+.pbar-expr { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.pbar-expr b { color: var(--text); }
+
+.guide { margin: 14px 20px 0; font-size: 13px; color: var(--muted); line-height: 1.7; background: var(--surface2); border-radius: 10px; padding: 12px 14px; width: calc(100% - 40px); }
+
+.sets { display: flex; flex-direction: column; gap: 14px; padding: 16px 20px 0; width: 100%; }
+
+.set-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.set-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px 12px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+.set-emoji { font-size: 22px; flex-shrink: 0; }
+.set-num { font-size: 11px; font-weight: 700; letter-spacing: .8px; color: var(--gold); text-transform: uppercase; margin-bottom: 2px; }
+.set-title { font-size: 14px; font-weight: 800; color: var(--text); line-height: 1.2; }
+.set-title-ko { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+.dialogue { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.line { display: flex; gap: 10px; align-items: flex-start; }
+.speaker {
+  font-size: 11px; font-weight: 700;
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.speaker.a { background: rgba(88,166,255,.15); color: var(--blue); border: 1px solid rgba(88,166,255,.3); }
+.speaker.b { background: rgba(188,140,255,.15); color: var(--purple); border: 1px solid rgba(188,140,255,.3); }
+.speech { font-size: 14px; line-height: 1.7; color: var(--text); }
+.speak-it { display: flex; align-items: flex-start; gap: 8px; padding: 10px 16px 14px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); line-height: 1.6; }
+.speak-it .icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a class="btn-back" href="./index.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg>
+      목록으로
+    </a>
+    <span class="header-title">패턴 34–36 · 대화 연습</span>
+    <span style="width:60px"></span>
+  </div>
+</div>
+
+<div class="pattern-bar">
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 34</span>
+    <span class="pbar-expr"><b>How often do you + 동사?</b> — 얼마나 자주 ~ 해?</span>
+  </div>
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 35</span>
+    <span class="pbar-expr"><b>I hope to + 동사</b> — ~하면 좋겠어</span>
+  </div>
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 36</span>
+    <span class="pbar-expr"><b>I agree with + 명사 / I agree that 주어 + 동사</b> — ~에 동의해 / ~라는 거 맞아</span>
+  </div>
+</div>
+
+<div class="guide">
+  A와 B 역할을 나눠서 소리 내어 읽어보세요. 자연스러워질 때까지 반복하고, 역할을 바꿔서 한 번 더!
+</div>
+
+<div class="sets">
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">💬</span><div><p class="set-num">SET 1</p><p class="set-title">Keeping In Touch</p><p class="set-title-ko">연락 유지</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How often do you text your close friends first?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Honestly, not that often. I kind of wait for them to reach out.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Same. I hope to get better at that. It's a bad habit.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I agree. I always feel guilty when too much time passes.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Like a month goes by and suddenly you realize you haven't talked at all.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Exactly. We should make more effort.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">☕</span><div><p class="set-num">SET 2</p><p class="set-title">The Friend Date</p><p class="set-title-ko">친구랑 약속 잡기</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How often do you actually meet your friends in person these days?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Maybe once a month? Everyone's so busy.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I hope to see my college friends more this year. We keep canceling.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I agree that making plans is the easy part. Actually showing up is another thing.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Right. Someone always has work or something.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">We need to just book it and not back out.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">💔</span><div><p class="set-num">SET 3</p><p class="set-title">The Breakup Debrief</p><p class="set-title-ko">이별 후 수다</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How often do you think about your ex?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Less than before. Maybe once a week now? It's getting better.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I agree that time really does help. It's cliché but true.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Yeah. I hope to feel totally over it by summer.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">You will. You've already come so far.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Thanks. It just takes longer than you expect.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">😬</span><div><p class="set-num">SET 4</p><p class="set-title">The Awkward One</p><p class="set-title-ko">불편한 사람</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How often do you have to see that coworker you don't like?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Every single day. It's exhausting.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I agree that some people are just draining no matter what you do.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Exactly. I hope to find a way to just feel neutral about it.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">That's actually the best goal. Not hate, just... nothing.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Right. Indifference is the dream.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">💌</span><div><p class="set-num">SET 5</p><p class="set-title">Sliding Into DMs</p><p class="set-title-ko">연락 먼저 할까?</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How often do you make the first move when you like someone?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Almost never. I just wait and hope they do something.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I hope to be braver about that. It's just scary.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I agree with you. But also the worst they can say is no, right?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Logically yes. Emotionally, terrifying.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Ha. Same.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🤝</span><div><p class="set-num">SET 6</p><p class="set-title">The Apology</p><p class="set-title-ko">먼저 사과하기</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How often do you apologize first after a fight?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Depends on the person. With close friends, pretty often.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I agree that being the bigger person gets easier with practice.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">It does. I hope to stop letting my ego get in the way so much.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">That's honestly the hardest part.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Especially when you think you're right.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">📱</span><div><p class="set-num">SET 7</p><p class="set-title">Read Receipts</p><p class="set-title-ko">읽씹 문화</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How often do you leave messages on read without replying?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">More than I should. Sometimes I just don't know what to say.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I agree that it's not always intentional. But it still hurts.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Yeah. I hope to be better at at least sending a quick reply.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Even just "lol" is better than nothing.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">True. Radio silence is the worst.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🥂</span><div><p class="set-num">SET 8</p><p class="set-title">Blind Date Talk</p><p class="set-title-ko">소개팅 후기</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How often do you go on blind dates?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I went through a phase last year. Like once a month.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">How was it?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Mostly fine but exhausting. I hope to just meet someone naturally.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I agree with that. Blind dates feel like job interviews sometimes.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Exactly. You're both performing and it's weird.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🌱</span><div><p class="set-num">SET 9</p><p class="set-title">Growing Apart</p><p class="set-title-ko">멀어지는 친구</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How often do you feel like you're drifting from an old friend?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">More than I'd like. People just change, I guess.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I agree that it's natural. But it still feels sad.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">It does. I hope to stay close to the people who actually matter.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">That's kind of the goal, right? Quality over quantity.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Yeah. A few real ones is enough.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">💑</span><div><p class="set-num">SET 10</p><p class="set-title">Relationship Goals</p><p class="set-title-ko">이런 연애 하고 싶어</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How often do you think about what you want in a relationship?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Honestly a lot lately. I feel like I finally know what I need.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">What's the top thing?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Someone I can be boring with. Like comfortable silence, takeout, nothing special.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I agree that the everyday stuff matters more than the big gestures.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Exactly. I hope to find that kind of easy, calm love someday.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+</div>
+</body>
+</html>
