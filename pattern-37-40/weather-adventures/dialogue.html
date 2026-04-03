@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather Dialogue · 패턴 37–40</title>
+<style>
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #1c2230;
+  --border:    #21262d;
+  --gold:      #c9a227;
+  --gold-dim:  #8a6e1a;
+  --gold-glow: rgba(201,162,39,.15);
+  --text:      #e6edf3;
+  --muted:     #7d8590;
+  --green:     #3fb950;
+  --green-bg:  rgba(63,185,80,.12);
+  --red:       #f85149;
+  --red-bg:    rgba(248,81,73,.12);
+  --blue:      #58a6ff;
+  --purple:    #bc8cff;
+  --radius:    14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 540px;
+  margin: 0 auto;
+  padding-bottom: 48px;
+}
+
+.header { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 20px; width: 100%; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+.btn-back { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); background: none; border: none; cursor: pointer; font-size: 13px; padding: 4px 0; transition: color .2s; text-decoration: none; width: 60px; }
+.btn-back:hover { color: var(--gold); }
+.btn-back svg { width: 16px; height: 16px; }
+.header-title { font-size: 14px; font-weight: 700; color: var(--muted); }
+
+.pattern-bar { margin: 16px 20px 0; width: calc(100% - 40px); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.pattern-bar-row { display: flex; gap: 8px; align-items: flex-start; }
+.pbar-num { font-size: 11px; font-weight: 700; color: var(--gold); background: var(--gold-glow); padding: 2px 7px; border-radius: 5px; white-space: nowrap; margin-top: 1px; }
+.pbar-expr { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.pbar-expr b { color: var(--text); }
+
+.guide { margin: 14px 20px 0; width: calc(100% - 40px); font-size: 13px; color: var(--muted); line-height: 1.7; background: var(--surface2); border-radius: 10px; padding: 12px 14px; }
+
+.sets { display: flex; flex-direction: column; gap: 14px; padding: 16px 20px 0; width: 100%; }
+
+.set-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.set-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px 12px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+.set-emoji { font-size: 22px; flex-shrink: 0; }
+.set-num { font-size: 11px; font-weight: 700; letter-spacing: .8px; color: var(--gold); text-transform: uppercase; margin-bottom: 2px; }
+.set-title { font-size: 14px; font-weight: 800; color: var(--text); line-height: 1.2; }
+.set-title-ko { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+.dialogue { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.line { display: flex; gap: 10px; align-items: flex-start; }
+.speaker { font-size: 11px; font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.speaker.a { background: rgba(88,166,255,.15); color: var(--blue); border: 1px solid rgba(88,166,255,.3); }
+.speaker.b { background: rgba(188,140,255,.15); color: var(--purple); border: 1px solid rgba(188,140,255,.3); }
+.speech { font-size: 14px; line-height: 1.7; color: var(--text); }
+
+.speak-it { display: flex; align-items: flex-start; gap: 8px; padding: 10px 16px 14px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); line-height: 1.6; }
+.speak-it .icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a class="btn-back" href="./index.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg>
+      목록으로
+    </a>
+    <span class="header-title">패턴 37–40 · 대화 연습</span>
+    <span style="width:60px"></span>
+  </div>
+</div>
+
+<div class="pattern-bar">
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 37</span>
+    <span class="pbar-expr"><b>I'm upset / happy that + 문장</b> — ~해서 속상해 / 기뻐</span>
+  </div>
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 38</span>
+    <span class="pbar-expr"><b>when I + 동사</b> — 내가 ~할 때</span>
+  </div>
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 39</span>
+    <span class="pbar-expr"><b>If I + 동사</b> — 만약 ~한다면</span>
+  </div>
+  <div class="pattern-bar-row">
+    <span class="pbar-num">패턴 40</span>
+    <span class="pbar-expr"><b>I would + 동사</b> — ~할 것 같아 / ~하겠어</span>
+  </div>
+</div>
+
+<div class="guide">
+  A와 B 역할을 나눠서 소리 내어 읽어보세요. 자연스러워질 때까지 반복하고, 역할을 바꿔서 한 번 더!
+</div>
+
+<div class="sets">
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🌧️</span><div><p class="set-num">SET 1</p><p class="set-title">Finally Raining</p><p class="set-title-ko">드디어 비가 와</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm so happy that it's finally raining. It was way too hot.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Right? I feel like a different person already.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">When I step outside in this weather I just want to walk forever.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Same. Something about rain just resets everything.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">If it keeps up this weekend I'm going to a café and not leaving.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">That sounds like the perfect Saturday honestly.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🌸</span><div><p class="set-num">SET 2</p><p class="set-title">Spring Energy</p><p class="set-title-ko">봄 에너지</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I would go on a walk every single day if the weather stayed like this.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">It's perfect right now. Not too hot, not too cold.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">When I see cherry blossoms I feel like everything's going to be okay.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Ha, same. Even if nothing's changed, it just feels lighter.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm happy that spring actually came early this year.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Me too. I needed it after that winter.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">☀️</span><div><p class="set-num">SET 3</p><p class="set-title">Summer Complaints</p><p class="set-title-ko">여름 불평</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm upset that summer's already here. It was April like five minutes ago.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I know. The humidity is unbearable.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">If I could pick any season to live in forever it would be October.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">October is perfect. Crisp air, no sweat.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">When I think about August I genuinely feel tired.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Don't jinx it. We still have three months to go.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🍂</span><div><p class="set-num">SET 4</p><p class="set-title">Autumn Person</p><p class="set-title-ko">가을 사람</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">When does it start feeling like fall here? I can never tell.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Usually late September. But some years it's October before you notice.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm happy that I'm a fall person. It just suits me.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">What do you mean suits you?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I would wear sweaters every day if I could. I hate being hot.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Fair. I'm more of a spring person but fall is a close second.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">❄️</span><div><p class="set-num">SET 5</p><p class="set-title">First Snow</p><p class="set-title-ko">첫눈</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">It snowed last night! I'm so happy that I got to see it.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I missed it. I woke up and it was already melted.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm upset that it didn't last longer. It was perfect for like an hour.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">If it snows properly this winter I want to go somewhere with mountains.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">When I see snow I always want hot chocolate and a book.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">That's basically the whole winter dream right there.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🌩️</span><div><p class="set-num">SET 6</p><p class="set-title">Caught in the Rain</p><p class="set-title-ko">비를 맞았어</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I got completely soaked on the way home. I'm upset that I forgot my umbrella.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Oh no. Did you have anything important on you?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Just my phone, luckily. But my shoes are still wet.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">When I get caught in the rain like that I feel like the day is ruined.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Exactly. Everything after just feels off.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">If I had known it was going to rain I would have taken the subway instead.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🌥️</span><div><p class="set-num">SET 7</p><p class="set-title">Cloudy Day Mood</p><p class="set-title-ko">흐린 날의 기분</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">When it's cloudy like this I feel kind of cozy actually.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Really? I get kind of low energy on grey days.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I would nap every cloudy afternoon if I didn't have work.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">That sounds amazing and terrible at the same time.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm happy that today's cloudy. It means I don't feel guilty staying in.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">That's a very specific way to think about it but I get it.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🌬️</span><div><p class="set-num">SET 8</p><p class="set-title">Wind Day</p><p class="set-title-ko">바람 부는 날</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">It's so windy today. My hair is a mess.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I know, I almost lost my coffee lid on the way here.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">If this keeps up I would just work from home honestly.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">When it's windy like this I always feel cold no matter what I wear.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Same. It's technically warm but wind makes it feel like winter.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I'm upset that the forecast said "clear skies." This is not that.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🌅</span><div><p class="set-num">SET 9</p><p class="set-title">Morning Routine</p><p class="set-title-ko">아침 루틴</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">When I wake up and it's sunny I actually get out of bed faster.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Ha, same. Dark mornings are brutal.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm happy that sunrise is earlier now. It makes such a difference.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I would exercise in the morning if it weren't dark when I wake up.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">That's literally the only reason I don't.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">If mornings were just one hour later I think I'd be a completely different person.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🌈</span><div><p class="set-num">SET 10</p><p class="set-title">After the Rain</p><p class="set-title-ko">비 그친 후</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Oh, there's a rainbow. Did you see it?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Where? Oh wow, that's a full one.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm happy that we came outside when we did.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">When I see a rainbow I feel like something good is about to happen.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">That's very optimistic of you.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I would take it as a sign honestly. If I had a big decision to make today I'd just go for it.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+</div>
+</body>
+</html>
