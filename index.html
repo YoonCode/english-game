@@ -17,6 +17,8 @@
   --muted:     #7d8590;
   --green:     #3fb950;
   --green-bg:  rgba(63,185,80,.12);
+  --red:       #f85149;
+  --red-bg:    rgba(248,81,73,.12);
   --blue:      #58a6ff;
   --purple:    #bc8cff;
   --radius:    14px;
@@ -69,6 +71,7 @@ div.card { background: var(--surface); border: 1.5px solid var(--border); border
 .patterns { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
 .pattern-item { font-size: 13px; color: var(--muted); line-height: 1.5; }
 .pattern-item strong { color: var(--gold); font-weight: 700; font-size: 11px; letter-spacing: .5px; margin-right: 6px; }
+
 .card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
 .content-count { font-size: 12px; color: var(--muted); }
 .content-count b { color: var(--text); }
@@ -88,8 +91,8 @@ a.card:hover .arrow { transform: translateX(4px); }
 
 <div class="stats-bar">
   <div class="stat"><span class="stat-num">46</span><span class="stat-label">전체 패턴</span></div>
-  <div class="stat"><span class="stat-num">6</span><span class="stat-label">활성 세트</span></div>
-  <div class="stat"><span class="stat-num">6</span><span class="stat-label">게임 수</span></div>
+  <div class="stat"><span class="stat-num">7</span><span class="stat-label">활성 세트</span></div>
+  <div class="stat"><span class="stat-num">7</span><span class="stat-label">게임 수</span></div>
 </div>
 
 <div class="section-label">학습 가능</div>
@@ -155,35 +158,36 @@ a.card:hover .arrow { transform: translateX(4px); }
     <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 인간관계·연애 💬</span><span class="arrow">→</span></div>
   </a>
 
+  <a class="card active" href="./pattern-37-40/index.html">
+    <div class="card-top"><div class="card-num">37<span>– 40</span></div><span class="card-status ready"><span class="dot"></span>학습 가능</span></div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 37</strong>I'm upset / happy that + 문장</div>
+      <div class="pattern-item"><strong>패턴 38</strong>when I + 동사</div>
+      <div class="pattern-item"><strong>패턴 39</strong>If I + 동사</div>
+      <div class="pattern-item"><strong>패턴 40</strong>I would + 동사</div>
+    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 계절·날씨·일상 🌤️</span><span class="arrow">→</span></div>
+  </a>
+
 </div>
 
 <div class="section-label">준비 중</div>
 <div class="card-list">
 
   <div class="card" onclick="showToast()">
-    <div class="card-top"><div class="card-num">37<span>– 39</span></div><span class="card-status soon">준비 중</span></div>
+    <div class="card-top"><div class="card-num">41<span>– 43</span></div><span class="card-status soon">준비 중</span></div>
     <div class="patterns">
-      <div class="pattern-item"><strong>패턴 37</strong>—</div>
-      <div class="pattern-item"><strong>패턴 38</strong>—</div>
-      <div class="pattern-item"><strong>패턴 39</strong>—</div>
-    </div>
-    <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
-  </div>
-
-  <div class="card" onclick="showToast()">
-    <div class="card-top"><div class="card-num">40<span>– 42</span></div><span class="card-status soon">준비 중</span></div>
-    <div class="patterns">
-      <div class="pattern-item"><strong>패턴 40</strong>—</div>
       <div class="pattern-item"><strong>패턴 41</strong>—</div>
       <div class="pattern-item"><strong>패턴 42</strong>—</div>
+      <div class="pattern-item"><strong>패턴 43</strong>—</div>
     </div>
     <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
   </div>
 
   <div class="card" onclick="showToast()">
-    <div class="card-top"><div class="card-num">43<span>– 46</span></div><span class="card-status soon">준비 중</span></div>
+    <div class="card-top"><div class="card-num">44<span>– 46</span></div><span class="card-status soon">준비 중</span></div>
     <div class="patterns">
-      <div class="pattern-item"><strong>패턴 43–46</strong>—</div>
+      <div class="pattern-item"><strong>패턴 44–46</strong>—</div>
     </div>
     <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
   </div>
