@@ -25,13 +25,10 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  background: var(--bg);
-  color: var(--text);
+  background: var(--bg); color: var(--text);
   font-family: system-ui, -apple-system, sans-serif;
-  min-height: 100vh;
-  max-width: 540px;
-  margin: 0 auto;
-  padding-bottom: 48px;
+  min-height: 100vh; max-width: 540px;
+  margin: 0 auto; padding-bottom: 48px;
 }
 .header { padding: 32px 20px 0; text-align: center; }
 .header-title { font-size: 22px; font-weight: 800; font-family: Georgia, serif; color: var(--gold); letter-spacing: .5px; }
@@ -91,12 +88,22 @@ a.card:hover .arrow { transform: translateX(4px); }
 
 <div class="stats-bar">
   <div class="stat"><span class="stat-num">46</span><span class="stat-label">전체 패턴</span></div>
-  <div class="stat"><span class="stat-num">8</span><span class="stat-label">활성 세트</span></div>
-  <div class="stat"><span class="stat-num">8</span><span class="stat-label">게임 수</span></div>
+  <div class="stat"><span class="stat-num">10</span><span class="stat-label">활성 세트</span></div>
+  <div class="stat"><span class="stat-num">10</span><span class="stat-label">게임 수</span></div>
 </div>
 
 <div class="section-label">학습 가능</div>
 <div class="card-list">
+
+  <a class="card active" href="./pattern-1-3/index.html">
+    <div class="card-top"><div class="card-num">1<span>– 3</span></div><span class="card-status ready"><span class="dot"></span>학습 가능</span></div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 1</strong>Can you + 동사?</div>
+      <div class="pattern-item"><strong>패턴 2</strong>I'd like to + 동사</div>
+      <div class="pattern-item"><strong>패턴 3</strong>I think / I don't think 주어 + 동사</div>
+    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 쇼핑·물건·추천 🛍️</span><span class="arrow">→</span></div>
+  </a>
 
   <a class="card active" href="./pattern-19-21/index.html">
     <div class="card-top"><div class="card-num">19<span>– 21</span></div><span class="card-status ready"><span class="dot"></span>학습 가능</span></div>
@@ -179,15 +186,33 @@ a.card:hover .arrow { transform: translateX(4px); }
     <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 직장·회의·업무 💼</span><span class="arrow">→</span></div>
   </a>
 
+  <a class="card active" href="./pattern-44-46/index.html">
+    <div class="card-top"><div class="card-num">44<span>– 46</span></div><span class="card-status ready"><span class="dot"></span>학습 가능</span></div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 44</strong>How could you + 동사?</div>
+      <div class="pattern-item"><strong>패턴 45</strong>I'm getting + 형용사</div>
+      <div class="pattern-item"><strong>패턴 46</strong>Are you / I'm done with + 명사/동사ing</div>
+    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 친구·연애·갈등 💔</span><span class="arrow">→</span></div>
+  </a>
+
 </div>
 
 <div class="section-label">준비 중</div>
 <div class="card-list">
 
   <div class="card" onclick="showToast()">
-    <div class="card-top"><div class="card-num">44<span>– 46</span></div><span class="card-status soon">준비 중</span></div>
+    <div class="card-top"><div class="card-num">4<span>– 6</span></div><span class="card-status soon">준비 중</span></div>
     <div class="patterns">
-      <div class="pattern-item"><strong>패턴 44–46</strong>—</div>
+      <div class="pattern-item"><strong>패턴 4–6</strong>—</div>
+    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
+  </div>
+
+  <div class="card" onclick="showToast()">
+    <div class="card-top"><div class="card-num">7<span>– 9</span></div><span class="card-status soon">준비 중</span></div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 7–9</strong>—</div>
     </div>
     <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
   </div>
