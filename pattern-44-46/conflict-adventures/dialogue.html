@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conflict Dialogue · 패턴 44–46</title>
+<style>
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #1c2230;
+  --border:    #21262d;
+  --gold:      #c9a227;
+  --gold-dim:  #8a6e1a;
+  --gold-glow: rgba(201,162,39,.15);
+  --text:      #e6edf3;
+  --muted:     #7d8590;
+  --green:     #3fb950;
+  --green-bg:  rgba(63,185,80,.12);
+  --red:       #f85149;
+  --red-bg:    rgba(248,81,73,.12);
+  --blue:      #58a6ff;
+  --purple:    #bc8cff;
+  --radius:    14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100dvh; display: flex;
+  flex-direction: column; align-items: center;
+  max-width: 540px; margin: 0 auto; padding-bottom: 48px;
+}
+.header { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 20px; width: 100%; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+.btn-back { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); background: none; border: none; cursor: pointer; font-size: 13px; padding: 4px 0; transition: color .2s; text-decoration: none; width: 60px; }
+.btn-back:hover { color: var(--gold); }
+.btn-back svg { width: 16px; height: 16px; }
+.header-title { font-size: 14px; font-weight: 700; color: var(--muted); }
+.pattern-bar { margin: 16px 20px 0; width: calc(100% - 40px); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.pattern-bar-row { display: flex; gap: 8px; align-items: flex-start; }
+.pbar-num { font-size: 11px; font-weight: 700; color: var(--gold); background: var(--gold-glow); padding: 2px 7px; border-radius: 5px; white-space: nowrap; margin-top: 1px; }
+.pbar-expr { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.pbar-expr b { color: var(--text); }
+.guide { margin: 14px 20px 0; width: calc(100% - 40px); font-size: 13px; color: var(--muted); line-height: 1.7; background: var(--surface2); border-radius: 10px; padding: 12px 14px; }
+.sets { display: flex; flex-direction: column; gap: 14px; padding: 16px 20px 0; width: 100%; }
+.set-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.set-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px 12px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+.set-emoji { font-size: 22px; flex-shrink: 0; }
+.set-num { font-size: 11px; font-weight: 700; letter-spacing: .8px; color: var(--gold); text-transform: uppercase; margin-bottom: 2px; }
+.set-title { font-size: 14px; font-weight: 800; color: var(--text); line-height: 1.2; }
+.set-title-ko { font-size: 12px; color: var(--muted); margin-top: 1px; }
+.dialogue { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.line { display: flex; gap: 10px; align-items: flex-start; }
+.speaker { font-size: 11px; font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.speaker.a { background: rgba(88,166,255,.15); color: var(--blue); border: 1px solid rgba(88,166,255,.3); }
+.speaker.b { background: rgba(188,140,255,.15); color: var(--purple); border: 1px solid rgba(188,140,255,.3); }
+.speech { font-size: 14px; line-height: 1.7; color: var(--text); }
+.speak-it { display: flex; align-items: flex-start; gap: 8px; padding: 10px 16px 14px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); line-height: 1.6; }
+.speak-it .icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a class="btn-back" href="../index.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg>
+      목록으로
+    </a>
+    <span class="header-title">패턴 44–46 · 대화 연습</span>
+    <span style="width:60px"></span>
+  </div>
+</div>
+
+<div class="pattern-bar">
+  <div class="pattern-bar-row"><span class="pbar-num">패턴 44</span><span class="pbar-expr"><b>How could you + 동사?</b> — 어떻게 ~할 수 있어?</span></div>
+  <div class="pattern-bar-row"><span class="pbar-num">패턴 45</span><span class="pbar-expr"><b>I'm getting + 형용사</b> — 점점 ~해지고 있어</span></div>
+  <div class="pattern-bar-row"><span class="pbar-num">패턴 46</span><span class="pbar-expr"><b>Are you / I'm done with + 명사/동사ing</b> — ~는 다 끝났어?</span></div>
+</div>
+
+<div class="guide">A와 B 역할을 나눠서 소리 내어 읽어보세요. 자연스러워질 때까지 반복하고, 역할을 바꿔서 한 번 더!</div>
+
+<div class="sets">
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">😤</span><div><p class="set-num">SET 1</p><p class="set-title">The Secret That Wasn't</p><p class="set-title-ko">비밀이 아니었어</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I told you that in confidence. How could you tell everyone?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I didn't tell everyone. I told one person.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">That's the same thing and you know it.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I'm getting why you're upset. But I genuinely didn't think it was a big deal.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">It was a big deal to me. That's what matters.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">You're right. I'm sorry. I should have kept it.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">💬</span><div><p class="set-num">SET 2</p><p class="set-title">One-Sided Effort</p><p class="set-title-ko">혼자만 노력하는 관계</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I feel like I'm the only one reaching out lately.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I know. I'm getting busier but that's not an excuse.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm done with always being the one who texts first.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">That's fair. I've been taking you for granted.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I just want things to feel equal.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">They should. Let me do better.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">💔</span><div><p class="set-num">SET 3</p><p class="set-title">The Cancelled Plans</p><p class="set-title-ko">또 취소야</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How could you cancel again? This is the third time this month.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I know. Something came up last minute. I feel terrible.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm getting tired of rearranging my whole day for nothing.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I understand. I would be frustrated too.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Are you done with cancelling or is this just how things are now?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">No, I hear you. I'll stop doing this. I promise.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🙄</span><div><p class="set-num">SET 4</p><p class="set-title">The Ex Problem</p><p class="set-title-ko">전 연인 문제</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Are you done with talking to your ex? You said you would stop.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">We just text sometimes. It's not a big deal.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">It is to me. How could you keep doing it after we talked about this?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I hear you. I'm getting why it's bothering you more than I realized.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I just need to know where we stand.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">We're good. I'll stop. You matter more.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">😔</span><div><p class="set-num">SET 5</p><p class="set-title">Growing Apart</p><p class="set-title-ko">멀어지는 느낌</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Do you ever feel like we're getting distant?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Honestly, yeah. I've noticed it too.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm getting more and more worried about it.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Me too. We used to talk every day.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Are you done with trying or are we just in a rough patch?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Rough patch. Definitely. I'm not done with us.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🔥</span><div><p class="set-num">SET 6</p><p class="set-title">The Comparison</p><p class="set-title-ko">비교하기</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How could you compare me to your last partner? That's so unfair.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I didn't mean it like that. It just came out wrong.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">It still hurt. I'm getting really tired of feeling like I'm being measured.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">You're not. I'm sorry, that was a stupid thing to say.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Just think before you speak sometimes.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">You're right. I will. That won't happen again.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🤐</span><div><p class="set-num">SET 7</p><p class="set-title">The Silent Treatment</p><p class="set-title-ko">무시 당하는 느낌</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">You've been ignoring my messages for two days. What's going on?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I needed space. I didn't know how to say that.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm getting really anxious when you just go quiet like that.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I know. I should have said something instead of disappearing.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Are you done with shutting down every time things get hard?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I'm working on it. I really am.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">😅</span><div><p class="set-num">SET 8</p><p class="set-title">The Bad Advice</p><p class="set-title-ko">나쁜 충고</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">How could you tell me to just let it go? You didn't even hear the whole story.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Okay fair. I jumped to conclusions. Tell me everything.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm getting more upset the more I think about it actually.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Then talk it through. I'm listening for real this time.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">She basically threw me under the bus in front of everyone.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Oh wow. Yeah, that's not something to just let go.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🌱</span><div><p class="set-num">SET 9</p><p class="set-title">After the Fight</p><p class="set-title-ko">싸운 다음 날</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Are you done with being upset? I want to talk.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I'm not upset anymore. Just tired.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Me too. I'm getting over it but I still want to understand what happened.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I think we just hit a wall. We were both stressed.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Probably. How could we let it get that bad though?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">We'll figure it out. That's the whole point of talking.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">💛</span><div><p class="set-num">SET 10</p><p class="set-title">Choosing to Stay</p><p class="set-title-ko">머물기로 결정하다</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I've been thinking. I'm done with running away every time things get hard.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Really? What changed?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm getting better at sitting with discomfort instead of just leaving.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">That's actually huge. I've noticed you're different lately.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">How could you tell?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">You stay in the room now. Even when it's hard. That means everything.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+</div>
+</body>
+</html>
