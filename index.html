@@ -6,92 +6,60 @@
 <title>English Pattern Study</title>
 <style>
 :root {
-  --bg:        #0d1117;
-  --surface:   #161b22;
-  --surface2:  #1c2230;
-  --border:    #21262d;
-  --gold:      #c9a227;
-  --gold-dim:  #8a6e1a;
-  --gold-glow: rgba(201,162,39,.15);
-  --text:      #e6edf3;
-  --muted:     #7d8590;
-  --green:     #3fb950;
-  --green-bg:  rgba(63,185,80,.12);
-  --red:       #f85149;
-  --red-bg:    rgba(248,81,73,.12);
-  --blue:      #58a6ff;
-  --purple:    #bc8cff;
-  --radius:    14px;
+  --bg:#0d1117; --surface:#161b22; --surface2:#1c2230; --border:#21262d;
+  --gold:#c9a227; --gold-dim:#8a6e1a; --gold-glow:rgba(201,162,39,.15);
+  --text:#e6edf3; --muted:#7d8590;
+  --green:#3fb950; --green-bg:rgba(63,185,80,.12);
+  --red:#f85149; --red-bg:rgba(248,81,73,.12);
+  --blue:#58a6ff; --purple:#bc8cff; --radius:14px;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg); color: var(--text);
-  font-family: system-ui, -apple-system, sans-serif;
-  min-height: 100vh; max-width: 540px;
-  margin: 0 auto; padding-bottom: 48px;
-}
-.header { padding: 32px 20px 0; text-align: center; }
-.header-title { font-size: 22px; font-weight: 800; font-family: Georgia, serif; color: var(--gold); letter-spacing: .5px; }
-.header-sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
-
-.stats-bar { display: flex; margin: 20px 20px 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-.stat { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 14px 0; }
-.stat + .stat { border-left: 1px solid var(--border); }
-.stat-num { font-size: 22px; font-weight: 800; color: var(--gold); }
-.stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
-
-.section-label { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; color: var(--muted); text-transform: uppercase; padding: 24px 20px 10px; }
-.card-list { display: flex; flex-direction: column; gap: 12px; padding: 0 20px; }
-
-a.card {
-  display: block; text-decoration: none;
-  background: var(--surface); border: 1.5px solid var(--gold-dim);
-  border-radius: var(--radius); padding: 18px;
-  position: relative; overflow: hidden;
-  transition: border-color .2s, box-shadow .2s, transform .15s;
-}
-a.card::before { content: ''; position: absolute; inset: 0; background: var(--gold-glow); opacity: 0; transition: opacity .2s; }
-a.card:hover { border-color: var(--gold); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(201,162,39,.12); }
-a.card:hover::before { opacity: 1; }
-
-div.card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 18px; opacity: .45; cursor: not-allowed; }
-
-.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
-.card-num { font-size: 28px; font-weight: 900; font-family: Georgia, serif; color: var(--gold); line-height: 1; }
-.card-num span { font-size: 18px; color: var(--gold-dim); }
-.card-status { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
-.card-status.ready { background: var(--green-bg); color: var(--green); }
-.card-status.soon  { background: var(--surface2); color: var(--muted); }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,sans-serif; min-height:100vh; max-width:540px; margin:0 auto; padding-bottom:48px; }
+.header { padding:32px 20px 0; text-align:center; }
+.header-title { font-size:22px; font-weight:800; font-family:Georgia,serif; color:var(--gold); letter-spacing:.5px; }
+.header-sub { font-size:13px; color:var(--muted); margin-top:6px; }
+.stats-bar { display:flex; margin:20px 20px 0; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.stat { flex:1; display:flex; flex-direction:column; align-items:center; padding:14px 0; }
+.stat+.stat { border-left:1px solid var(--border); }
+.stat-num { font-size:22px; font-weight:800; color:var(--gold); }
+.stat-label { font-size:11px; color:var(--muted); margin-top:3px; }
+.section-label { font-size:11px; font-weight:700; letter-spacing:1.2px; color:var(--muted); text-transform:uppercase; padding:24px 20px 10px; }
+.card-list { display:flex; flex-direction:column; gap:12px; padding:0 20px; }
+a.card { display:block; text-decoration:none; background:var(--surface); border:1.5px solid var(--gold-dim); border-radius:var(--radius); padding:18px; position:relative; overflow:hidden; transition:border-color .2s,box-shadow .2s,transform .15s; }
+a.card::before { content:''; position:absolute; inset:0; background:var(--gold-glow); opacity:0; transition:opacity .2s; }
+a.card:hover { border-color:var(--gold); transform:translateY(-1px); box-shadow:0 4px 20px rgba(201,162,39,.12); }
+a.card:hover::before { opacity:1; }
+div.card { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:18px; opacity:.45; cursor:not-allowed; }
+.card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; }
+.card-num { font-size:28px; font-weight:900; font-family:Georgia,serif; color:var(--gold); line-height:1; }
+.card-num span { font-size:18px; color:var(--gold-dim); }
+.card-status { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; padding:4px 10px; border-radius:20px; }
+.card-status.ready { background:var(--green-bg); color:var(--green); }
+.card-status.soon { background:var(--surface2); color:var(--muted); }
+.dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-
-.patterns { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
-.pattern-item { font-size: 13px; color: var(--muted); line-height: 1.5; }
-.pattern-item strong { color: var(--gold); font-weight: 700; font-size: 11px; letter-spacing: .5px; margin-right: 6px; }
-
-.card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
-.content-count { font-size: 12px; color: var(--muted); }
-.content-count b { color: var(--text); }
-.arrow { color: var(--gold); font-size: 16px; transition: transform .2s; }
-a.card:hover .arrow { transform: translateX(4px); }
-
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-size: 13px; padding: 10px 18px; border-radius: 20px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 100; }
-.toast.show { opacity: 1; }
+.patterns { display:flex; flex-direction:column; gap:7px; margin-bottom:14px; }
+.pattern-item { font-size:13px; color:var(--muted); line-height:1.5; }
+.pattern-item strong { color:var(--gold); font-weight:700; font-size:11px; letter-spacing:.5px; margin-right:6px; }
+.card-footer { display:flex; justify-content:space-between; align-items:center; padding-top:12px; border-top:1px solid var(--border); }
+.content-count { font-size:12px; color:var(--muted); }
+.content-count b { color:var(--text); }
+.arrow { color:var(--gold); font-size:16px; transition:transform .2s; }
+a.card:hover .arrow { transform:translateX(4px); }
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--surface2); border:1px solid var(--border); color:var(--muted); font-size:13px; padding:10px 18px; border-radius:20px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .25s; z-index:100; }
+.toast.show { opacity:1; }
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="header-title">✦ English Pattern Study</div>
   <div class="header-sub">패턴으로 배우는 영어 회화</div>
 </div>
-
 <div class="stats-bar">
   <div class="stat"><span class="stat-num">46</span><span class="stat-label">전체 패턴</span></div>
-  <div class="stat"><span class="stat-num">10</span><span class="stat-label">활성 세트</span></div>
-  <div class="stat"><span class="stat-num">10</span><span class="stat-label">게임 수</span></div>
+  <div class="stat"><span class="stat-num">12</span><span class="stat-label">활성 세트</span></div>
+  <div class="stat"><span class="stat-num">12</span><span class="stat-label">게임 수</span></div>
 </div>
-
 <div class="section-label">학습 가능</div>
 <div class="card-list">
 
@@ -103,6 +71,26 @@ a.card:hover .arrow { transform: translateX(4px); }
       <div class="pattern-item"><strong>패턴 3</strong>I think / I don't think 주어 + 동사</div>
     </div>
     <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 쇼핑·물건·추천 🛍️</span><span class="arrow">→</span></div>
+  </a>
+
+  <a class="card active" href="./pattern-4-6/index.html">
+    <div class="card-top"><div class="card-num">4<span>– 6</span></div><span class="card-status ready"><span class="dot"></span>학습 가능</span></div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 4</strong>I didn't + 동사 / I wasn't + 형용사</div>
+      <div class="pattern-item"><strong>패턴 5</strong>How about + 명사/동사ing?</div>
+      <div class="pattern-item"><strong>패턴 6</strong>Would you please + 동사?</div>
+    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 여행·호텔·교통 ✈️</span><span class="arrow">→</span></div>
+  </a>
+
+  <a class="card active" href="./pattern-7-9/index.html">
+    <div class="card-top"><div class="card-num">7<span>– 9</span></div><span class="card-status ready"><span class="dot"></span>학습 가능</span></div>
+    <div class="patterns">
+      <div class="pattern-item"><strong>패턴 7</strong>What is your + 명사?</div>
+      <div class="pattern-item"><strong>패턴 8</strong>Let's + 동사</div>
+      <div class="pattern-item"><strong>패턴 9</strong>There is (are) + 명사</div>
+    </div>
+    <div class="card-footer"><span class="content-count">게임 <b>1</b>개 · 집·이사·인테리어 🏠</span><span class="arrow">→</span></div>
   </a>
 
   <a class="card active" href="./pattern-19-21/index.html">
@@ -200,23 +188,16 @@ a.card:hover .arrow { transform: translateX(4px); }
 
 <div class="section-label">준비 중</div>
 <div class="card-list">
-
   <div class="card" onclick="showToast()">
-    <div class="card-top"><div class="card-num">4<span>– 6</span></div><span class="card-status soon">준비 중</span></div>
-    <div class="patterns">
-      <div class="pattern-item"><strong>패턴 4–6</strong>—</div>
-    </div>
+    <div class="card-top"><div class="card-num">10<span>– 12</span></div><span class="card-status soon">준비 중</span></div>
+    <div class="patterns"><div class="pattern-item"><strong>패턴 10–12</strong>—</div></div>
     <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
   </div>
-
   <div class="card" onclick="showToast()">
-    <div class="card-top"><div class="card-num">7<span>– 9</span></div><span class="card-status soon">준비 중</span></div>
-    <div class="patterns">
-      <div class="pattern-item"><strong>패턴 7–9</strong>—</div>
-    </div>
+    <div class="card-top"><div class="card-num">13<span>– 15</span></div><span class="card-status soon">준비 중</span></div>
+    <div class="patterns"><div class="pattern-item"><strong>패턴 13–15</strong>—</div></div>
     <div class="card-footer"><span class="content-count">게임 <b>0</b>개</span></div>
   </div>
-
 </div>
 
 <div id="toast" class="toast">🔒 아직 준비 중이에요. 곧 오픈할게요!</div>
