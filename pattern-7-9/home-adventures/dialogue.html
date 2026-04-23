@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Dialogue · 패턴 7–9</title>
+<style>
+:root {
+  --bg:#0d1117; --surface:#161b22; --surface2:#1c2230; --border:#21262d;
+  --gold:#c9a227; --gold-dim:#8a6e1a; --gold-glow:rgba(201,162,39,.15);
+  --text:#e6edf3; --muted:#7d8590;
+  --green:#3fb950; --green-bg:rgba(63,185,80,.12);
+  --red:#f85149; --red-bg:rgba(248,81,73,.12);
+  --blue:#58a6ff; --purple:#bc8cff; --radius:14px;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,sans-serif; min-height:100dvh; display:flex; flex-direction:column; align-items:center; max-width:540px; margin:0 auto; padding-bottom:48px; }
+.header { position:sticky; top:0; z-index:10; background:var(--bg); border-bottom:1px solid var(--border); padding:0 20px; width:100%; }
+.header-inner { display:flex; align-items:center; justify-content:space-between; height:52px; }
+.btn-back { display:inline-flex; align-items:center; gap:6px; color:var(--muted); background:none; border:none; cursor:pointer; font-size:13px; padding:4px 0; transition:color .2s; text-decoration:none; width:60px; }
+.btn-back:hover { color:var(--gold); }
+.btn-back svg { width:16px; height:16px; }
+.header-title { font-size:14px; font-weight:700; color:var(--muted); }
+.pattern-bar { margin:16px 20px 0; width:calc(100% - 40px); background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; display:flex; flex-direction:column; gap:8px; }
+.pattern-bar-row { display:flex; gap:8px; align-items:flex-start; }
+.pbar-num { font-size:11px; font-weight:700; color:var(--gold); background:var(--gold-glow); padding:2px 7px; border-radius:5px; white-space:nowrap; margin-top:1px; }
+.pbar-expr { font-size:12px; color:var(--muted); line-height:1.5; }
+.pbar-expr b { color:var(--text); }
+.guide { margin:14px 20px 0; width:calc(100% - 40px); font-size:13px; color:var(--muted); line-height:1.7; background:var(--surface2); border-radius:10px; padding:12px 14px; }
+.sets { display:flex; flex-direction:column; gap:14px; padding:16px 20px 0; width:100%; }
+.set-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.set-header { display:flex; align-items:center; gap:12px; padding:14px 16px 12px; border-bottom:1px solid var(--border); background:var(--surface2); }
+.set-emoji { font-size:22px; flex-shrink:0; }
+.set-num { font-size:11px; font-weight:700; letter-spacing:.8px; color:var(--gold); text-transform:uppercase; margin-bottom:2px; }
+.set-title { font-size:14px; font-weight:800; color:var(--text); line-height:1.2; }
+.set-title-ko { font-size:12px; color:var(--muted); margin-top:1px; }
+.dialogue { padding:14px 16px; display:flex; flex-direction:column; gap:10px; }
+.line { display:flex; gap:10px; align-items:flex-start; }
+.speaker { font-size:11px; font-weight:700; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.speaker.a { background:rgba(88,166,255,.15); color:var(--blue); border:1px solid rgba(88,166,255,.3); }
+.speaker.b { background:rgba(188,140,255,.15); color:var(--purple); border:1px solid rgba(188,140,255,.3); }
+.speech { font-size:14px; line-height:1.7; color:var(--text); }
+.speak-it { display:flex; align-items:flex-start; gap:8px; padding:10px 16px 14px; border-top:1px solid var(--border); font-size:12px; color:var(--muted); line-height:1.6; }
+.speak-it .icon { font-size:14px; flex-shrink:0; margin-top:1px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a class="btn-back" href="./index.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg>
+      목록으로
+    </a>
+    <span class="header-title">패턴 7–9 · 대화 연습</span>
+    <span style="width:60px"></span>
+  </div>
+</div>
+
+<div class="pattern-bar">
+  <div class="pattern-bar-row"><span class="pbar-num">패턴 7</span><span class="pbar-expr"><b>What is your + 명사?</b> — 당신의 ~는 무엇인가요?</span></div>
+  <div class="pattern-bar-row"><span class="pbar-num">패턴 8</span><span class="pbar-expr"><b>Let's + 동사</b> — ~해요 / 합시다</span></div>
+  <div class="pattern-bar-row"><span class="pbar-num">패턴 9</span><span class="pbar-expr"><b>There is (are) + 명사</b> — ~가(들이) 있어요</span></div>
+</div>
+
+<div class="guide">A와 B 역할을 나눠서 소리 내어 읽어보세요. 자연스러워질 때까지 반복하고, 역할을 바꿔서 한 번 더!</div>
+
+<div class="sets">
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🏠</span><div><p class="set-num">SET 1</p><p class="set-title">New Neighbor</p><p class="set-title-ko">새 이웃</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Hi! I just moved in next door. I'm Jina.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Oh welcome! I'm Minho. What is your apartment number?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">It's 504. I'm still unpacking.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">There are a lot of boxes in the hallway. Need any help?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">That would be great actually.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Let's start with the heavy ones first.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🚛</span><div><p class="set-num">SET 2</p><p class="set-title">Moving Day</p><p class="set-title-ko">이사하는 날</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">The moving truck just left. I'm exhausted.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Let's take a break before we do anything else.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Good idea. There's nothing in the fridge though.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">What is your go-to order when you're too tired to cook?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Probably chicken. Simple and fast.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Let's just order that then. My treat.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🛋️</span><div><p class="set-num">SET 3</p><p class="set-title">Furniture Debate</p><p class="set-title-ko">가구 논쟁</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">What is your opinion on the sofa color?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I think dark grey. It goes with everything.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">There are too many dark pieces already though.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Fair point. Let's go with something lighter then.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Beige maybe?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">There's a nice one at that store we passed. Let's check it out.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🪟</span><div><p class="set-num">SET 4</p><p class="set-title">The View</p><p class="set-title-ko">창문 너머</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Come look at this. There's an amazing view from the bedroom window.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Oh wow. You can see the whole park.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">What is your favorite time of day to look out?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Sunset for sure. The sky turns completely orange.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">There are benches down there too. Let's go walk after dinner.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Perfect. I could use some fresh air.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🔧</span><div><p class="set-num">SET 5</p><p class="set-title">Something's Broken</p><p class="set-title-ko">뭔가 고장났어</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">There's a weird noise coming from the kitchen sink.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Let's take a look before it gets worse.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">What is your experience with plumbing? Anything useful?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Almost zero. But there's a toolbox in the cabinet.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Let's at least check if it's something obvious.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">And if not, there's a maintenance number on the fridge.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🌿</span><div><p class="set-num">SET 6</p><p class="set-title">Plant Corner</p><p class="set-title-ko">식물 코너</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I want to add some plants. There's a perfect empty corner by the window.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">What is your favorite type of indoor plant?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Something low-maintenance. I'm not great at this.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">There are some really easy ones — snake plants, pothos, that kind of thing.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Let's go to that plant shop this weekend.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Good. There's one near the market that's really well-stocked.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🎨</span><div><p class="set-num">SET 7</p><p class="set-title">Wall Color</p><p class="set-title-ko">벽 색깔 고르기</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm thinking about painting the living room. What is your first reaction?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I love that idea. There's so much you can do with paint.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">What is your color preference for a small space?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Lighter tones. There are studies that say it makes rooms feel bigger.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">White is too plain though. Let's try a warm cream or sage.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Sage would look amazing with your furniture.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">📦</span><div><p class="set-num">SET 8</p><p class="set-title">Still Unpacked</p><p class="set-title-ko">아직 짐이 있어</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">There are still three boxes I haven't opened since I moved in.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">That was two months ago! What is your excuse?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I just didn't need any of it apparently.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Let's open them today and decide what to keep.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">And if I haven't missed anything in two months?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">There's your answer. Time to donate.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🏘️</span><div><p class="set-num">SET 9</p><p class="set-title">Neighborhood Guide</p><p class="set-title-ko">동네 안내</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I'm new here. What is your favorite spot in this neighborhood?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">There's a really cozy café two blocks down. You'll love it.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Any good restaurants?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">There are a few. There's a great Korean place near the park.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Let's go there for lunch sometime.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Definitely. There's also a night market on Fridays if you're into that.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🛏️</span><div><p class="set-num">SET 10</p><p class="set-title">Room Swap</p><p class="set-title-ko">방 바꾸기</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">What is your thought on switching the bedroom and the study?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Interesting. The study is bigger though.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">There's more natural light in the study too. Better for sleeping.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Let's measure both rooms before we decide.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Good call. There's a tape measure somewhere in that drawer.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Let's just do it now while we're thinking about it.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+</div>
+</body>
+</html>
