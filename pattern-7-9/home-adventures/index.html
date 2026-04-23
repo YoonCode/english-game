@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Adventures · 패턴 7–9</title>
+<style>
+:root {
+  --bg:#0d1117; --surface:#161b22; --surface2:#1c2230; --border:#21262d;
+  --gold:#c9a227; --gold-dim:#8a6e1a; --gold-glow:rgba(201,162,39,.15);
+  --text:#e6edf3; --muted:#7d8590;
+  --green:#3fb950; --green-bg:rgba(63,185,80,.12);
+  --red:#f85149; --red-bg:rgba(248,81,73,.12);
+  --blue:#58a6ff; --purple:#bc8cff; --radius:14px;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,sans-serif; min-height:100dvh; display:flex; flex-direction:column; align-items:center; max-width:540px; margin:0 auto; }
+
+#intro-screen { display:flex; flex-direction:column; width:100%; min-height:100dvh; padding:0 20px 48px; }
+.intro-emoji-wrap { text-align:center; padding:52px 0 20px; font-size:72px; animation:floatEmoji 3s ease-in-out infinite; }
+@keyframes floatEmoji { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+.intro-title { text-align:center; font-size:26px; font-weight:900; font-family:Georgia,serif; color:var(--gold); margin-bottom:6px; }
+.intro-sub { text-align:center; font-size:13px; color:var(--muted); margin-bottom:28px; }
+.pattern-box { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; margin-bottom:20px; }
+.pattern-box-title { font-size:11px; font-weight:700; letter-spacing:1.2px; color:var(--gold); text-transform:uppercase; margin-bottom:14px; }
+.recap-item { display:flex; gap:10px; align-items:flex-start; margin-bottom:12px; }
+.recap-item:last-child { margin-bottom:0; }
+.recap-num { font-size:11px; font-weight:700; color:var(--gold); background:var(--gold-glow); padding:2px 7px; border-radius:5px; white-space:nowrap; margin-top:2px; }
+.recap-expr { font-size:13px; line-height:1.6; }
+.recap-expr b { color:var(--text); display:block; }
+.recap-expr span { color:var(--muted); font-size:12px; }
+.info-row { display:flex; gap:10px; margin-bottom:24px; }
+.info-pill { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px; text-align:center; }
+.info-val { font-size:20px; font-weight:800; color:var(--gold); }
+.info-lbl { font-size:11px; color:var(--muted); margin-top:2px; }
+.btn-start { width:100%; padding:18px; background:var(--gold); color:#0d1117; border:none; border-radius:var(--radius); font-size:16px; font-weight:800; cursor:pointer; transition:opacity .2s,transform .15s; }
+.btn-start:hover { opacity:.9; transform:scale(1.01); }
+.btn-dialogue { display:block; width:100%; padding:15px; background:transparent; color:var(--text); border:1.5px solid var(--border); border-radius:var(--radius); font-size:15px; font-weight:600; cursor:pointer; text-align:center; text-decoration:none; transition:border-color .2s,background .2s; margin-top:10px; }
+.btn-dialogue:hover { border-color:var(--gold-dim); background:var(--surface2); }
+.intro-meta { text-align:center; font-size:12px; color:var(--muted); margin-top:12px; }
+
+#game-screen { display:none; width:100%; padding-bottom:48px; }
+.topbar { position:sticky; top:0; z-index:10; background:var(--bg); border-bottom:1px solid var(--border); padding:12px 20px 0; width:100%; }
+.topbar-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.btn-back { display:inline-flex; align-items:center; gap:6px; color:var(--muted); background:none; border:none; cursor:pointer; font-size:13px; padding:4px 0; transition:color .2s; }
+.btn-back:hover { color:var(--gold); }
+.btn-back svg { width:16px; height:16px; }
+.scene-counter { font-size:13px; font-weight:700; color:var(--muted); }
+.score-display { display:flex; align-items:center; gap:4px; font-size:14px; font-weight:700; color:var(--gold); }
+.progress-track { height:3px; background:var(--surface2); border-radius:2px; margin-bottom:1px; }
+.progress-fill { height:100%; background:var(--gold); border-radius:2px; transition:width .4s ease; }
+.game-body { padding:20px; }
+.scene-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; margin-bottom:16px; }
+.scene-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.scene-emoji { font-size:24px; }
+.scene-title { font-size:15px; font-weight:800; }
+.scene-situation { font-size:13px; color:var(--muted); background:var(--surface2); border-radius:8px; padding:10px 12px; margin-bottom:14px; line-height:1.7; }
+.dialogue { display:flex; flex-direction:column; gap:8px; }
+.d-line { display:flex; gap:8px; align-items:flex-start; }
+.speaker { font-size:12px; font-weight:800; color:var(--gold); min-width:16px; margin-top:3px; }
+.speech { font-size:14px; line-height:1.65; color:var(--text); }
+.speech.blank { background:var(--surface2); border:1.5px dashed var(--gold-dim); border-radius:8px; padding:8px 12px; color:var(--muted); font-style:italic; }
+.prompt-label { text-align:center; font-size:13px; font-weight:700; color:var(--muted); margin:16px 0 12px; }
+.choices { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+.choice-btn { width:100%; text-align:left; padding:14px 16px; background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); color:var(--text); font-size:14px; line-height:1.5; cursor:pointer; transition:border-color .15s,background .15s; }
+.choice-btn:not(:disabled):hover { border-color:var(--gold); background:var(--surface2); }
+.choice-btn.correct { border-color:var(--green)!important; background:var(--green-bg)!important; color:var(--green); }
+.choice-btn.wrong   { border-color:var(--red)!important; background:var(--red-bg)!important; color:var(--red); }
+.choice-btn.dimmed  { opacity:.4; }
+.feedback { display:none; border-radius:var(--radius); padding:14px 16px; border:1px solid; line-height:1.65; }
+.feedback.correct { background:var(--green-bg); border-color:var(--green); }
+.feedback.wrong   { background:var(--red-bg); border-color:var(--red); }
+.feedback-head { font-size:14px; font-weight:800; margin-bottom:6px; }
+.feedback.correct .feedback-head { color:var(--green); }
+.feedback.wrong   .feedback-head { color:var(--red); }
+.feedback-body { font-size:13px; color:var(--muted); }
+.wrong-actions { margin-top:12px; display:none; gap:10px; animation:fadeIn .3s ease; }
+.wrong-actions.show { display:flex; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+.btn-retry-scene { flex:1; padding:15px; background:var(--surface); color:var(--text); border:1.5px solid var(--gold-dim); border-radius:var(--radius); font-size:14px; font-weight:700; cursor:pointer; transition:border-color .2s,background .2s; }
+.btn-retry-scene:hover { border-color:var(--gold); background:var(--surface2); }
+.btn-continue { flex:1; padding:15px; background:var(--gold); color:#0d1117; border:none; border-radius:var(--radius); font-size:14px; font-weight:700; cursor:pointer; }
+.btn-next { display:none; width:100%; padding:16px; background:var(--gold); color:#0d1117; border:none; border-radius:var(--radius); font-size:15px; font-weight:800; cursor:pointer; margin-top:12px; transition:opacity .2s; }
+.btn-next:hover { opacity:.9; }
+
+#result-screen { display:none; width:100%; padding:0 20px 48px; }
+.result-hero { text-align:center; padding:40px 0 24px; }
+.result-trophy { font-size:64px; margin-bottom:12px; }
+.result-score { font-size:42px; font-weight:900; color:var(--gold); font-family:Georgia,serif; }
+.result-score span { font-size:20px; color:var(--gold-dim); }
+.result-comment { font-size:15px; color:var(--muted); margin-top:6px; }
+.acc-bar-wrap { margin-bottom:20px; }
+.acc-label { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:8px; }
+.acc-track { height:8px; background:var(--surface2); border-radius:4px; overflow:hidden; }
+.acc-fill { height:100%; background:var(--gold); border-radius:4px; transition:width .8s ease; }
+.dots-row { display:flex; gap:8px; justify-content:center; margin-bottom:24px; }
+.dot-item { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; }
+.dot-item.ok   { background:var(--green-bg); color:var(--green); }
+.dot-item.miss { background:var(--red-bg); color:var(--red); }
+.recap-box { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; margin-bottom:20px; }
+.recap-box-title { font-size:11px; font-weight:700; letter-spacing:1.2px; color:var(--gold); text-transform:uppercase; margin-bottom:14px; }
+.recap-row { display:flex; gap:10px; align-items:flex-start; margin-bottom:12px; }
+.recap-row:last-child { margin-bottom:0; }
+.recap-badge { font-size:11px; font-weight:700; color:var(--gold); background:var(--gold-glow); padding:2px 7px; border-radius:5px; white-space:nowrap; margin-top:2px; }
+.recap-text { font-size:13px; line-height:1.6; }
+.recap-text b { color:var(--text); display:block; }
+.recap-text span { color:var(--muted); font-size:12px; }
+.result-actions { display:flex; flex-direction:column; gap:10px; }
+.btn-replay { width:100%; padding:16px; background:var(--gold); color:#0d1117; border:none; border-radius:var(--radius); font-size:15px; font-weight:800; cursor:pointer; transition:opacity .2s; }
+.btn-replay:hover { opacity:.9; }
+.btn-home { width:100%; padding:16px; background:var(--surface); color:var(--text); border:1.5px solid var(--border); border-radius:var(--radius); font-size:15px; font-weight:700; cursor:pointer; text-align:center; text-decoration:none; display:block; transition:border-color .2s; }
+.btn-home:hover { border-color:var(--gold-dim); }
+</style>
+</head>
+<body>
+
+<!-- ══ INTRO ══ -->
+<div id="intro-screen">
+  <div class="intro-emoji-wrap">🏠</div>
+  <div class="intro-title">Home Adventures</div>
+  <div class="intro-sub">패턴 7–9 · 집·이사·인테리어 편</div>
+  <div class="pattern-box">
+    <div class="pattern-box-title">이번 게임의 패턴</div>
+    <div class="recap-item">
+      <span class="recap-num">패턴 7</span>
+      <div class="recap-expr"><b>What is your + 명사?</b><span>당신의 ~는 뭐예요? / 상대방의 의견·취향·정보를 물어볼 때</span></div>
+    </div>
+    <div class="recap-item">
+      <span class="recap-num">패턴 8</span>
+      <div class="recap-expr"><b>Let's + 동사</b><span>~해요 / 합시다 / 함께 뭔가를 하자고 제안할 때</span></div>
+    </div>
+    <div class="recap-item">
+      <span class="recap-num">패턴 9</span>
+      <div class="recap-expr"><b>There is (are) + 명사</b><span>~가(들이) 있어요 / 어딘가에 무언가가 존재함을 설명할 때</span></div>
+    </div>
+  </div>
+  <div class="info-row">
+    <div class="info-pill"><div class="info-val">6</div><div class="info-lbl">씬</div></div>
+    <div class="info-pill"><div class="info-val">3</div><div class="info-lbl">패턴</div></div>
+    <div class="info-pill"><div class="info-val">5분</div><div class="info-lbl">소요</div></div>
+  </div>
+  <button class="btn-start" onclick="startGame()">게임 시작하기 →</button>
+  <a class="btn-dialogue" href="./dialogue.html">📄 대화 연습 먼저 보기</a>
+  <p class="intro-meta">6개 씬 · 약 5분 소요</p>
+</div>
+
+<!-- ══ GAME ══ -->
+<div id="game-screen">
+  <div class="topbar">
+    <div class="topbar-row">
+      <button class="btn-back" onclick="location.href='../index.html'">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg>
+        목록으로
+      </button>
+      <span class="scene-counter" id="scene-counter">씬 1 / 6</span>
+      <span class="score-display">⭐ <span id="score-text">0점</span></span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+  <div class="game-body">
+    <div class="scene-card">
+      <div class="scene-header"><span class="scene-emoji" id="scene-emoji"></span><span class="scene-title" id="scene-title"></span></div>
+      <div class="scene-situation" id="scene-situation"></div>
+      <div class="dialogue" id="dialogue"></div>
+    </div>
+    <div class="prompt-label" id="prompt-label"></div>
+    <div class="choices" id="choices"></div>
+    <div class="feedback" id="feedback-box">
+      <div class="feedback-head" id="feedback-head"></div>
+      <div class="feedback-body" id="feedback-body"></div>
+    </div>
+    <div class="wrong-actions" id="wrong-actions">
+      <button class="btn-retry-scene" onclick="retryScene()">🔄 다시 풀기</button>
+      <button class="btn-continue" onclick="nextScene()">그냥 진행하기 →</button>
+    </div>
+    <button class="btn-next" id="btn-next" onclick="nextScene()">다음 씬으로 →</button>
+  </div>
+</div>
+
+<!-- ══ RESULT ══ -->
+<div id="result-screen">
+  <div class="result-hero">
+    <div class="result-trophy" id="result-trophy">🏆</div>
+    <div class="result-score" id="result-score">6<span> / 6</span></div>
+    <div class="result-comment" id="result-comment">완벽해요! 패턴 마스터!</div>
+  </div>
+  <div class="acc-bar-wrap">
+    <div class="acc-label"><span>정답률</span><span id="acc-pct">100%</span></div>
+    <div class="acc-track"><div class="acc-fill" id="acc-fill" style="width:0%"></div></div>
+  </div>
+  <div class="dots-row" id="dots-row"></div>
+  <div class="recap-box">
+    <div class="recap-box-title">패턴 정리</div>
+    <div class="recap-row">
+      <span class="recap-badge">패턴 7</span>
+      <div class="recap-text"><b>What is your + 명사?</b><span>상대방의 의견·취향·정보를 물어볼 때. "What is your opinion/plan/favorite ~?" 형태로 자주 써요.</span></div>
+    </div>
+    <div class="recap-row">
+      <span class="recap-badge">패턴 8</span>
+      <div class="recap-text"><b>Let's + 동사</b><span>함께 뭔가를 하자고 제안할 때. "Let's go / try / start ~"처럼 짧고 자연스럽게 쓸 수 있어요.</span></div>
+    </div>
+    <div class="recap-row">
+      <span class="recap-badge">패턴 9</span>
+      <div class="recap-text"><b>There is (are) + 명사</b><span>무언가가 어딘가에 있다고 설명할 때. 단수면 'There is', 복수면 'There are'를 써요.</span></div>
+    </div>
+  </div>
+  <div class="result-actions">
+    <button class="btn-replay" onclick="replayGame()">🔄 다시 도전하기</button>
+    <a class="btn-home" href="./index.html">← 목록으로 돌아가기</a>
+  </div>
+</div>
+
+<script>
+const scenes = [
+  // ── SCENE 1 ── Set 1: New Neighbor (패턴 7)
+  {
+    emoji: '🏠',
+    title: 'New Neighbor',
+    situation: '새로 이사 온 이웃을 만났어요. B가 A에게 몇 호에 사는지 물어보려고 해요.',
+    dialogue: [
+      { s: 'A', t: "Hi! I just moved in next door. I'm Jina." },
+      { s: 'B', t: '???', blank: true },
+      { s: 'A', t: "It's 504. I'm still unpacking." },
+      { s: 'B', t: "There are a lot of boxes in the hallway. Need any help?" }
+    ],
+    prompt: "B가 '어서 오세요! 저는 민호예요. 몇 호예요?'라고 물어보려고 해요.",
+    choices: [
+      { text: "Oh welcome! I'm Minho. What is your apartment number?", correct: true, feedback: "정답! 🎉 <b>패턴 7 'What is your + 명사?'</b>로 자연스럽게 정보를 물었어요. 'apartment number'처럼 명사 자리에 원하는 정보를 넣으면 다양하게 활용할 수 있어요." },
+      { text: "Oh welcome! Let's introduce ourselves properly.", correct: false, feedback: "<b>패턴 8 'Let's ~'</b>는 함께 뭔가를 하자고 제안할 때 써요. 지금 B는 제안이 아니라 이웃에게 <b>구체적인 정보를 물어보는</b> 상황이에요. 패턴 7이 맞아요." },
+      { text: "Oh welcome! There is a community board with everyone's names.", correct: false, feedback: "<b>패턴 9 'There is ~'</b>는 무언가가 존재한다고 설명할 때 써요. 지금 B는 설명이 아니라 <b>A의 방 번호를 물어보는</b> 상황이에요. 패턴 7이 적합해요." }
+    ]
+  },
+  // ── SCENE 2 ── Set 2: Moving Day (패턴 9)
+  {
+    emoji: '🚛',
+    title: 'Moving Day',
+    situation: '이사 후 지쳐서 쉬고 있어요. A가 냉장고에 아무것도 없다고 말하려고 해요.',
+    dialogue: [
+      { s: 'A', t: "The moving truck just left. I'm exhausted." },
+      { s: 'B', t: "Let's take a break before we do anything else." },
+      { s: 'A', t: '???', blank: true },
+      { s: 'B', t: "What is your go-to order when you're too tired to cook?" }
+    ],
+    prompt: "A가 '좋은 생각이야. 근데 냉장고에 아무것도 없어'라고 말하려고 해요.",
+    choices: [
+      { text: "Good idea. There's nothing in the fridge though.", correct: true, feedback: "정답! 🎉 <b>패턴 9 'There is + 명사'</b>의 부정 형태 'There's nothing ~'으로 냉장고가 비어있는 상황을 자연스럽게 표현했어요. 'though'를 뒤에 붙이면 '그런데' 뉘앙스가 살아나요." },
+      { text: "Good idea. What is your plan for dinner tonight?", correct: false, feedback: "<b>패턴 7 'What is your ~?'</b>는 정보를 물을 때 써요. 지금 A는 질문이 아니라 <b>냉장고 상황을 설명</b>하는 상황이에요. 패턴 9가 맞아요." },
+      { text: "Good idea. Let's just order something then.", correct: false, feedback: "<b>패턴 8 'Let's ~'</b>도 자연스럽지만, 지금 A는 제안보다 먼저 <b>냉장고가 비어 있다는 사실을 전달</b>하는 상황이에요. 패턴 9가 더 적합해요." }
+    ]
+  },
+  // ── SCENE 3 ── Set 3: Furniture Debate (패턴 8)
+  {
+    emoji: '🛋️',
+    title: 'Furniture Debate',
+    situation: '소파 색깔 때문에 의견이 갈렸어요. B가 A의 말에 동의하며 더 밝은 걸로 바꾸자고 제안하려고 해요.',
+    dialogue: [
+      { s: 'A', t: "What is your opinion on the sofa color?" },
+      { s: 'B', t: "I think dark grey. It goes with everything." },
+      { s: 'A', t: "There are too many dark pieces already though." },
+      { s: 'B', t: '???', blank: true }
+    ],
+    prompt: "B가 '맞는 말이야. 그럼 더 밝은 걸로 하자'고 제안하려고 해요.",
+    choices: [
+      { text: "Fair point. Let's go with something lighter then.", correct: true, feedback: "정답! 🎉 <b>패턴 8 'Let's + 동사'</b>로 함께 방향을 바꾸자는 제안을 자연스럽게 했어요. 'Fair point'는 '맞는 말이야'라는 뜻으로 상대 의견을 인정할 때 쓰는 자연스러운 표현이에요." },
+      { text: "Fair point. What is your preference for lighter colors?", correct: false, feedback: "<b>패턴 7 'What is your ~?'</b>는 정보를 물을 때 써요. 지금 B는 질문이 아니라 A의 의견에 동의하며 <b>함께 방향을 바꾸자고 제안</b>하는 상황이에요. 패턴 8이 맞아요." },
+      { text: "Fair point. There are many lighter options at the store.", correct: false, feedback: "<b>패턴 9 'There are ~'</b>도 자연스럽지만, 지금 B의 핵심은 정보 제공이 아니라 <b>함께 결정을 바꾸자는 제안</b>이에요. 패턴 8이 더 적합해요." }
+    ]
+  },
+  // ── SCENE 4 ── Set 5: Something's Broken (패턴 9)
+  {
+    emoji: '🔧',
+    title: "Something's Broken",
+    situation: '부엌 싱크대에서 이상한 소리가 나요. B가 공구함이 어디 있는지 알려주려고 해요.',
+    dialogue: [
+      { s: 'A', t: "There's a weird noise coming from the kitchen sink." },
+      { s: 'B', t: "Let's take a look before it gets worse." },
+      { s: 'A', t: "What is your experience with plumbing? Anything useful?" },
+      { s: 'B', t: '???', blank: true }
+    ],
+    prompt: "B가 '거의 없어. 근데 캐비닛에 공구함이 있어'라고 말하려고 해요.",
+    choices: [
+      { text: "Almost zero. But there's a toolbox in the cabinet.", correct: true, feedback: "정답! 🎉 <b>패턴 9 'There is + 명사'</b>로 공구함이 어디 있는지 자연스럽게 알려줬어요. 'But there's ~'처럼 역접으로 이어가면 대화가 더 자연스러워요." },
+      { text: "Almost zero. What is your plan if it's something serious?", correct: false, feedback: "<b>패턴 7 'What is your ~?'</b>는 정보를 물을 때 써요. 지금 B는 질문이 아니라 <b>공구함 위치를 알려주는</b> 상황이에요. 패턴 9가 맞아요." },
+      { text: "Almost zero. Let's just call a plumber right away.", correct: false, feedback: "<b>패턴 8 'Let's ~'</b>도 자연스럽지만, 지금 B가 먼저 해야 할 말은 제안보다 <b>공구함이 있다는 정보 전달</b>이에요. 패턴 9가 더 적합해요." }
+    ]
+  },
+  // ── SCENE 5 ── Set 7: Wall Color (패턴 7)
+  {
+    emoji: '🎨',
+    title: 'Wall Color',
+    situation: '거실 벽을 페인트칠하려고 해요. A가 B에게 좁은 공간에 어울리는 색상 취향을 물어보려고 해요.',
+    dialogue: [
+      { s: 'A', t: "I'm thinking about painting the living room. What is your first reaction?" },
+      { s: 'B', t: "I love that idea. There's so much you can do with paint." },
+      { s: 'A', t: '???', blank: true },
+      { s: 'B', t: "Lighter tones. There are studies that say it makes rooms feel bigger." }
+    ],
+    prompt: "A가 '좁은 공간에는 어떤 색을 선호해?'라고 물어보려고 해요.",
+    choices: [
+      { text: "What is your color preference for a small space?", correct: true, feedback: "정답! 🎉 <b>패턴 7 'What is your + 명사?'</b>로 상대방의 취향을 자연스럽게 물었어요. 'color preference'는 '색상 취향'이라는 뜻으로 인테리어 대화에서 자주 쓰이는 표현이에요." },
+      { text: "Let's pick a color that works for small spaces.", correct: false, feedback: "<b>패턴 8 'Let's ~'</b>는 함께 뭔가를 하자는 제안이에요. 지금 A는 제안이 아니라 <b>B의 색상 취향을 물어보는</b> 상황이에요. 패턴 7이 맞아요." },
+      { text: "There are so many good colors to choose from.", correct: false, feedback: "<b>패턴 9 'There are ~'</b>는 무언가가 존재한다고 설명할 때 써요. 지금 A는 설명이 아니라 <b>B의 의견을 구체적으로 묻는</b> 상황이에요. 패턴 7이 적합해요." }
+    ]
+  },
+  // ── SCENE 6 ── Set 9: Neighborhood Guide (패턴 8)
+  {
+    emoji: '🏘️',
+    title: 'Neighborhood Guide',
+    situation: '새로 이사 온 동네를 소개해주고 있어요. B가 같이 점심 먹으러 가자고 제안하려고 해요.',
+    dialogue: [
+      { s: 'A', t: "I'm new here. What is your favorite spot in this neighborhood?" },
+      { s: 'B', t: "There's a really cozy café two blocks down. You'll love it." },
+      { s: 'A', t: "Any good restaurants?" },
+      { s: 'B', t: "There are a few. There's a great Korean place near the park." },
+      { s: 'A', t: "That sounds amazing!" },
+      { s: 'B', t: '???', blank: true }
+    ],
+    prompt: "B가 '언제 같이 점심 먹으러 가요!'라고 제안하려고 해요.",
+    choices: [
+      { text: "Let's go there for lunch sometime!", correct: true, feedback: "정답! 🎉 <b>패턴 8 'Let's + 동사'</b>로 함께 가자는 제안을 자연스럽게 했어요. 'sometime'을 뒤에 붙이면 '언제 한번'이라는 가벼운 제안 뉘앙스가 돼요." },
+      { text: "What is your schedule like this week?", correct: false, feedback: "<b>패턴 7 'What is your ~?'</b>는 정보를 물을 때 써요. 지금 B는 일정을 묻는 게 아니라 <b>같이 가자고 제안</b>하는 상황이에요. 패턴 8이 맞아요." },
+      { text: "There is a lunch special on weekdays too.", correct: false, feedback: "<b>패턴 9 'There is ~'</b>도 자연스럽지만, 지금 B의 핵심은 정보 제공이 아니라 <b>함께 가자는 제안</b>이에요. 패턴 8이 더 적합해요." }
+    ]
+  }
+];
+
+let currentScene = 0, score = 0, results = [], shuffledChoices = [];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function startGame() {
+  document.getElementById('intro-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+  currentScene = 0; score = 0; results = []; renderScene();
+}
+function renderScene() {
+  const s = scenes[currentScene];
+  document.getElementById('scene-counter').textContent = `씬 ${currentScene+1} / ${scenes.length}`;
+  document.getElementById('score-text').textContent = `${score}점`;
+  document.getElementById('progress-fill').style.width = `${(currentScene/scenes.length)*100}%`;
+  document.getElementById('scene-emoji').textContent = s.emoji;
+  document.getElementById('scene-title').textContent = s.title;
+  document.getElementById('scene-situation').textContent = s.situation;
+  const dlg = document.getElementById('dialogue'); dlg.innerHTML = '';
+  s.dialogue.forEach(line => {
+    const div = document.createElement('div'); div.className = 'd-line';
+    const sp = document.createElement('span'); sp.className = 'speaker'; sp.textContent = line.s;
+    const txt = document.createElement('span'); txt.className = line.blank ? 'speech blank' : 'speech';
+    txt.textContent = line.blank ? '??? (빈칸)' : line.t;
+    div.appendChild(sp); div.appendChild(txt); dlg.appendChild(div);
+  });
+  document.getElementById('prompt-label').textContent = s.prompt;
+  shuffledChoices = shuffle(s.choices);
+  const choicesEl = document.getElementById('choices'); choicesEl.innerHTML = '';
+  shuffledChoices.forEach((c,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn'; btn.id = `choice-${i}`;
+    btn.textContent = c.text; btn.onclick = () => selectChoice(i);
+    choicesEl.appendChild(btn);
+  });
+  const fb = document.getElementById('feedback-box');
+  fb.style.display = 'none'; fb.className = 'feedback';
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('wrong-actions').classList.remove('show');
+}
+function selectChoice(idx) {
+  const choice = shuffledChoices[idx];
+  document.querySelectorAll('.choice-btn').forEach((btn,i) => { btn.disabled=true; if(i!==idx) btn.classList.add('dimmed'); });
+  const btn = document.getElementById(`choice-${idx}`);
+  const fb = document.getElementById('feedback-box');
+  const wrongActions = document.getElementById('wrong-actions');
+  const nextBtn = document.getElementById('btn-next');
+  if (choice.correct) {
+    btn.classList.add('correct'); score++; results.push(true);
+    fb.className = 'feedback correct';
+    document.getElementById('feedback-head').textContent = '✅ 정답이에요!';
+    wrongActions.classList.remove('show'); nextBtn.style.display = 'block';
+    nextBtn.textContent = currentScene < scenes.length-1 ? '다음 씬으로 →' : '결과 보기 →';
+  } else {
+    btn.classList.add('wrong'); results.push(false);
+    shuffledChoices.forEach((c,i) => { if(c.correct) document.getElementById(`choice-${i}`).classList.add('correct'); });
+    fb.className = 'feedback wrong';
+    document.getElementById('feedback-head').textContent = '❌ 아쉬워요!';
+    nextBtn.style.display = 'none'; wrongActions.classList.add('show');
+  }
+  document.getElementById('feedback-body').innerHTML = choice.feedback;
+  fb.style.display = 'block';
+  document.getElementById('score-text').textContent = `${score}점`;
+}
+function retryScene() { results.pop(); renderScene(); }
+function nextScene() { currentScene++; if(currentScene < scenes.length) renderScene(); else showResult(); }
+function showResult() {
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'block';
+  let trophy, comment;
+  if      (score===6) { trophy='🏆'; comment='완벽해요! 패턴 마스터!'; }
+  else if (score===5) { trophy='🌟'; comment='훌륭해요! 거의 완벽!'; }
+  else if (score===4) { trophy='👍'; comment='잘 하셨어요!'; }
+  else if (score===3) { trophy='📚'; comment='절반 맞았어요!'; }
+  else                { trophy='💪'; comment='다시 도전해봐요!'; }
+  document.getElementById('result-trophy').textContent = trophy;
+  document.getElementById('result-score').innerHTML = `${score}<span> / 6</span>`;
+  document.getElementById('result-comment').textContent = comment;
+  const pct = Math.round((score/scenes.length)*100);
+  document.getElementById('acc-pct').textContent = `${pct}%`;
+  setTimeout(() => { document.getElementById('acc-fill').style.width = `${pct}%`; }, 100);
+  const dots = document.getElementById('dots-row'); dots.innerHTML = '';
+  results.forEach(ok => { const d=document.createElement('div'); d.className=`dot-item ${ok?'ok':'miss'}`; d.textContent=ok?'○':'✕'; dots.appendChild(d); });
+}
+function replayGame() {
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+  currentScene=0; score=0; results=[]; renderScene();
+}
+</script>
+</body>
+</html>
