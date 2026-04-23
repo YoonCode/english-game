@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Dialogue · 패턴 4–6</title>
+<style>
+:root {
+  --bg:#0d1117; --surface:#161b22; --surface2:#1c2230; --border:#21262d;
+  --gold:#c9a227; --gold-dim:#8a6e1a; --gold-glow:rgba(201,162,39,.15);
+  --text:#e6edf3; --muted:#7d8590;
+  --green:#3fb950; --green-bg:rgba(63,185,80,.12);
+  --red:#f85149; --red-bg:rgba(248,81,73,.12);
+  --blue:#58a6ff; --purple:#bc8cff; --radius:14px;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,sans-serif; min-height:100dvh; display:flex; flex-direction:column; align-items:center; max-width:540px; margin:0 auto; padding-bottom:48px; }
+.header { position:sticky; top:0; z-index:10; background:var(--bg); border-bottom:1px solid var(--border); padding:0 20px; width:100%; }
+.header-inner { display:flex; align-items:center; justify-content:space-between; height:52px; }
+.btn-back { display:inline-flex; align-items:center; gap:6px; color:var(--muted); background:none; border:none; cursor:pointer; font-size:13px; padding:4px 0; transition:color .2s; text-decoration:none; width:60px; }
+.btn-back:hover { color:var(--gold); }
+.btn-back svg { width:16px; height:16px; }
+.header-title { font-size:14px; font-weight:700; color:var(--muted); }
+.pattern-bar { margin:16px 20px 0; width:calc(100% - 40px); background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; display:flex; flex-direction:column; gap:8px; }
+.pattern-bar-row { display:flex; gap:8px; align-items:flex-start; }
+.pbar-num { font-size:11px; font-weight:700; color:var(--gold); background:var(--gold-glow); padding:2px 7px; border-radius:5px; white-space:nowrap; margin-top:1px; }
+.pbar-expr { font-size:12px; color:var(--muted); line-height:1.5; }
+.pbar-expr b { color:var(--text); }
+.guide { margin:14px 20px 0; width:calc(100% - 40px); font-size:13px; color:var(--muted); line-height:1.7; background:var(--surface2); border-radius:10px; padding:12px 14px; }
+.sets { display:flex; flex-direction:column; gap:14px; padding:16px 20px 0; width:100%; }
+.set-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.set-header { display:flex; align-items:center; gap:12px; padding:14px 16px 12px; border-bottom:1px solid var(--border); background:var(--surface2); }
+.set-emoji { font-size:22px; flex-shrink:0; }
+.set-num { font-size:11px; font-weight:700; letter-spacing:.8px; color:var(--gold); text-transform:uppercase; margin-bottom:2px; }
+.set-title { font-size:14px; font-weight:800; color:var(--text); line-height:1.2; }
+.set-title-ko { font-size:12px; color:var(--muted); margin-top:1px; }
+.dialogue { padding:14px 16px; display:flex; flex-direction:column; gap:10px; }
+.line { display:flex; gap:10px; align-items:flex-start; }
+.speaker { font-size:11px; font-weight:700; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.speaker.a { background:rgba(88,166,255,.15); color:var(--blue); border:1px solid rgba(88,166,255,.3); }
+.speaker.b { background:rgba(188,140,255,.15); color:var(--purple); border:1px solid rgba(188,140,255,.3); }
+.speech { font-size:14px; line-height:1.7; color:var(--text); }
+.speak-it { display:flex; align-items:flex-start; gap:8px; padding:10px 16px 14px; border-top:1px solid var(--border); font-size:12px; color:var(--muted); line-height:1.6; }
+.speak-it .icon { font-size:14px; flex-shrink:0; margin-top:1px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a class="btn-back" href="./index.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3L5 8l5 5"/></svg>
+      목록으로
+    </a>
+    <span class="header-title">패턴 4–6 · 대화 연습</span>
+    <span style="width:60px"></span>
+  </div>
+</div>
+
+<div class="pattern-bar">
+  <div class="pattern-bar-row"><span class="pbar-num">패턴 4</span><span class="pbar-expr"><b>I didn't + 동사 / I wasn't + 형용사</b> — ~안 했어요 / ~가 아니었어요</span></div>
+  <div class="pattern-bar-row"><span class="pbar-num">패턴 5</span><span class="pbar-expr"><b>How about + 명사/동사ing?</b> — ~는/하는 것은 어때요?</span></div>
+  <div class="pattern-bar-row"><span class="pbar-num">패턴 6</span><span class="pbar-expr"><b>Would you please + 동사?</b> — ~해 주시겠어요?</span></div>
+</div>
+
+<div class="guide">A와 B 역할을 나눠서 소리 내어 읽어보세요. 자연스러워질 때까지 반복하고, 역할을 바꿔서 한 번 더!</div>
+
+<div class="sets">
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">✈️</span><div><p class="set-num">SET 1</p><p class="set-title">The Late Check-in</p><p class="set-title-ko">늦은 체크인</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Would you please let me check in early? My flight landed at 6am.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I'll check what's available. Your room might be ready.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I didn't sleep at all on the plane. I'm exhausted.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">How about waiting in our lounge? We have coffee and sofas.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">That would be great actually.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I'll call you as soon as the room is ready.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🚕</span><div><p class="set-num">SET 2</p><p class="set-title">Wrong Taxi</p><p class="set-title-ko">잘못 탄 택시</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Excuse me, I didn't ask to go this way. This is longer.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">There's heavy traffic on the main road. This is faster.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I wasn't aware of that. How long will it take now?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">About fifteen minutes.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Would you please turn the meter off and charge a flat rate?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I'm sorry but I can't do that. This is the standard route now.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🏨</span><div><p class="set-num">SET 3</p><p class="set-title">Hotel Room Problem</p><p class="set-title-ko">호텔 방 문제</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Hi, I wasn't happy with my room. The air conditioning wasn't working.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I'm so sorry about that. Would you please give me your room number?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">It's 412. I didn't complain last night because it was late.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I completely understand. How about moving you to a room on a higher floor?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">That would be perfect. Thank you.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I'll have it ready in about twenty minutes.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🗺️</span><div><p class="set-num">SET 4</p><p class="set-title">Lost in the City</p><p class="set-title-ko">길을 잃었어</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I didn't realize the subway stop was so far from the hotel.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Yeah the map was a bit misleading.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I wasn't prepared for all this walking either. My feet are killing me.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">How about taking a bus back? There's a stop right there.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Do you know which number goes to our area?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I think it's the 42. Would you please check on your app?</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🍽️</span><div><p class="set-num">SET 5</p><p class="set-title">Restaurant Hunt</p><p class="set-title-ko">식당 찾기</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I didn't book anywhere for dinner. I completely forgot.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">On a Saturday night? Every place will be packed.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I wasn't thinking. What do we do now?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">How about just walking around and seeing what looks good?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Or we could ask the hotel concierge.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Good idea. Would you please call down and ask them?</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🛄</span><div><p class="set-num">SET 6</p><p class="set-title">Missing Luggage</p><p class="set-title-ko">수하물 분실</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Would you please check where my suitcase is? It didn't come out.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I'm sorry. Can you give me your baggage claim tag?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Here. I didn't notice until everyone else had left.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">I see it. It was loaded onto a different flight by mistake.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I wasn't expecting this at all. When will I get it?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">How about tomorrow morning? We'll deliver it directly to your hotel.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🚆</span><div><p class="set-num">SET 7</p><p class="set-title">Train Mix-up</p><p class="set-title-ko">기차를 잘못 탔어</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I think I didn't get on the right train.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">What does your ticket say?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Platform 7, 10:45. I wasn't paying attention and just jumped on.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">This train goes to Lyon, not Paris. You need to get off at the next stop.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">How about catching the next train from there?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Would you please ask the conductor? They'll help you transfer.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🌧️</span><div><p class="set-num">SET 8</p><p class="set-title">Rainy Day Plan Change</p><p class="set-title-ko">비 오는 날 계획 변경</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I didn't know it was going to rain all day today.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Me neither. So much for the beach plan.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I wasn't really in the mood for museums but I guess that's the option now.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">How about checking out that indoor market we saw yesterday?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Oh that actually sounds way better.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Would you please look up the opening hours? I'll get the umbrella.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">💶</span><div><p class="set-num">SET 9</p><p class="set-title">Currency Problem</p><p class="set-title-ko">환전 문제</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">I didn't bring enough cash. Most places here don't take cards.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Really? How much do you have left?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">Like twenty euros. I wasn't expecting everything to be cash only.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">How about finding an ATM?</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I already tried. There's a fee and my card got declined.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Would you please let me cover you for now? You can transfer it later.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+  <div class="set-card">
+    <div class="set-header"><span class="set-emoji">🛫</span><div><p class="set-num">SET 10</p><p class="set-title">Flight Delay</p><p class="set-title-ko">항공편 지연</p></div></div>
+    <div class="dialogue">
+      <div class="line"><span class="speaker a">A</span><span class="speech">Would you please tell me how long the delay is?</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">We're currently looking at about three hours. We're very sorry.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I didn't plan for this. I have a connection to catch.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">How about speaking to our transfer desk? They can rebook you.</span></div>
+      <div class="line"><span class="speaker a">A</span><span class="speech">I wasn't aware there was a desk for that.</span></div>
+      <div class="line"><span class="speaker b">B</span><span class="speech">Yes, it's just past gate 12. They'll take care of you right away.</span></div>
+    </div>
+    <div class="speak-it"><span class="icon">🔊</span>A와 B가 함께 처음부터 끝까지 말해보세요. 역할 바꾸기도 잊지 마세요!</div>
+  </div>
+
+</div>
+</body>
+</html>
